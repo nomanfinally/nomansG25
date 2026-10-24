@@ -1,0 +1,12 @@
+node_modules/
+g25views/
+dist/
+test-results/
+playwright-report/
+.impeccable/review/
+.impeccable/hook.cache.json
+.impeccable/config.local.json
+study/
+G25VIEWS_STUDY.md
+PCA_VIEWS_STUDY.md
+*.log

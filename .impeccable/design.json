@@ -1,0 +1,491 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-24T18:57:51.662365+00:00",
+  "title": "Design System: G25 tools",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Primary",
+        "tonalRamp": [
+          "oklch(15% 0.13490 251.74)",
+          "oklch(26.43% 0.13490 251.74)",
+          "oklch(37.86% 0.13490 251.74)",
+          "oklch(49.29% 0.13490 251.74)",
+          "oklch(60.71% 0.13490 251.74)",
+          "oklch(72.14% 0.13490 251.74)",
+          "oklch(83.57% 0.13490 251.74)",
+          "oklch(95% 0.13490 251.74)"
+        ]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "Primary Hover",
+        "tonalRamp": [
+          "oklch(15% 0.01269 244.25)",
+          "oklch(26.43% 0.01269 244.25)",
+          "oklch(37.86% 0.01269 244.25)",
+          "oklch(49.29% 0.01269 244.25)",
+          "oklch(60.71% 0.01269 244.25)",
+          "oklch(72.14% 0.01269 244.25)",
+          "oklch(83.57% 0.01269 244.25)",
+          "oklch(95% 0.01269 244.25)"
+        ]
+      },
+      "active": {
+        "role": "primary",
+        "displayName": "Active",
+        "tonalRamp": [
+          "oklch(15% 0.01616 245.09)",
+          "oklch(26.43% 0.01616 245.09)",
+          "oklch(37.86% 0.01616 245.09)",
+          "oklch(49.29% 0.01616 245.09)",
+          "oklch(60.71% 0.01616 245.09)",
+          "oklch(72.14% 0.01616 245.09)",
+          "oklch(83.57% 0.01616 245.09)",
+          "oklch(95% 0.01616 245.09)"
+        ]
+      },
+      "rail": {
+        "role": "neutral",
+        "displayName": "Rail",
+        "tonalRamp": [
+          "oklch(15% 0.00860 255.58)",
+          "oklch(26.43% 0.00860 255.58)",
+          "oklch(37.86% 0.00860 255.58)",
+          "oklch(49.29% 0.00860 255.58)",
+          "oklch(60.71% 0.00860 255.58)",
+          "oklch(72.14% 0.00860 255.58)",
+          "oklch(83.57% 0.00860 255.58)",
+          "oklch(95% 0.00860 255.58)"
+        ]
+      },
+      "rail-active": {
+        "role": "neutral",
+        "displayName": "Rail Active",
+        "tonalRamp": [
+          "oklch(15% 0.01594 255.61)",
+          "oklch(26.43% 0.01594 255.61)",
+          "oklch(37.86% 0.01594 255.61)",
+          "oklch(49.29% 0.01594 255.61)",
+          "oklch(60.71% 0.01594 255.61)",
+          "oklch(72.14% 0.01594 255.61)",
+          "oklch(83.57% 0.01594 255.61)",
+          "oklch(95% 0.01594 255.61)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26.43% 0.00000 0.00)",
+          "oklch(37.86% 0.00000 0.00)",
+          "oklch(49.29% 0.00000 0.00)",
+          "oklch(60.71% 0.00000 0.00)",
+          "oklch(72.14% 0.00000 0.00)",
+          "oklch(83.57% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Text",
+        "tonalRamp": [
+          "oklch(15% 0.01489 252.31)",
+          "oklch(26.43% 0.01489 252.31)",
+          "oklch(37.86% 0.01489 252.31)",
+          "oklch(49.29% 0.01489 252.31)",
+          "oklch(60.71% 0.01489 252.31)",
+          "oklch(72.14% 0.01489 252.31)",
+          "oklch(83.57% 0.01489 252.31)",
+          "oklch(95% 0.01489 252.31)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15% 0.02153 250.78)",
+          "oklch(26.43% 0.02153 250.78)",
+          "oklch(37.86% 0.02153 250.78)",
+          "oklch(49.29% 0.02153 250.78)",
+          "oklch(60.71% 0.02153 250.78)",
+          "oklch(72.14% 0.02153 250.78)",
+          "oklch(83.57% 0.02153 250.78)",
+          "oklch(95% 0.02153 250.78)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(15% 0.00874 247.92)",
+          "oklch(26.43% 0.00874 247.92)",
+          "oklch(37.86% 0.00874 247.92)",
+          "oklch(49.29% 0.00874 247.92)",
+          "oklch(60.71% 0.00874 247.92)",
+          "oklch(72.14% 0.00874 247.92)",
+          "oklch(83.57% 0.00874 247.92)",
+          "oklch(95% 0.00874 247.92)"
+        ]
+      },
+      "error": {
+        "role": "semantic",
+        "displayName": "Error",
+        "tonalRamp": [
+          "oklch(15% 0.16521 26.40)",
+          "oklch(26.43% 0.16521 26.40)",
+          "oklch(37.86% 0.16521 26.40)",
+          "oklch(49.29% 0.16521 26.40)",
+          "oklch(60.71% 0.16521 26.40)",
+          "oklch(72.14% 0.16521 26.40)",
+          "oklch(83.57% 0.16521 26.40)",
+          "oklch(95% 0.16521 26.40)"
+        ]
+      },
+      "hover": {
+        "role": "neutral",
+        "displayName": "Hover",
+        "tonalRamp": [
+          "oklch(15% 0.00418 236.50)",
+          "oklch(26.43% 0.00418 236.50)",
+          "oklch(37.86% 0.00418 236.50)",
+          "oklch(49.29% 0.00418 236.50)",
+          "oklch(60.71% 0.00418 236.50)",
+          "oklch(72.14% 0.00418 236.50)",
+          "oklch(83.57% 0.00418 236.50)",
+          "oklch(95% 0.00418 236.50)"
+        ]
+      },
+      "disabled-text": {
+        "role": "neutral",
+        "displayName": "Disabled Text",
+        "tonalRamp": [
+          "oklch(15% 0.01679 251.26)",
+          "oklch(26.43% 0.01679 251.26)",
+          "oklch(37.86% 0.01679 251.26)",
+          "oklch(49.29% 0.01679 251.26)",
+          "oklch(60.71% 0.01679 251.26)",
+          "oklch(72.14% 0.01679 251.26)",
+          "oklch(83.57% 0.01679 251.26)",
+          "oklch(95% 0.01679 251.26)"
+        ]
+      },
+      "disabled-surface": {
+        "role": "neutral",
+        "displayName": "Disabled Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00170 247.84)",
+          "oklch(26.43% 0.00170 247.84)",
+          "oklch(37.86% 0.00170 247.84)",
+          "oklch(49.29% 0.00170 247.84)",
+          "oklch(60.71% 0.00170 247.84)",
+          "oklch(72.14% 0.00170 247.84)",
+          "oklch(83.57% 0.00170 247.84)",
+          "oklch(95% 0.00170 247.84)"
+        ]
+      },
+      "rail-text": {
+        "role": "neutral",
+        "displayName": "Rail Text",
+        "tonalRamp": [
+          "oklch(15% 0.01091 256.70)",
+          "oklch(26.43% 0.01091 256.70)",
+          "oklch(37.86% 0.01091 256.70)",
+          "oklch(49.29% 0.01091 256.70)",
+          "oklch(60.71% 0.01091 256.70)",
+          "oklch(72.14% 0.01091 256.70)",
+          "oklch(83.57% 0.01091 256.70)",
+          "oklch(95% 0.01091 256.70)"
+        ]
+      },
+      "rail-disabled": {
+        "role": "neutral",
+        "displayName": "Rail Disabled",
+        "tonalRamp": [
+          "oklch(15% 0.01971 255.55)",
+          "oklch(26.43% 0.01971 255.55)",
+          "oklch(37.86% 0.01971 255.55)",
+          "oklch(49.29% 0.01971 255.55)",
+          "oklch(60.71% 0.01971 255.55)",
+          "oklch(72.14% 0.01971 255.55)",
+          "oklch(83.57% 0.01971 255.55)",
+          "oklch(95% 0.01971 255.55)"
+        ]
+      },
+      "rail-planned": {
+        "role": "neutral",
+        "displayName": "Rail Planned",
+        "tonalRamp": [
+          "oklch(15% 0.02286 256.75)",
+          "oklch(26.43% 0.02286 256.75)",
+          "oklch(37.86% 0.02286 256.75)",
+          "oklch(49.29% 0.02286 256.75)",
+          "oklch(60.71% 0.02286 256.75)",
+          "oklch(72.14% 0.02286 256.75)",
+          "oklch(83.57% 0.02286 256.75)",
+          "oklch(95% 0.02286 256.75)"
+        ]
+      },
+      "icon": {
+        "role": "neutral",
+        "displayName": "Icon",
+        "tonalRamp": [
+          "oklch(15% 0.02259 248.31)",
+          "oklch(26.43% 0.02259 248.31)",
+          "oklch(37.86% 0.02259 248.31)",
+          "oklch(49.29% 0.02259 248.31)",
+          "oklch(60.71% 0.02259 248.31)",
+          "oklch(72.14% 0.02259 248.31)",
+          "oklch(83.57% 0.02259 248.31)",
+          "oklch(95% 0.02259 248.31)"
+        ]
+      },
+      "active-icon": {
+        "role": "primary",
+        "displayName": "Active Icon",
+        "tonalRamp": [
+          "oklch(15% 0.12304 251.14)",
+          "oklch(26.43% 0.12304 251.14)",
+          "oklch(37.86% 0.12304 251.14)",
+          "oklch(49.29% 0.12304 251.14)",
+          "oklch(60.71% 0.12304 251.14)",
+          "oklch(72.14% 0.12304 251.14)",
+          "oklch(83.57% 0.12304 251.14)",
+          "oklch(95% 0.12304 251.14)"
+        ]
+      },
+      "active-line": {
+        "role": "primary",
+        "displayName": "Active Line",
+        "tonalRamp": [
+          "oklch(15% 0.03575 246.92)",
+          "oklch(26.43% 0.03575 246.92)",
+          "oklch(37.86% 0.03575 246.92)",
+          "oklch(49.29% 0.03575 246.92)",
+          "oklch(60.71% 0.03575 246.92)",
+          "oklch(72.14% 0.03575 246.92)",
+          "oklch(83.57% 0.03575 246.92)",
+          "oklch(95% 0.03575 246.92)"
+        ]
+      },
+      "field-surface": {
+        "role": "neutral",
+        "displayName": "Field Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00170 247.84)",
+          "oklch(26.43% 0.00170 247.84)",
+          "oklch(37.86% 0.00170 247.84)",
+          "oklch(49.29% 0.00170 247.84)",
+          "oklch(60.71% 0.00170 247.84)",
+          "oklch(72.14% 0.00170 247.84)",
+          "oklch(83.57% 0.00170 247.84)",
+          "oklch(95% 0.00170 247.84)"
+        ]
+      },
+      "field-line": {
+        "role": "neutral",
+        "displayName": "Field Line",
+        "tonalRamp": [
+          "oklch(15% 0.01725 250.87)",
+          "oklch(26.43% 0.01725 250.87)",
+          "oklch(37.86% 0.01725 250.87)",
+          "oklch(49.29% 0.01725 250.87)",
+          "oklch(60.71% 0.01725 250.87)",
+          "oklch(72.14% 0.01725 250.87)",
+          "oklch(83.57% 0.01725 250.87)",
+          "oklch(95% 0.01725 250.87)"
+        ]
+      },
+      "plot-grid": {
+        "role": "neutral",
+        "displayName": "Plot Grid",
+        "tonalRamp": [
+          "oklch(15% 0.00254 228.79)",
+          "oklch(26.43% 0.00254 228.79)",
+          "oklch(37.86% 0.00254 228.79)",
+          "oklch(49.29% 0.00254 228.79)",
+          "oklch(60.71% 0.00254 228.79)",
+          "oklch(72.14% 0.00254 228.79)",
+          "oklch(83.57% 0.00254 228.79)",
+          "oklch(95% 0.00254 228.79)"
+        ]
+      },
+      "plot-frame": {
+        "role": "neutral",
+        "displayName": "Plot Frame",
+        "tonalRamp": [
+          "oklch(15% 0.00990 248.01)",
+          "oklch(26.43% 0.00990 248.01)",
+          "oklch(37.86% 0.00990 248.01)",
+          "oklch(49.29% 0.00990 248.01)",
+          "oklch(60.71% 0.00990 248.01)",
+          "oklch(72.14% 0.00990 248.01)",
+          "oklch(83.57% 0.00990 248.01)",
+          "oklch(95% 0.00990 248.01)"
+        ]
+      },
+      "plot-tick": {
+        "role": "neutral",
+        "displayName": "Plot Tick",
+        "tonalRamp": [
+          "oklch(15% 0.01768 251.32)",
+          "oklch(26.43% 0.01768 251.32)",
+          "oklch(37.86% 0.01768 251.32)",
+          "oklch(49.29% 0.01768 251.32)",
+          "oklch(60.71% 0.01768 251.32)",
+          "oklch(72.14% 0.01768 251.32)",
+          "oklch(83.57% 0.01768 251.32)",
+          "oklch(95% 0.01768 251.32)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "body": {
+        "displayName": "Body",
+        "purpose": "Interface controls and Plotly defaults."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Empty chart title."
+      },
+      "panel-title": {
+        "displayName": "Panel Title",
+        "purpose": "Coordinate-entry heading."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Axis captions, rail labels and status."
+      },
+      "hint": {
+        "displayName": "Hint",
+        "purpose": "Entry instructions."
+      },
+      "coordinate": {
+        "displayName": "Coordinate",
+        "purpose": "Multiline coordinate rows."
+      },
+      "brand": {
+        "displayName": "Brand",
+        "purpose": "Compact G25 rail wordmark."
+      }
+    },
+    "shadows": [
+      {
+        "name": "coordinate-overlay",
+        "value": "0 7px 22px rgba(28, 38, 49, 0.14)",
+        "purpose": "Temporary coordinate-entry panel only."
+      }
+    ],
+    "motion": [
+      {
+        "name": "button-state",
+        "value": "background-color 120ms ease-out, border-color 120ms ease-out",
+        "purpose": "Button state changes only under prefers-reduced-motion: no-preference."
+      }
+    ],
+    "breakpoints": []
+  },
+  "components": [
+    {
+      "name": "Run PCA",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Blue-outline primary action with production hover, focus and disabled states.",
+      "html": "<button type=\"button\" class=\"ds-primary\">Run PCA</button>",
+      "css": ".ds-primary{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#30363d;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--color-line,#d7dce1);border-radius:var(--radius-control,3px);background:#fff;cursor:pointer;border-color:var(--color-primary,#1764ac);color:var(--color-primary,#1764ac);}.ds-primary:hover:not(:disabled){background:#f2f5f7;}.ds-primary:focus-visible{outline:2px solid var(--color-primary,#1764ac);outline-offset:2px;}.ds-primary:disabled{cursor:default;color:#747c85;background:#fafbfc;}@media(prefers-reduced-motion:no-preference){.ds-primary{transition:background-color 120ms ease-out,border-color 120ms ease-out;}}.ds-primary:hover:not(:disabled){background:var(--color-primary-hover,#edf5fc);}.ds-primary:disabled{border-color:#b5c3d0;}"
+    },
+    {
+      "name": "Save PNG",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Neutral secondary toolbar action.",
+      "html": "<button type=\"button\" class=\"ds-secondary\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><path d=\"m7 10 5 5 5-5M12 15V3\"/></svg>Save PNG</button>",
+      "css": ".ds-secondary{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#30363d;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--color-line,#d7dce1);border-radius:var(--radius-control,3px);background:#fff;cursor:pointer;}.ds-secondary:hover:not(:disabled){background:#f2f5f7;}.ds-secondary:focus-visible{outline:2px solid var(--color-primary,#1764ac);outline-offset:2px;}.ds-secondary:disabled{cursor:default;color:#747c85;background:#fafbfc;}@media(prefers-reduced-motion:no-preference){.ds-secondary{transition:background-color 120ms ease-out,border-color 120ms ease-out;}}"
+    },
+    {
+      "name": "Toolbar toggle",
+      "kind": "button",
+      "refersTo": "button-icon",
+      "description": "Pressed legend tool; the same states apply to geometry tools.",
+      "html": "<button type=\"button\" class=\"ds-icon\" aria-label=\"Toggle legend\" aria-pressed=\"true\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01\"/></svg></button>",
+      "css": ".ds-icon{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#30363d;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--color-line,#d7dce1);border-radius:var(--radius-control,3px);background:#fff;cursor:pointer;width:30px;padding:0;border-color:transparent;background:transparent;color:#505b66;}.ds-icon:hover:not(:disabled){background:#f2f5f7;}.ds-icon:focus-visible{outline:2px solid var(--color-primary,#1764ac);outline-offset:2px;}.ds-icon:disabled{cursor:default;color:#747c85;background:#fafbfc;}@media(prefers-reduced-motion:no-preference){.ds-icon{transition:background-color 120ms ease-out,border-color 120ms ease-out;}}.ds-icon[aria-pressed=\"true\"]{background:var(--color-active,#e7f1fa);border-color:#c4d9ed;color:#155b9b;}.ds-icon:disabled{background:transparent;color:#7b838c;}"
+    },
+    {
+      "name": "Coordinate data trigger",
+      "kind": "button",
+      "refersTo": "data-trigger",
+      "description": "Truncating summary; blue border and text when expanded.",
+      "html": "<button type=\"button\" class=\"ds-data\" aria-expanded=\"false\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"/><path d=\"M14 2v6h6M8 13h8M8 17h6\"/></svg><span>Paste G25 coordinates\u2026</span><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button>",
+      "css": ".ds-data{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#30363d;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--color-line,#d7dce1);border-radius:var(--radius-control,3px);background:#fff;cursor:pointer;width:270px;min-width:200px;padding:0 9px;justify-content:flex-start;color:#4c5967;}.ds-data:hover:not(:disabled){background:#f2f5f7;}.ds-data:focus-visible{outline:2px solid var(--color-primary,#1764ac);outline-offset:2px;}.ds-data:disabled{cursor:default;color:#747c85;background:#fafbfc;}@media(prefers-reduced-motion:no-preference){.ds-data{transition:background-color 120ms ease-out,border-color 120ms ease-out;}}.ds-data span{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.ds-data svg{flex-shrink:0;}.ds-data[aria-expanded=\"true\"]{border-color:var(--color-primary,#1764ac);color:var(--color-primary,#1764ac);}"
+    },
+    {
+      "name": "Component selector",
+      "kind": "input",
+      "refersTo": "select",
+      "description": "Native compact selector with muted axis caption.",
+      "html": "<label class=\"ds-axis\"><span>X</span><select class=\"ds-select\" aria-label=\"Horizontal component\"><option>PC1</option><option disabled>PC2</option><option>PC3</option></select></label>",
+      "css": ".ds-axis{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#30363d;display:inline-flex;align-items:center;gap:5px;}.ds-axis>span{font-size:10px;color:var(--color-muted,#59636e);}.ds-select{font:inherit;color:inherit;height:30px;min-width:63px;padding:0 7px;border:1px solid var(--color-line,#d7dce1);border-radius:var(--radius-control,3px);background:#fff;}.ds-select:focus-visible{outline:2px solid var(--color-primary,#1764ac);outline-offset:2px;}.ds-select:disabled{cursor:default;color:#747c85;background:#fafbfc;}"
+    },
+    {
+      "name": "Coordinate textarea",
+      "kind": "input",
+      "refersTo": "coordinate-input",
+      "description": "Monospace preserved-whitespace field, demonstrating its associated error state.",
+      "html": "<label class=\"ds-field-label\" for=\"ds-coordinates\">G25 coordinates</label><textarea class=\"ds-coordinates\" id=\"ds-coordinates\" spellcheck=\"false\" aria-invalid=\"true\" aria-describedby=\"ds-input-error\">Group:sample,0.123456,0.098765</textarea><p class=\"ds-input-error\" id=\"ds-input-error\" role=\"alert\">Line 1: expected 25 coordinates.</p>",
+      "css": ".ds-field-label{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#30363d;display:block;font-size:13px;font-weight:600;margin-bottom:6px;}.ds-coordinates{display:block;width:100%;height:226px;min-height:110px;max-height:calc(100dvh - 235px);resize:vertical;padding:10px;border:1px solid #b9c2cc;border-radius:var(--radius-control,3px);background:#fcfdfe;color:#30363d;font:11px/1.7 Consolas,\"Liberation Mono\",monospace;white-space:pre;overflow:auto;caret-color:var(--color-primary,#1764ac);scrollbar-color:#a5adb6 #f4f6f8;scrollbar-width:thin;}.ds-coordinates:focus-visible{outline:2px solid var(--color-primary,#1764ac);outline-offset:2px;}.ds-coordinates::placeholder{color:#606c78;opacity:1;}.ds-coordinates[aria-invalid=\"true\"]{border-color:var(--color-error,#a32222);}.ds-input-error{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#30363d;margin:9px 0 0;font-size:11px;line-height:1.6;color:var(--color-error,#a32222);}"
+    },
+    {
+      "name": "Suite navigation",
+      "kind": "nav",
+      "refersTo": "rail-current",
+      "description": "Current PCA tool and visibly disabled planned analyses.",
+      "html": "<aside class=\"ds-rail\"><div class=\"ds-brand\">G25</div><nav class=\"ds-rail-nav\" aria-label=\"G25 tools\"><button class=\"ds-rail-item ds-current\" aria-current=\"page\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 3v18h18\"/><circle cx=\"7.5\" cy=\"13.5\" r=\".5\"/><circle cx=\"13.5\" cy=\"7.5\" r=\".5\"/><circle cx=\"18.5\" cy=\"16.5\" r=\".5\"/></svg><span>G25 PCA</span></button><button class=\"ds-rail-item\" disabled><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m21.3 8.7-6-6a1 1 0 0 0-1.4 0l-11.2 11.2a1 1 0 0 0 0 1.4l6 6a1 1 0 0 0 1.4 0L21.3 10a1 1 0 0 0 0-1.4Z\"/><path d=\"m7.5 10.5 2 2m1-5 2 2m1-5 2 2m-11 7 2 2\"/></svg><span>Distances</span><small>Planned</small></button><button class=\"ds-rail-item\" disabled><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m12 3 10 6-10 6L2 9Z\"/><path d=\"m2 15 10 6 10-6M2 12l10 6 10-6\"/></svg><span>Models</span><small>Planned</small></button></nav></aside>",
+      "css": ".ds-rail{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#30363d;width:var(--rail-width,76px);color:#e5e9ef;background:var(--color-rail,#24272b);}.ds-brand{height:var(--toolbar-height,46px);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:600;letter-spacing:-0.4px;border-bottom:1px solid #41464e;}.ds-rail-nav{padding-top:8px;}.ds-rail-item{font:inherit;width:100%;min-height:76px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;padding:12px 3px;border:0;border-radius:0;background:transparent;color:#e2e7ee;font-size:10px;cursor:pointer;}.ds-rail-item.ds-current,.ds-rail-item.ds-current:hover{background:var(--color-rail-active,#3a4048);color:#fff;}.ds-rail-item:disabled{color:#b4bdc9;background:transparent;cursor:default;}.ds-rail-item small{font-size:9px;color:#adb7c5;}.ds-rail-item:focus-visible{outline:2px solid #afcff0;outline-offset:-3px;}"
+    },
+    {
+      "name": "Coordinate entry panel",
+      "kind": "custom",
+      "refersTo": "coordinate-panel",
+      "description": "Actual heading, hint and footer treatment for the single raised surface; textarea has its own preview.",
+      "html": "<section class=\"ds-panel\" aria-label=\"G25 coordinate data\"><div class=\"ds-panel-heading\"><label>G25 coordinates</label><button class=\"ds-panel-close\" aria-label=\"Close coordinate data\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M18 6 6 18M6 6l12 12\"/></svg></button></div><p>One sample per line: name, then 25 comma-separated values. A name like <code>Group:sample</code> sets its group.</p><div class=\"ds-panel-footer\"><span>Processed in your browser \u00b7 Ctrl+Enter to run</span><button class=\"ds-primary\">Run PCA</button></div></section>",
+      "css": ".ds-primary{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#30363d;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--color-line,#d7dce1);border-radius:var(--radius-control,3px);background:#fff;cursor:pointer;border-color:var(--color-primary,#1764ac);color:var(--color-primary,#1764ac);}.ds-primary:hover:not(:disabled){background:#f2f5f7;}.ds-primary:focus-visible{outline:2px solid var(--color-primary,#1764ac);outline-offset:2px;}.ds-primary:disabled{cursor:default;color:#747c85;background:#fafbfc;}@media(prefers-reduced-motion:no-preference){.ds-primary{transition:background-color 120ms ease-out,border-color 120ms ease-out;}}.ds-primary:hover:not(:disabled){background:var(--color-primary-hover,#edf5fc);}.ds-primary:disabled{border-color:#b5c3d0;}.ds-panel{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#30363d;width:660px;padding:13px 16px 14px;border:1px solid #b7c0ca;border-radius:4px;background:#fff;box-shadow:0 7px 22px rgba(28,38,49,0.14);}.ds-panel-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}.ds-panel-heading label{font-size:13px;font-weight:600;}.ds-panel-close{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;border:1px solid transparent;border-radius:var(--radius-control,3px);background:transparent;color:#505b66;cursor:pointer;}.ds-panel-close:hover{background:#f2f5f7;}.ds-panel-close:focus-visible{outline:2px solid var(--color-primary,#1764ac);outline-offset:2px;}.ds-panel p{margin:0 0 12px;max-width:75ch;color:var(--color-muted,#59636e);font-size:11px;line-height:1.6;}.ds-panel code{font-family:Consolas,\"Liberation Mono\",monospace;font-size:11px;}.ds-panel-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:12px;color:var(--color-muted,#59636e);font-size:10px;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "G25 Views' single-chart workspace",
+    "overview": "G25 tools is a compact desktop analysis interface: one stable white chart, a charcoal tool rail and a narrow toolbar. Its visual authority is the user-pinned G25 Views composition with PCA_views' colored and outlined sample marks. The direction name records that existing commitment.\n\nThe chart carries the visual interest. Familiar Arial/Helvetica labels, blue-outline actions, subtle gray rules and small corners keep controls readable and subordinate to data. This is a code-first React, TypeScript, Vite and Plotly interface; no image composition is the design authority.",
+    "keyCharacteristics": [
+      "One dominant, stable white chart on desktop.",
+      "Compact controls with visible pressed, disabled and keyboard-focus states.",
+      "Individual sample marks with group color, shape and dark outline.",
+      "Anchored coordinate entry with the last valid result retained on input errors."
+    ],
+    "rules": [
+      {
+        "name": "Data First",
+        "body": "Sample marks carry group identity. Keep grid, hull fills, regression and interface chrome visually subordinate to them.",
+        "section": "colors"
+      },
+      {
+        "name": "Stable Chart",
+        "body": "Keep the plotting frame and ranges unchanged for legend, label, hull and regression toggles. A new fit or component change can establish new ranges.",
+        "section": "layout"
+      }
+    ],
+    "dos": [
+      "Do preserve chart dimensions and ranges when toggling the legend or geometry.",
+      "Do use both group colors and marker shapes with dark outlines.",
+      "Do retain the last successful chart on input errors and associate error copy with the field.",
+      "Do label disabled future tools Planned.",
+      "Do keep Arial/Helvetica interface text and monospace coordinate input."
+    ],
+    "donts": [
+      "Don't add settings dialogs, permanent control sidebars, mobile adaptations, regional presets or point editors to this approved surface.",
+      "Don't average away individual sample points when drawing group geometry.",
+      "Don't introduce filled primary actions, decorative cards, gradients, illustration or a hero into this chart workspace.",
+      "Don't treat synthetic review fixtures as shipping data or imply a large-data performance guarantee."
+    ]
+  }
+}
