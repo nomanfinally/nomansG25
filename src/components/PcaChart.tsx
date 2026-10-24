@@ -8,54 +8,127 @@ import {
 } from "react";
 import type { Config, Layout, PlotlyHTMLElement } from "plotly.js";
 import type { PcaResult } from "../domain/pca";
-import { axisTitle, buildFigure, type PlotView } from "../domain/figure";
+import {
+  buildFigure,
+  escapeHtml,
+  type PlotView,
+  type AddOptions,
+  type LabelOffset,
+  type NamedAnnotation,
+} from "../domain/figure";
 import { paddedRange, wheelPixels, zoomRange } from "../domain/geometry";
+import sourceIcons from "../data/g25-icons.json";
 
 type PlotlyApi = typeof import("plotly.js");
 type ChartElement = PlotlyHTMLElement & {
   _fullLayout: {
+    dragmode: Layout["dragmode"];
     xaxis: { range: number[]; _offset: number; _length: number };
     yaxis: { range: number[]; _offset: number; _length: number };
   };
 };
+export type ChartAction =
+  | "subtitle"
+  | "legend"
+  | "markerSize"
+  | "pointLabels"
+  | "labelStyle"
+  | "labels"
+  | "hulls"
+  | "hullOpacity"
+  | "regression"
+  | "projected";
+const customButtons: { index: number; action: ChartAction; title?: string }[] =
+  [
+    { index: 0, action: "subtitle" },
+    { index: 1, action: "legend", title: "Toggle legend: show / hide" },
+    { index: 6, action: "markerSize" },
+    { index: 7, action: "pointLabels" },
+    { index: 8, action: "labelStyle" },
+    { index: 9, action: "labels" },
+    { index: 10, action: "hulls" },
+    { index: 11, action: "hullOpacity" },
+    { index: 12, action: "regression" },
+    { index: 13, action: "projected" },
+  ];
 export interface ChartHandle {
-  zoom: (factor: number) => void;
-  reset: () => void;
-  savePng: () => Promise<void>;
+  savePng: (width?: number, height?: number) => Promise<void>;
 }
 interface Props {
   result: PcaResult | null;
   view: PlotView;
+  additions: AddOptions;
   revision: number;
-  onReady: (ready: boolean) => void;
+  onAction: (action: ChartAction) => void;
+  onHidden: (hidden: number[]) => void;
 }
-
-const config: Partial<Config> = {
-  displayModeBar: false,
-  scrollZoom: false,
-  responsive: false,
-  doubleClick: "reset",
-  showTips: false,
-  displaylogo: false,
-};
 
 export const PcaChart = forwardRef<ChartHandle, Props>(
   function PcaChart(props, ref) {
-    const host = useRef<HTMLDivElement>(null);
-    const api = useRef<PlotlyApi | null>(null);
+    const host = useRef<HTMLDivElement>(null),
+      api = useRef<PlotlyApi | null>(null);
     const latest = useRef(props);
     latest.current = props;
     const queue = useRef<Promise<unknown>>(Promise.resolve());
-    const renderedAxes = useRef("");
-    const renderId = useRef(0);
-    const [ready, setReady] = useState(false);
-    const [error, setError] = useState("");
+    const renderId = useRef(0),
+      renderedAxes = useRef("");
+    const offsets = useRef(new Map<string, LabelOffset>()),
+      offsetRevision = useRef(props.revision);
+    const [ready, setReady] = useState(false),
+      [error, setError] = useState("");
+    if (offsetRevision.current !== props.revision) {
+      offsets.current.clear();
+      offsetRevision.current = props.revision;
+    }
     const figure = useMemo(
-      () => (props.result ? buildFigure(props.result, props.view) : null),
-      [props.result, props.view],
+      () =>
+        props.result
+          ? buildFigure(
+              props.result,
+              props.view,
+              props.additions,
+              offsets.current,
+            )
+          : null,
+      [props.result, props.view, props.additions, props.revision],
     );
+  const resetAxes = () => {
+    const element = host.current;
+    if (!element || !api.current) return;
+    queue.current = queue.current.then(async () => {
+      const { result, view } = latest.current;
+      if (!result) {
+        await api.current!.relayout(element, { 'xaxis.autorange': true, 'yaxis.autorange': true });
+        return;
+      }
+      await api.current!.relayout(element, {
+        'xaxis.range': paddedRange(result.scores.map(row => row[view.x])),
+        'yaxis.range': paddedRange(result.scores.map(row => row[view.y])),
+        'xaxis.autorange': false, 'yaxis.autorange': false,
+      });
+    }).catch(() => setError('Unable to reset the axes. Try running PCA again.'));
+  };
+  const makeConfig = (): Partial<Config> => ({
+      displayModeBar: "hover",
+      scrollZoom: false,
+      responsive: false,
+      showTips: true,
+      displaylogo: true,
+      edits: { annotationTail: true },
+      toImageButtonOptions: { format: "png", filename: "G25 Custom PCA" },
+    modeBarButtons: [
+      ['toImage'],
+      ['zoom2d', 'pan2d', 'select2d', 'lasso2d'],
+      ['zoomIn2d', 'zoomOut2d', 'autoScale2d', { name: 'resetScale2d', title: 'Reset axes', icon: api.current!.Icons.home, click: resetAxes }],
+      customButtons.map((button) => ({
+        name: button.title ?? sourceIcons[button.index].name,
+        title: button.title ?? sourceIcons[button.index].name,
+        icon: sourceIcons[button.index].icon,
+        click: () => latest.current.onAction(button.action),
+      })),
+    ] as NonNullable<Config['modeBarButtons']>,
+    });
 
-    const reportError = (message: string) => setError(message);
     useEffect(() => {
       let disposed = false;
       const element = host.current!;
@@ -63,29 +136,60 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
         .then(async (module) => {
           if (disposed) return;
           api.current = module.default;
-          await api.current.newPlot(element, [], {}, config);
+          await api.current.newPlot(element, [], {}, makeConfig());
           if (disposed) {
             api.current.purge(element);
             return;
           }
+          const chart = element as unknown as ChartElement;
+          chart.on("plotly_relayout", (event) => {
+            if (!Object.keys(event).some((k) => k.startsWith("annotations[")))
+              return;
+            for (const annotation of (chart.layout.annotations ??
+              []) as NamedAnnotation[]) {
+              if (
+                annotation.name &&
+                typeof annotation.ax === "number" &&
+                typeof annotation.ay === "number"
+              )
+                offsets.current.set(
+                  `${latest.current.view.x}:${latest.current.view.y}:${annotation.name}`,
+                  { ax: annotation.ax, ay: annotation.ay },
+                );
+            }
+          });
+          chart.on("plotly_restyle", (event) => {
+            const update = event[0];
+            if (!update || !("visible" in update)) return;
+            const hidden = chart.data.flatMap((trace, i) =>
+              "visible" in trace &&
+              (trace.visible === "legendonly" || trace.visible === false)
+                ? [i]
+                : [],
+            );
+            latest.current.onHidden(hidden);
+          });
           setReady(true);
         })
         .catch(() => {
           if (!disposed)
-            reportError(
+            setError(
               "The chart could not start. Reload the page and try again.",
             );
         });
 
-      // One owner for wheel zoom. Zoom, render and resize share a queue so rapid
-      // wheel input cannot be overwritten by a stale toolbar redraw.
       let frame = 0,
-        delta = 0;
-      let anchor = { x: 0.5, y: 0.5 };
+        delta = 0,
+        anchor = { x: 0.5, y: 0.5 };
       const wheel = (event: WheelEvent) => {
         if (!latest.current.result || !api.current || !event.deltaY) return;
-        const chart = element as unknown as ChartElement;
-        const full = chart._fullLayout;
+        if (
+          event.target instanceof Element &&
+          event.target.closest(".legend,.modebar")
+        )
+          return;
+        const chart = element as unknown as ChartElement,
+          full = chart._fullLayout;
         if (!full) return;
         const box = element.getBoundingClientRect();
         const x =
@@ -94,9 +198,6 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
           1 -
           (event.clientY - box.top - full.yaxis._offset) / full.yaxis._length;
         if (x < 0 || x > 1 || y < 0 || y > 1) return;
-        // Scrolling a long legend must scroll its entries, never zoom the plot.
-        if (event.target instanceof Element && event.target.closest(".legend"))
-          return;
         event.preventDefault();
         event.stopPropagation();
         anchor = { x, y };
@@ -104,22 +205,31 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
         if (frame) return;
         frame = requestAnimationFrame(() => {
           frame = 0;
-          const factor = Math.exp(Math.max(-2, Math.min(2, delta * 0.0015)));
-          const position = anchor;
+          const factor = Math.exp(Math.max(-2, Math.min(2, delta * 0.0015))),
+            position = anchor;
           delta = 0;
           queue.current = queue.current
             .then(async () => {
               if (disposed || !element.isConnected) return;
-              const axes = chart._fullLayout;
+              const current = chart._fullLayout;
               await api.current!.relayout(element, {
-                "xaxis.range": zoomRange(axes.xaxis.range, factor, position.x),
-                "yaxis.range": zoomRange(axes.yaxis.range, factor, position.y),
+                "xaxis.range": zoomRange(
+                  current.xaxis.range,
+                  factor,
+                  position.x,
+                ),
+                "yaxis.range": zoomRange(
+                  current.yaxis.range,
+                  factor,
+                  position.y,
+                ),
                 "xaxis.autorange": false,
                 "yaxis.autorange": false,
               });
             })
             .catch(() => {
-              if (!disposed) reportError("Unable to zoom. Try Reset view.");
+              if (!disposed)
+                setError("Unable to zoom. Use Reset axes in the plot toolbar.");
             });
         });
       };
@@ -140,9 +250,7 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
             })
             .catch(() => {
               if (!disposed)
-                reportError(
-                  "The chart could not resize. Try reloading the page.",
-                );
+                setError("The chart could not resize. Reload the page.");
             });
         });
       });
@@ -158,188 +266,122 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
     }, []);
 
     useEffect(() => {
-      props.onReady(ready && !error);
-    }, [ready, error, props.onReady]);
-
-    useEffect(() => {
       if (!ready || !api.current || !host.current) return;
-      const { result, view, revision } = props;
-      const axesKey = `${revision}:${view.x}:${view.y}`;
+      const { result, view, revision } = props,
+        axesKey = `${revision}:${view.x}:${view.y}`;
       const axis = {
         zeroline: false,
-        showgrid: !!result,
-        gridcolor: "#eceeef",
-        gridwidth: 1,
-        showline: true,
-        mirror: true,
-        linecolor: "#6b7075",
-        linewidth: 1,
-        ticks: "outside" as const,
-        ticklen: 4,
-        tickcolor: "#8a9096",
-        tickfont: { size: 11, color: "#555d66" },
-        showticklabels: !!result,
-        automargin: false,
-        autorange: false,
+        spikemode: "across" as const,
+        spikedash: "dot" as const,
+        spikethickness: 1,
+        spikesnap: "data" as const,
+        showspikes: false,
+        tickfont: { color: "#ddd" },
       };
-      // Plotly supports autoexpand; the upstream @types omit it on Margin.
-      const margin = { l: 74, r: 28, t: 32, b: 58, autoexpand: false };
       const layout: Partial<Layout> = {
-        autosize: true,
-        margin,
-        paper_bgcolor: "#ffffff",
-        plot_bgcolor: "#ffffff",
-        font: {
-          family: "Arial, Helvetica, sans-serif",
-          size: 12,
-          color: "#30363d",
-        },
+        xaxis: { ...axis },
+        yaxis: { ...axis },
+        hovermode: "closest",
         dragmode: "pan",
-        hovermode: result ? "closest" : false,
-        hoverlabel: {
-          bgcolor: "#ffffff",
-          bordercolor: "#b8c0c8",
-          font: { size: 12, color: "#30363d" },
+        margin: { l: 50, r: 20, t: 52, b: 18 },
+        title: {
+          text:
+            "Global 25 Custom PCA" +
+            (view.subtitle
+              ? '<br><span style="font-size: 15px">' +
+                escapeHtml(view.subtitle) +
+                "</span>"
+              : ""),
+          font: { size: 17 },
         },
-        showlegend: !!result && view.legend,
-        legend: {
-          x: 0.99,
-          y: 0.99,
-          xanchor: "right",
-          yanchor: "top",
-          bgcolor: "rgba(255,255,255,.94)",
-          borderwidth: 0,
-          font: { size: 11, color: "#30363d" },
-          itemclick: false,
-          itemdoubleclick: false,
-          traceorder: "normal",
-        },
-        xaxis: {
-          ...axis,
-          title: {
-            text: result ? axisTitle(result, view.x) : "",
-            standoff: 13,
-            font: { size: 12 },
-          },
-        },
-        yaxis: {
-          ...axis,
-          title: {
-            text: result ? axisTitle(result, view.y) : "",
-            standoff: 12,
-            font: { size: 12 },
-          },
-        },
+        modebar: { activecolor: "#007bff" },
+        showlegend: view.legend,
+        legend: { itemclick: "toggle", itemdoubleclick: "toggleothers" },
         annotations: figure?.annotations ?? [],
         shapes: figure?.shapes ?? [],
         uirevision: axesKey,
       };
-      const element = host.current;
-      const id = ++renderId.current;
+      const element = host.current,
+        id = ++renderId.current;
       queue.current = queue.current
         .then(async () => {
           if (!element.isConnected || id !== renderId.current) return;
-          const previous = (element as unknown as ChartElement)._fullLayout;
+          const chart = element as unknown as ChartElement,
+            same = renderedAxes.current === axesKey,
+            previous = chart._fullLayout;
           for (const key of ["xaxis", "yaxis"] as const) {
             const index = key === "xaxis" ? view.x : view.y;
             layout[key] = {
               ...layout[key],
-              range:
-                renderedAxes.current === axesKey && previous?.[key]?.range
-                  ? [...previous[key].range]
-                  : result
-                    ? paddedRange(result.scores.map((row) => row[index]))
-                    : [-1, 1],
+              ...(result
+                ? {
+                    autorange: false,
+                    range:
+                      same && previous?.[key]?.range
+                        ? [...previous[key].range]
+                        : paddedRange(result.scores.map((row) => row[index])),
+                  }
+                : { autorange: true }),
             };
           }
-          await api.current!.react(
-            element,
-            figure?.traces ?? [],
-            layout,
-            config,
-          );
+          if (same && previous?.dragmode) layout.dragmode = previous.dragmode;
+          const annotations = (figure?.annotations ?? []).map((annotation) => ({
+            ...annotation,
+            ...offsets.current.get(`${view.x}:${view.y}:${annotation.name}`),
+          }));
+          layout.annotations = annotations;
+          const traces = (figure?.traces ?? []).map((trace, i) => ({
+            ...trace,
+            ...(same && chart.data[i] && "selectedpoints" in chart.data[i]
+              ? {
+                  selectedpoints: (
+                    chart.data[i] as { selectedpoints?: number[] }
+                  ).selectedpoints,
+                }
+              : {}),
+          }));
+          await api.current!.react(element, traces, layout, makeConfig());
           renderedAxes.current = axesKey;
           setError("");
         })
         .catch(() =>
-          reportError("The chart could not render. Try running PCA again."),
+          setError("The chart could not render. Try running PCA again."),
         );
     }, [ready, figure, props.result, props.view, props.revision]);
 
     useImperativeHandle(
       ref,
       () => ({
-        zoom(factor) {
-          const element = host.current;
-          if (!element || !api.current || !latest.current.result) return;
-          queue.current = queue.current
-            .then(async () => {
-              const full = (element as unknown as ChartElement)._fullLayout;
-              await api.current!.relayout(element, {
-                "xaxis.range": zoomRange(full.xaxis.range, factor),
-                "yaxis.range": zoomRange(full.yaxis.range, factor),
-                "xaxis.autorange": false,
-                "yaxis.autorange": false,
-              });
-            })
-            .catch(() => reportError("Unable to zoom. Try Reset view."));
-        },
-        reset() {
-          const element = host.current;
-          if (!element || !api.current) return;
-          queue.current = queue.current
-            .then(async () => {
-              const { result, view } = latest.current;
-              if (!result) return;
-              await api.current!.relayout(element, {
-                "xaxis.range": paddedRange(
-                  result.scores.map((row) => row[view.x]),
-                ),
-                "yaxis.range": paddedRange(
-                  result.scores.map((row) => row[view.y]),
-                ),
-                "xaxis.autorange": false,
-                "yaxis.autorange": false,
-              });
-            })
-            .catch(() =>
-              reportError("Unable to reset the chart. Try running PCA again."),
-            );
-        },
-        async savePng() {
+        async savePng(width, height) {
           await queue.current;
-          if (!api.current || !host.current || !latest.current.result)
-            throw new Error(
-              "The chart is still loading. Try again in a moment.",
-            );
+          if (!api.current || !host.current || !ready)
+            throw new Error("The chart is still loading. Try again.");
           const options = {
             format: "png" as const,
-            width: host.current.clientWidth,
-            height: host.current.clientHeight,
-            scale: 2,
-            filename: "G25_Custom_PCA",
+            width: width ?? host.current.clientWidth,
+            height: height ?? host.current.clientHeight,
+            filename:
+              "G25 Custom PCA" +
+              (latest.current.view.subtitle
+                ? " " + latest.current.view.subtitle
+                : ""),
           };
           await api.current.downloadImage(host.current, options);
         },
       }),
-      [],
+      [ready],
     );
-
     return (
       <>
         <div
           className="pca-chart"
           ref={host}
-          aria-label={
-            props.result
-              ? `Custom PCA of ${props.result.dataset.samples.length} samples, PC${props.view.x + 1} versus PC${props.view.y + 1}`
-              : "Empty PCA chart"
-          }
+          aria-label="Custom Global25 PCA plot"
         />
         {error && (
-          <div className="chart-error" role="alert">
+          <p className="chart-error" role="alert">
             {error}
-          </div>
+          </p>
         )}
       </>
     );

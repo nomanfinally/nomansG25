@@ -25,7 +25,14 @@ const numeric = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/;
 
 export function parseG25(text: string, scaling: Scaling): G25Dataset {
   const samples: G25Sample[] = [];
-  const lines = text.replace(/^\uFEFF/, "").split(/\r\n?|\n/);
+  const cells = text
+    .replace(/^\uFEFF/, "")
+    .replace(/join@/g, "")
+    .split(",");
+  // Match G25 Views' space-separated multi-row paste in a one-line input.
+  for (let i = 25; i < cells.length; i += 25)
+    cells[i] = cells[i].replace(/[ \t]+(?=\S)/g, "\n");
+  const lines = cells.join(",").split(/\r\n?|\n/);
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line) continue;

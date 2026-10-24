@@ -27,15 +27,17 @@ Desktop browser use. G25 coordinates only; no `.evec` import. Both scaled and ra
 - Initial analysis: Custom PCA only. Regional PCA presets are outside the initial scope.
 - Mouse-wheel zoom in/out and zoom controls.
 - Show/hide legend.
-- Better marker shapes and colors drawing from PCA_views.
-- Group labels, convex hulls and regression are confirmed additions.
-- One stable chart area, following the simplicity of G25 Views. Exact fixed-pixel versus viewport-filling dimensions have not been specified; the recommendation is one viewport-filling chart with no ratio switcher.
-- Controls belong in a compact toolbar. No settings dialog.
-- A vertical dark strip on the left is confirmed for navigation between G25 PCA, G25 distances and G25 models. The latter two analyses are future work.
+- G25 Views' Custom PCA interface is the exact design and interaction reference. The user rejected the first interpretation and requested the original's sizing, icons, hover toolbar and feature cycles.
+- Native Plotly hover modebar with its stock tools and the original G25 Views Custom PCA SVG icons. No permanent plot toolbar or status footer.
+- All Custom PCA grouping modes: Aggregated, Individual, As one group; custom group naming; main-group/subgroup decorations; creation checkboxes for labels/hulls/regression.
+- Point labels cycle off/full/group/ID; marker sizes cycle big/medium/small; group labels cycle movable/static/static with background; hull opacity cycles 0.9/0.6/0.3. Include projected-group visibility, geometry visibility, native legend interactions, subtitle and the original 18 PNG size choices.
+- Improved outlined markers and shapes from PCA_views, with the original G25 Views marker treatment also available in the compact addition-options dropdown.
+- One viewport-filling chart, no ratio switcher, no settings dialog. Top input strip matches the original 47 px height.
+- A 32 px dark icon-only left rail reserves navigation for G25 PCA, G25 distances and G25 models. The latter two analyses remain future work.
 - Desktop adaptation only for now.
 - Ask about optional features before expanding scope. Avoid importing PCA_views' entire customization system.
-- Compact X/Y component selectors and a simple PNG download are confirmed. No export settings dialog.
-- Input entry uses a compact anchored multiline panel opened from the toolbar. The working interface name is G25 tools; a final product name is not settled.
+- Compact X/Y component selectors remain. PNG export uses G25 Views' Save dropdown and native camera tool, without an export settings dialog.
+- Input entry is the original-style single-line coordinate field, accepting multiline clipboard paste and space-separated rows. No separate data-entry panel. The working interface name is G25 tools; a final product name is not settled.
 
 ## Brand Commitments
 

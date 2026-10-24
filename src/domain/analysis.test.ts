@@ -1,7 +1,12 @@
 import { describe, expect, test } from "vitest";
 import { parseG25, G25_EIGENVALUES } from "./g25";
 import { calculatePca, fitPca } from "./pca";
-import { buildFigure, initialPlotView } from "./figure";
+import {
+  buildFigure,
+  initialPlotView,
+  initialAddOptions,
+  createEntries,
+} from "./figure";
 import { convexHull, regressionLine, zoomRange } from "./geometry";
 
 const vector = (x: number, y: number) => [x, y, ...Array(23).fill(0)];
@@ -126,7 +131,12 @@ describe("Custom PCA mathematics", () => {
 describe("plot semantics", () => {
   test("groups points without replacing them with averages; creates matching geometry only when enabled", () => {
     const result = calculatePca(rectangle, "scaled");
-    const basic = buildFigure(result, initialPlotView);
+    const basic = buildFigure(result, initialPlotView, {
+      ...initialAddOptions,
+      labels: false,
+      hulls: false,
+      regression: false,
+    });
     expect(basic.traces).toHaveLength(2);
     expect(
       basic.traces.map(
@@ -142,7 +152,7 @@ describe("plot semantics", () => {
       regression: true,
     });
     expect(decorated.annotations).toHaveLength(2);
-    expect(decorated.shapes).toHaveLength(2);
+    expect(decorated.shapes).toHaveLength(4);
   });
   test("escapes user text for Plotly markup", () => {
     const result = calculatePca(
@@ -158,6 +168,50 @@ describe("plot semantics", () => {
         annotation.text?.includes("&lt;b&gt;"),
       ),
     ).toBe(true);
+  });
+  test("all original grouping modes retain samples and support subgroup decorations", () => {
+    const result = calculatePca(rectangle, "scaled");
+    const individual = createEntries(result, {
+      ...initialAddOptions,
+      mode: "individual",
+    });
+    expect(individual.map((entry) => entry.indices.length)).toEqual([
+      1, 1, 1, 1,
+    ]);
+    expect(individual.map((entry) => entry.name)).toEqual([
+      "A:one",
+      "A:two",
+      "B:one",
+      "B:two",
+    ]);
+    const single = createEntries(result, {
+      ...initialAddOptions,
+      mode: "single",
+      customName: "One group",
+      subgroups: true,
+    });
+    expect(single).toHaveLength(1);
+    expect(single[0].name).toBe("One group");
+    expect(single[0].indices).toEqual([0, 1, 2, 3]);
+    expect(single[0].decorations.map((group) => group.name)).toEqual([
+      "A",
+      "B",
+    ]);
+  });
+  test("hiding a trace also hides its owned annotations and shapes", () => {
+    const result = calculatePca(rectangle, "scaled");
+    const figure = buildFigure(result, {
+      ...initialPlotView,
+      hiddenTraces: [0],
+    });
+    expect(figure.traces[0]).toHaveProperty("visible", "legendonly");
+    expect(figure.annotations[0].visible).toBe(false);
+    expect(
+      figure.shapes
+        .filter((shape) => shape.name?.endsWith(":0:0"))
+        .every((shape) => shape.visible === false),
+    ).toBe(true);
+    expect(figure.annotations[1].visible).toBe(true);
   });
   test("degenerate hulls and vertical regression do not invent a fitted area/line", () => {
     expect(

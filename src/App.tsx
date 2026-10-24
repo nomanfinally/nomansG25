@@ -1,92 +1,138 @@
-import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  ChartScatter,
-  Ruler,
-  Layers3,
-  FileText,
-  ChevronDown,
-  Plus,
-  Minus,
-  RotateCcw,
-  List,
-  Tags,
-  Pentagon,
-  TrendingUp,
-  Download,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { ChartScatter, Ruler, Layers3 } from "lucide-react";
 import type { Scaling } from "./domain/g25";
 import type { PcaResult } from "./domain/pca";
-import { initialPlotView, type PlotView } from "./domain/figure";
-import { PcaChart, type ChartHandle } from "./components/PcaChart";
-import { DataEntry } from "./components/DataEntry";
+import {
+  imageSizes,
+  initialAddOptions,
+  initialPlotView,
+  type AddOptions,
+  type PlotView,
+  axisTitle,
+  createEntries,
+} from "./domain/figure";
+import {
+  PcaChart,
+  type ChartHandle,
+  type ChartAction,
+} from "./components/PcaChart";
+import gearPaths from "./data/g25-gear.json";
 
-function ToolButton({
+function Menu({
   label,
-  icon: Icon,
-  pressed,
-  disabled,
-  onClick,
+  children,
+  title,
 }: {
-  label: string;
-  icon: LucideIcon;
-  pressed?: boolean;
-  disabled?: boolean;
-  onClick: () => void;
+  label: ReactNode;
+  children: ReactNode;
+  title?: string;
 }) {
   return (
-    <button
-      type="button"
-      className={`icon-button${pressed ? " is-active" : ""}`}
-      title={label}
-      aria-label={label}
-      aria-pressed={pressed}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      <Icon size={16} strokeWidth={1.65} />
-    </button>
+    <details className="source-menu">
+      <summary
+        className="btn btn-sm btn-outline-secondary dropdown-toggle"
+        title={title}
+      >
+        {label}
+      </summary>
+      <div className="dropdown-menu">{children}</div>
+    </details>
   );
 }
+function closeMenu(event: React.MouseEvent<HTMLElement>) {
+  event.currentTarget.closest("details")?.removeAttribute("open");
+}
+const addModeNames = {
+  aggregated: "Aggregated",
+  individual: "Individual",
+  single: "As one group",
+};
 
 export default function App() {
-  const [text, setText] = useState("");
-  const [scaling, setScaling] = useState<Scaling>("scaled");
-  const [dataOpen, setDataOpen] = useState(false);
-  const [result, setResult] = useState<PcaResult | null>(null);
-  const [view, setView] = useState<PlotView>(initialPlotView);
-  const [revision, setRevision] = useState(0);
-  const [busy, setBusy] = useState(false);
-  const [ready, setReady] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [exportError, setExportError] = useState("");
-  const [lastInput, setLastInput] = useState({
-    text: "",
-    scaling: "scaled" as Scaling,
-  });
-  const plot = useRef<ChartHandle>(null);
-  const worker = useRef<Worker | null>(null);
+  const [text, setText] = useState(""),
+    [scaling, setScaling] = useState<Scaling>("scaled");
+  const [options, setOptions] = useState<AddOptions>(initialAddOptions),
+    [applied, setApplied] = useState<AddOptions>(initialAddOptions);
+  const [result, setResult] = useState<PcaResult | null>(null),
+    [view, setView] = useState<PlotView>(initialPlotView);
+  const [revision, setRevision] = useState(0),
+    [busy, setBusy] = useState(false);
+  const [error, setError] = useState(""),
+    [saveError, setSaveError] = useState("");
+  const plot = useRef<ChartHandle>(null),
+    worker = useRef<Worker | null>(null),
+    requestId = useRef(0),
+    input = useRef<HTMLInputElement>(null);
   useEffect(() => () => worker.current?.terminate(), []);
-  const onReady = useCallback((value: boolean) => setReady(value), []);
-  const dirty =
-    !!result &&
-    (text.trim() !== lastInput.text || scaling !== lastInput.scaling);
+  useEffect(() => {
+    document.title = "G25 tools — Custom PCA";
+    const normalizeHash = () => {
+      if (window.location.hash !== "#Custom")
+        window.history.replaceState(
+          null,
+          "",
+          window.location.pathname + window.location.search + "#Custom",
+        );
+    };
+    normalizeHash();
+    window.addEventListener("hashchange", normalizeHash);
+    const outside = (event: PointerEvent) => {
+      document
+        .querySelectorAll<HTMLDetailsElement>("details.source-menu[open]")
+        .forEach((menu) => {
+          if (!menu.contains(event.target as Node)) menu.open = false;
+        });
+    };
+    const escape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      document
+        .querySelectorAll<HTMLDetailsElement>("details.source-menu[open]")
+        .forEach((menu) => {
+          menu.open = false;
+          menu.querySelector<HTMLElement>("summary")?.focus();
+        });
+    };
+    document.addEventListener("pointerdown", outside);
+    document.addEventListener("keydown", escape);
+    return () => {
+      window.removeEventListener("hashchange", normalizeHash);
+      document.removeEventListener("pointerdown", outside);
+      document.removeEventListener("keydown", escape);
+    };
+  }, []);
 
+  const reset = () => {
+    requestId.current++;
+    worker.current?.terminate();
+    worker.current = null;
+    setBusy(false);
+    setError("");
+    setSaveError("");
+    setResult(null);
+    setView({ ...initialPlotView, hiddenTraces: [] });
+    setRevision((value) => value + 1);
+  };
   const run = () => {
     if (busy) return;
     setError("");
-    setExportError("");
+    setSaveError("");
     if (!text.trim()) {
       setError(
-        "Paste G25 coordinates first. Each row needs a name and 25 comma-separated values.",
+        "Paste a sample name and 25 comma-separated G25 coordinates per row.",
       );
-      setDataOpen(true);
+      input.current?.focus();
       return;
     }
     worker.current?.terminate();
     setBusy(true);
-    const input = { text: text.trim(), scaling };
+    const id = ++requestId.current,
+      runOptions = { ...options };
     try {
       const next = new Worker(
         new URL("./workers/pca.worker.ts", import.meta.url),
@@ -96,278 +142,423 @@ export default function App() {
       next.onmessage = (
         event: MessageEvent<{ result?: PcaResult; error?: string }>,
       ) => {
+        if (id !== requestId.current) return;
         if (event.data.result) {
           setResult(event.data.result);
+          setApplied(runOptions);
+          setView({ ...initialPlotView, hiddenTraces: [] });
           setRevision((value) => value + 1);
-          setView((current) => ({ ...current, x: 0, y: 1 }));
-          setLastInput(input);
-          setDataOpen(false);
         } else {
           setError(
             event.data.error ??
-              "The PCA could not be calculated. Check the input and try again.",
+              "The PCA could not be calculated. Check the coordinate rows.",
           );
-          setDataOpen(true);
+          input.current?.focus();
         }
         setBusy(false);
         next.terminate();
         worker.current = null;
       };
       next.onerror = () => {
+        if (id !== requestId.current) return;
         setError("The PCA could not start. Reload the page and try again.");
-        setDataOpen(true);
         setBusy(false);
         next.terminate();
         worker.current = null;
       };
-      next.postMessage(input);
+      next.postMessage({ text: text.trim(), scaling });
     } catch {
-      setError("The PCA could not start. Reload the page and try again.");
       setBusy(false);
-      setDataOpen(true);
+      setError("The PCA could not start. Reload the page and try again.");
     }
   };
-
-  const toggle = (key: "legend" | "labels" | "hulls" | "regression") =>
-    setView((current) => ({ ...current, [key]: !current[key] }));
-  const enabled = !!result && ready && !busy;
-  const save = async () => {
-    setSaving(true);
-    setExportError("");
+  const action = useCallback(
+    (action: ChartAction) => {
+      if (action === "subtitle") {
+        const subtitle = window.prompt("Please enter subtitle");
+        setView((current) => ({
+          ...current,
+          subtitle: subtitle?.trim() ?? "",
+        }));
+        return;
+      }
+      setView((current) => {
+        switch (action) {
+          case "legend":
+            return { ...current, legend: !current.legend };
+          case "markerSize":
+            return { ...current, markerSize: (current.markerSize + 1) % 3 };
+          case "pointLabels":
+            return { ...current, pointLabels: (current.pointLabels + 1) % 4 };
+          case "labelStyle":
+            return { ...current, labelStyle: (current.labelStyle + 1) % 3 };
+          case "labels":
+            return { ...current, labels: !current.labels };
+          case "hulls":
+            return { ...current, hulls: !current.hulls };
+          case "hullOpacity":
+            return { ...current, hullOpacity: (current.hullOpacity + 1) % 3 };
+          case "regression":
+            return { ...current, regression: !current.regression };
+          case "projected": {
+            const count = result ? createEntries(result, applied).length : 0;
+            return {
+              ...current,
+              hiddenTraces:
+                current.hiddenTraces.length < count
+                  ? Array.from({ length: count }, (_, i) => i)
+                  : [],
+            };
+          }
+          default:
+            return current;
+        }
+      });
+    },
+    [result, applied],
+  );
+  const hidden = useCallback(
+    (hiddenTraces: number[]) =>
+      setView((current) => {
+        if (
+          hiddenTraces.length === current.hiddenTraces.length &&
+          hiddenTraces.every((n, i) => n === current.hiddenTraces[i])
+        )
+          return current;
+        return { ...current, hiddenTraces };
+      }),
+    [],
+  );
+  const save = async (width: number, height: number) => {
+    setSaveError("");
     try {
-      await plot.current?.savePng();
+      await plot.current?.savePng(width, height);
     } catch (error) {
-      setExportError(
+      setSaveError(
         error instanceof Error
           ? error.message
           : "The PNG could not be saved. Try again.",
       );
-    } finally {
-      setSaving(false);
     }
   };
+  const patch = (change: Partial<AddOptions>) =>
+    setOptions((current) => ({ ...current, ...change }));
 
   return (
     <div className="app-shell">
-      <aside className="tool-rail">
-        <div className="rail-brand" aria-label="G25 tools">
-          G25
-        </div>
-        <nav aria-label="G25 tools">
-          <button
-            className="rail-item is-current"
-            aria-current="page"
-            title="G25 PCA"
-          >
-            <ChartScatter size={21} strokeWidth={1.5} />
-            <span>G25 PCA</span>
-          </button>
-          <button
-            className="rail-item"
-            disabled
-            title="G25 distances — planned"
-          >
-            <Ruler size={21} strokeWidth={1.5} />
-            <span>Distances</span>
-            <small>Planned</small>
-          </button>
-          <button className="rail-item" disabled title="G25 models — planned">
-            <Layers3 size={21} strokeWidth={1.5} />
-            <span>Models</span>
-            <small>Planned</small>
-          </button>
-        </nav>
-      </aside>
+      <nav className="tool-rail" aria-label="G25 tools">
+        <button
+          className="rail-icon current"
+          aria-label="G25 PCA"
+          aria-current="page"
+          title="G25 PCA"
+        >
+          <ChartScatter size={18} strokeWidth={1.5} />
+        </button>
+        <button
+          className="rail-icon"
+          aria-label="G25 distances — planned"
+          title="G25 distances — planned"
+          disabled
+        >
+          <Ruler size={18} strokeWidth={1.5} />
+        </button>
+        <button
+          className="rail-icon"
+          aria-label="G25 models — planned"
+          title="G25 models — planned"
+          disabled
+        >
+          <Layers3 size={18} strokeWidth={1.5} />
+        </button>
+      </nav>
       <main className="workspace">
-        <header className="toolbar" aria-label="PCA toolbar">
-          <button
-            className={`data-trigger${dataOpen ? " is-active" : ""}`}
-            data-data-trigger
-            aria-controls="coordinate-panel"
-            aria-expanded={dataOpen}
-            onClick={() => setDataOpen(!dataOpen)}
-            title="Paste or edit G25 coordinates"
-          >
-            <FileText size={15} />
-            <span>
-              {result
-                ? `${result.dataset.samples.length.toLocaleString()} G25 samples${dirty ? " · edited" : ""}`
-                : "Paste G25 coordinates…"}
-            </span>
-            <ChevronDown size={13} />
-          </button>
-          <select
-            aria-label="Coordinate scaling"
-            value={scaling}
+        <form
+          className="input-group input-group-sm p-2 source-controls"
+          aria-label="G25 coordinate controls"
+          onSubmit={(event) => {
+            event.preventDefault();
+            run();
+          }}
+        >
+          <div className="input-group-prepend">
+            <button
+              className="btn btn-outline-primary"
+              type="button"
+              onClick={reset}
+            >
+              Reset plot
+            </button>
+            <Menu label="Save">
+              {imageSizes.map(([width, height]) => (
+                <button
+                  key={`${width}:${height}`}
+                  className="dropdown-item btn-sm"
+                  type="button"
+                  onClick={(event) => {
+                    closeMenu(event);
+                    void save(width, height);
+                  }}
+                >
+                  {width}×{height} px
+                </button>
+              ))}
+            </Menu>
+          </div>
+          <input
+            ref={input}
+            id="coordsInput"
+            aria-label="Global25 coordinates"
+            aria-invalid={!!error}
+            aria-describedby={error ? "coordinate-error" : undefined}
+            className={`form-control${error ? " is-invalid" : ""}`}
+            type="text"
+            placeholder="Paste single or multiple Global 25 coordinates here."
+            spellCheck={false}
+            value={text.replace(/\r?\n/g, " ")}
+            title={error || "Paste G25 rows; press Enter to run Custom PCA"}
             onChange={(event) => {
-              setScaling(event.target.value as Scaling);
+              setText(event.target.value);
               setError("");
             }}
-            disabled={busy}
-          >
-            <option value="scaled">Scaled</option>
-            <option value="raw">Raw</option>
-          </select>
-          <button className="button run-button" onClick={run} disabled={busy}>
-            {busy ? "Calculating…" : "Run PCA"}
-          </button>
-          <div className="tool-divider" />
-          <ToolButton
-            label="Reset view"
-            icon={RotateCcw}
-            disabled={!enabled}
-            onClick={() => plot.current?.reset()}
+            onPaste={(event) => {
+              const pasted = event.clipboardData.getData("text");
+              if (!pasted) return;
+              event.preventDefault();
+              const target = event.currentTarget,
+                start = target.selectionStart ?? 0,
+                end = target.selectionEnd ?? start,
+                display = text.replace(/\r?\n/g, " ");
+              setText(
+                display.slice(0, start) +
+                  pasted.replace(/\r?\n/g, " ") +
+                  display.slice(end),
+              );
+              setError("");
+            }}
           />
-          <ToolButton
-            label="Zoom in"
-            icon={Plus}
-            disabled={!enabled}
-            onClick={() => plot.current?.zoom(0.75)}
-          />
-          <ToolButton
-            label="Zoom out"
-            icon={Minus}
-            disabled={!enabled}
-            onClick={() => plot.current?.zoom(1 / 0.75)}
-          />
-          <div className="tool-divider" />
-          <ToolButton
-            label="Toggle legend"
-            icon={List}
-            pressed={view.legend}
-            disabled={!enabled}
-            onClick={() => toggle("legend")}
-          />
-          <ToolButton
-            label="Toggle group labels"
-            icon={Tags}
-            pressed={view.labels}
-            disabled={!enabled}
-            onClick={() => toggle("labels")}
-          />
-          <ToolButton
-            label="Toggle convex hulls"
-            icon={Pentagon}
-            pressed={view.hulls}
-            disabled={!enabled}
-            onClick={() => toggle("hulls")}
-          />
-          <ToolButton
-            label="Toggle regression lines"
-            icon={TrendingUp}
-            pressed={view.regression}
-            disabled={!enabled}
-            onClick={() => toggle("regression")}
-          />
-          <div className="toolbar-spacer" />
-          <div className="axis-controls">
-            {(["x", "y"] as const).map((axis) => (
-              <label key={axis}>
-                <span>{axis.toUpperCase()}</span>
-                <select
-                  aria-label={
-                    axis === "x" ? "Horizontal component" : "Vertical component"
-                  }
-                  value={view[axis]}
-                  disabled={!enabled}
-                  onChange={(event) =>
-                    setView((current) => ({
-                      ...current,
-                      [axis]: Number(event.target.value),
-                    }))
-                  }
+          <div className="input-group-append">
+            <button
+              className="close clear-coordinates"
+              aria-label="Clear coordinates"
+              type="button"
+              onClick={() => {
+                setText("");
+                setError("");
+                input.current?.focus();
+              }}
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+            <Menu
+              label={scaling === "scaled" ? "Scaled" : "Raw"}
+              title="Coordinate scaling"
+            >
+              {(["scaled", "raw"] as const).map((value) => (
+                <button
+                  className="dropdown-item btn-sm"
+                  type="button"
+                  key={value}
+                  onClick={(event) => {
+                    setScaling(value);
+                    setError("");
+                    closeMenu(event);
+                  }}
                 >
-                  {Array.from(
-                    { length: result?.componentCount ?? 2 },
-                    (_, index) => (
-                      <option
-                        key={index}
-                        value={index}
-                        disabled={index === view[axis === "x" ? "y" : "x"]}
-                      >
-                        PC{index + 1}
-                      </option>
-                    ),
-                  )}
-                </select>
-              </label>
-            ))}
+                  {value === "scaled" ? "Scaled" : "Raw"}
+                </button>
+              ))}
+            </Menu>
+            <Menu label={addModeNames[options.mode]} title="Grouping mode">
+              {(["aggregated", "individual", "single"] as const).map(
+                (value) => (
+                  <button
+                    className="dropdown-item btn-sm"
+                    type="button"
+                    key={value}
+                    onClick={(event) => {
+                      patch({ mode: value });
+                      closeMenu(event);
+                    }}
+                  >
+                    {addModeNames[value]}
+                  </button>
+                ),
+              )}
+            </Menu>
           </div>
-          <div className="tool-divider" />
-          <button
-            className="button save-button"
-            disabled={!enabled || saving}
-            onClick={() => void save()}
-          >
-            <Download size={14} />
-            {saving ? "Saving…" : "Save PNG"}
-          </button>
-        </header>
+          {options.mode === "single" && (
+            <input
+              className="form-control custom-name"
+              aria-label="Custom group name"
+              placeholder="Type custom name"
+              value={options.customName}
+              spellCheck={false}
+              onChange={(event) => patch({ customName: event.target.value })}
+            />
+          )}
+          <div className="input-group-append">
+            <Menu
+              title="Addition options"
+              label={
+                <svg
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  aria-label="Addition options"
+                >
+                  {gearPaths.map((d, i) => (
+                    <path key={i} fillRule="evenodd" d={d} />
+                  ))}
+                </svg>
+              }
+            >
+              <div className="addition-options py-2 px-3">
+                {(["labels", "hulls", "regression"] as const).map((key, i) => (
+                  <div
+                    className="custom-control form-control-sm custom-switch"
+                    key={key}
+                  >
+                    <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id={`add-${key}`}
+                      checked={options[key]}
+                      onChange={(event) =>
+                        patch({ [key]: event.target.checked })
+                      }
+                    />
+                    <label
+                      className="custom-control-label"
+                      htmlFor={`add-${key}`}
+                    >
+                      {
+                        [
+                          "Add group labels",
+                          "Add convex hulls",
+                          "Add regression lines",
+                        ][i]
+                      }
+                    </label>
+                  </div>
+                ))}
+                {options.mode === "single" && (
+                  <fieldset className="subgroup-options">
+                    <legend className="dropdown-header">Add to:</legend>
+                    {[false, true].map((value) => (
+                      <div
+                        className="custom-control custom-radio form-control-sm ml-2"
+                        key={String(value)}
+                      >
+                        <input
+                          type="radio"
+                          className="custom-control-input"
+                          name="decorate-group"
+                          id={value ? "subgroups" : "main-group"}
+                          checked={options.subgroups === value}
+                          onChange={() => patch({ subgroups: value })}
+                        />
+                        <label
+                          className="custom-control-label"
+                          htmlFor={value ? "subgroups" : "main-group"}
+                        >
+                          {value ? "Aggregated subgroups" : "Main group"}
+                        </label>
+                      </div>
+                    ))}
+                  </fieldset>
+                )}
+                <label className="marker-choice" htmlFor="marker-appearance">
+                  Markers
+                  <select
+                    id="marker-appearance"
+                    aria-label="Marker appearance"
+                    className="custom-select custom-select-sm"
+                    value={options.appearance}
+                    onChange={(event) =>
+                      patch({
+                        appearance: event.target
+                          .value as AddOptions["appearance"],
+                      })
+                    }
+                  >
+                    <option value="outlined">
+                      PCA Views outlines & shapes
+                    </option>
+                    <option value="g25">Original G25 Views</option>
+                  </select>
+                </label>
+              </div>
+            </Menu>
+            <div
+              className="component-controls"
+              aria-label="Custom PCA components"
+            >
+              {(["x", "y"] as const).map((axis) => (
+                <label key={axis}>
+                  <span>{axis.toUpperCase()}</span>
+                  <select
+                    aria-label={
+                      axis === "x"
+                        ? "Horizontal component"
+                        : "Vertical component"
+                    }
+                    title={
+                      result
+                        ? axisTitle(result, view[axis])
+                        : `PC${view[axis] + 1}`
+                    }
+                    className="custom-select custom-select-sm"
+                    value={view[axis]}
+                    disabled={!result || busy}
+                    onChange={(event) =>
+                      setView((current) => ({
+                        ...current,
+                        [axis]: Number(event.target.value),
+                      }))
+                    }
+                  >
+                    {Array.from(
+                      { length: result?.componentCount ?? 2 },
+                      (_, i) => (
+                        <option
+                          value={i}
+                          key={i}
+                          disabled={i === view[axis === "x" ? "y" : "x"]}
+                        >{`PC${i + 1}`}</option>
+                      ),
+                    )}
+                  </select>
+                </label>
+              ))}
+            </div>
+            <button
+              className="btn btn-outline-primary"
+              type="submit"
+              disabled={busy}
+            >
+              {busy ? "Running…" : "Run PCA"}
+            </button>
+          </div>
+        </form>
         <div className="plot-surface" aria-busy={busy}>
           <PcaChart
+            ref={plot}
             result={result}
             view={view}
+            additions={applied}
             revision={revision}
-            ref={plot}
-            onReady={onReady}
+            onAction={action}
+            onHidden={hidden}
           />
-          {!result && (
-            <div className="empty-state">
-              <h1>G25 PCA</h1>
-              <p>Paste G25 coordinates to run a custom PCA.</p>
-              <button
-                className="button"
-                data-data-trigger
-                onClick={() => setDataOpen(true)}
-              >
-                Paste coordinates
-              </button>
-            </div>
-          )}
-          {busy && (
-            <div className="calculation-status" role="status">
-              Calculating custom PCA…
-            </div>
-          )}
         </div>
-        <footer className="chart-status" aria-live="polite">
-          <span>
-            {result
-              ? `Custom PCA · ${result.dataset.samples.length.toLocaleString()} samples · ${result.dataset.groups.length.toLocaleString()} groups`
-              : "Custom PCA · G25 coordinates only"}
-            {dirty && (
-              <span className="pending-note">
-                {" "}
-                · Input changed — Run PCA to update
-              </span>
-            )}
-          </span>
-          <span>
-            {exportError ? (
-              <span className="export-error" role="alert">
-                {exportError}
-              </span>
-            ) : result ? (
-              `${result.dataset.scaling === "raw" ? "Raw input → scaled G25" : "Scaled G25"} · Wheel to zoom · Drag to pan`
-            ) : (
-              "Processed in your browser"
-            )}
-          </span>
-        </footer>
+        {(error || saveError) && (
+          <p className="input-feedback" id="coordinate-error" role="alert">
+            {error || saveError}
+          </p>
+        )}
       </main>
-      {dataOpen && (
-        <DataEntry
-          value={text}
-          onChange={(value) => {
-            setText(value);
-            setError("");
-          }}
-          onRun={run}
-          onClose={() => setDataOpen(false)}
-          error={error}
-          busy={busy}
-        />
-      )}
     </div>
   );
 }
