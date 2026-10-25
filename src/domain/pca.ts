@@ -34,7 +34,10 @@ export function fitPca(dataset: G25Dataset): PcaResult {
       "These samples have identical coordinates. Add samples with different G25 coordinates.",
     );
 
-  const pca = new PCA(rows, { center: true, scale: false });
+  // Exact parity with g25views (ml 4.0.0): use covarianceMatrix when rows > 25, SVD otherwise.
+  // g25views performs no artificial axis-sign flipping.
+  const method = rows.length > 25 ? "covarianceMatrix" : "SVD";
+  const pca = new PCA(rows, { method, center: true, scale: false });
   const allEigenvalues = pca
     .getEigenvalues()
     .map((value) => Math.max(0, value));
@@ -56,17 +59,6 @@ export function fitPca(dataset: G25Dataset): PcaResult {
     .getEigenvectors()
     .to2DArray()
     .map((row) => row.slice(0, componentCount));
-  // Fix otherwise arbitrary axis signs for repeatable runs (largest loading positive).
-  for (let j = 0; j < componentCount; j++) {
-    let largest = 0;
-    for (let i = 1; i < 25; i++)
-      if (Math.abs(loadings[i][j]) > Math.abs(loadings[largest][j]))
-        largest = i;
-    if (loadings[largest][j] < 0) {
-      for (const row of loadings) row[j] *= -1;
-      for (const row of scores) row[j] *= -1;
-    }
-  }
   if (!scores.every((row) => row.every(Number.isFinite)))
     throw new Error(
       "The PCA produced invalid coordinates. Check the input values.",

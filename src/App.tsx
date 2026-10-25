@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChartScatter, Ruler, Layers3, PanelLeftOpen, PanelLeftClose } from "lucide-react";
+import {
+  ChartScatter,
+  Ruler,
+  Layers3,
+  PanelLeftOpen,
+  PanelLeftClose,
+  Maximize,
+  Minimize,
+} from "lucide-react";
 import type { PcaResult } from "./domain/pca";
 import {
   initialAddOptions,
@@ -280,17 +288,27 @@ export default function App() {
             </span>
           </div>
         )}
-        {result && (
-          <div className="header-variance">
-            <span className="variance-stat">
-              PC{view.x + 1} ({(result.explainedVariance[view.x] * 100).toFixed(1)}%)
-            </span>
-            <span className="variance-dot">·</span>
-            <span className="variance-stat">
-              PC{view.y + 1} ({(result.explainedVariance[view.y] * 100).toFixed(1)}%)
-            </span>
-          </div>
-        )}
+        <div className="header-actions">
+          {result && (
+            <div className="header-variance">
+              <span className="variance-stat">
+                PC{view.x + 1} ({(result.explainedVariance[view.x] * 100).toFixed(1)}%)
+              </span>
+              <span className="variance-dot">·</span>
+              <span className="variance-stat">
+                PC{view.y + 1} ({(result.explainedVariance[view.y] * 100).toFixed(1)}%)
+              </span>
+            </div>
+          )}
+          <button
+            className="icon-button header-enlarge-btn"
+            aria-label={fullscreen ? "Exit fullscreen" : "Fullscreen"}
+            title={fullscreen ? "Exit fullscreen" : "Fullscreen"}
+            onClick={toggleFullscreen}
+          >
+            {fullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
+          </button>
+        </div>
       </header>
 
       <div className="app-content">
@@ -374,6 +392,13 @@ export default function App() {
             advanced={advanced}
             criteriaCount={criteria.filter((rule) => rule.value.trim()).length}
             onCollapse={() => setCollapsed(true)}
+            options={options}
+            onOptions={(change) => {
+              setOptions((current) => ({ ...current, ...change }));
+            }}
+            view={view}
+            patch={patch}
+            result={result}
           />
         </div>
 
@@ -448,10 +473,6 @@ export default function App() {
                 action={action}
                 plot={plot}
                 result={result}
-                options={options}
-                onOptions={(change) => {
-                  setOptions((current) => ({ ...current, ...change }));
-                }}
                 onClear={() => {
                   catalogue.clearSelection();
                   setSaveError("");
@@ -459,8 +480,6 @@ export default function App() {
                 onSave={(w, h) => void save(w, h)}
                 onOpenExport={() => setExportOpen(true)}
                 onTable={toggleTable}
-                fullscreen={fullscreen}
-                onFullscreen={toggleFullscreen}
               />
 
               <PcaChart
@@ -473,20 +492,13 @@ export default function App() {
                 onHidden={hidden}
               />
 
-              {result && view.legend && (
-                <PcaLegend
-                  result={result}
-                  options={options}
-                  view={view}
-                  onHidden={hidden}
-                  onClose={() => patch({ legend: false })}
-                />
-              )}
-
               {exportOpen && (
                 <ExportDialog
                   plot={plot}
+                  result={result}
                   view={view}
+                  options={options}
+                  selectedRows={catalogue.selected}
                   patchView={patch}
                   onSave={(w, h) => void save(w, h)}
                   onClose={() => setExportOpen(false)}
@@ -506,6 +518,16 @@ export default function App() {
                 </p>
               )}
             </div>
+
+            {result && view.legend && (
+              <PcaLegend
+                result={result}
+                options={options}
+                view={view}
+                onHidden={hidden}
+                onClose={() => patch({ legend: false })}
+              />
+            )}
           </main>
         </div>
     </div>

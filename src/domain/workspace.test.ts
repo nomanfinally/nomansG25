@@ -9,6 +9,8 @@ import {
   filterRows,
   matchesFilter,
   filterError,
+  compileSearch,
+  matchesRowRegex,
   type MetadataFilter,
 } from "./filters";
 import { prepareSearch, scoreSearch } from "./search";
@@ -159,5 +161,35 @@ test("export imageSizes contains all 18 dimensions matching PCA_views requiremen
   expect(imageSizes[0]).toEqual([800, 400]);
   expect(imageSizes.some(([w, h]) => w === 1920 && h === 1080)).toBe(true);
   expect(imageSizes.some(([w, h]) => w === 3840 && h === 2160)).toBe(true);
+});
+
+test("G25 Manager regex search compiles patterns, supports /regex/ and re:, and reports invalid regex errors", () => {
+  // Plain text
+  const plain = compileSearch("Europe");
+  expect(plain.regex).toBeNull();
+  expect(plain.error).toBe("");
+  expect(plain.query).toBe("europe");
+
+  // Slash regex
+  const regexSlash = compileSearch("/^Möd.*Avar/i");
+  expect(regexSlash.regex).not.toBeNull();
+  expect(regexSlash.error).toBe("");
+
+  // re: prefix regex
+  const rePrefix = compileSearch("re: ^Avar|Asia");
+  expect(rePrefix.regex).not.toBeNull();
+  expect(rePrefix.error).toBe("");
+
+  // Invalid regex
+  const invalid = compileSearch("/[unclosed-bracket/");
+  expect(invalid.error).toContain("Invalid regular expression");
+  expect(invalid.regex).toBeNull();
+
+  // Scope property matching
+  const testRow = database.rows[0]; // Mödling_Avar, a1, Europe, 650
+  expect(matchesRowRegex(testRow, "Regions", compileSearch("Europe"))).toBe(true);
+  expect(matchesRowRegex(testRow, "Regions", compileSearch("Asia"))).toBe(false);
+  expect(matchesRowRegex(testRow, "All fields", compileSearch("a1"))).toBe(true);
+  expect(matchesRowRegex(testRow, "Genetic ID", compileSearch("/^a\\d/"))).toBe(true);
 });
 

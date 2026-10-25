@@ -54,6 +54,9 @@ export function AdvancedSearch({
 
   const [scroll, setScroll] = useState(0);
   const [height, setHeight] = useState(400);
+  const [entityMode, setEntityMode] = useState<"individual" | "group">(
+    "individual",
+  );
   const scroller = useRef<HTMLDivElement>(null);
 
   const compiled = useMemo(
@@ -61,10 +64,59 @@ export function AdvancedSearch({
     [regexScope.query],
   );
 
+  const groupRows = useMemo(() => {
+    const map = new Map<
+      string,
+      { group: string; origin: CatalogueRow["origin"]; members: CatalogueRow[] }
+    >();
+    for (const row of matches) {
+      let entry = map.get(row.group);
+      if (!entry) {
+        entry = { group: row.group, origin: row.origin, members: [] };
+        map.set(row.group, entry);
+      }
+      entry.members.push(row);
+    }
+
+    const nonIdColumns = columns.filter(
+      (c) => c !== "Group ID" && c !== "Genetic ID",
+    );
+    const result: {
+      group: string;
+      origin: CatalogueRow["origin"];
+      members: CatalogueRow[];
+      sampleCount: number;
+      metadata: Record<string, string>;
+    }[] = [];
+
+    for (const [group, entry] of map.entries()) {
+      const metadata: Record<string, string> = {};
+      for (const col of nonIdColumns) {
+        const unique = [
+          ...new Set(
+            entry.members
+              .map((m) => m.metadata?.[col]?.trim())
+              .filter(Boolean),
+          ),
+        ];
+        metadata[col] = unique.join(", ") || "–";
+      }
+      result.push({
+        group,
+        origin: entry.origin,
+        members: entry.members,
+        sampleCount: entry.members.length,
+        metadata,
+      });
+    }
+
+    return result;
+  }, [matches, columns]);
+
   useEffect(() => {
     setScroll(0);
     scroller.current?.scrollTo(0, 0);
-  }, [matches]);
+  }, [matches, entityMode]);
 
   useEffect(() => {
     if (!scroller.current) return;
@@ -80,8 +132,10 @@ export function AdvancedSearch({
     [catalogue.selected],
   );
 
+  const totalCount =
+    entityMode === "individual" ? matches.length : groupRows.length;
   const start = Math.max(0, Math.floor(scroll / 28) - 6);
-  const end = Math.min(matches.length, start + Math.ceil(height / 28) + 14);
+  const end = Math.min(totalCount, start + Math.ceil(height / 28) + 14);
 
   const patch = (id: number, change: Partial<MetadataFilter>) =>
     onCriteria(
@@ -116,11 +170,53 @@ export function AdvancedSearch({
         </div>
       </header>
 
-      {/* Regex-Compatible Property Search Bar (G25_Manager / ArchaeoBase style) */}
+      {/* Regex-Compatible Property Search Bar (G25_Manager / ArchaeoBase attached dropdown style) */}
       <div className="advanced-regex-bar" role="search" aria-label="Metadata search">
-        <div className="regex-scope-row">
-          <div className="property-select regex-property-select">
+        <div
+          className={`toolbar-search ${regexScope.query.trim() ? "search-expanded" : ""} ${compiled.error ? "invalid" : ""}`}
+          id="search-control"
+          title={
+            compiled.error ||
+            "Search text, /regular expression/, or re: expression (Esc to clear)"
+          }
+        >
+          <Search size={14} className="search-icon" aria-hidden="true" />
+          <input
+            id="search-input"
+            type="search"
+            aria-label="Search text or regular expression"
+            aria-invalid={Boolean(compiled.error)}
+            placeholder="Search or /regex/…"
+            value={regexScope.query}
+            autoComplete="off"
+            spellCheck={false}
+            onChange={(e) =>
+              onRegexScope({ ...regexScope, query: e.target.value })
+            }
+            onKeyDown={(e) => {
+              if (e.key === "Escape" && regexScope.query) {
+                e.stopPropagation();
+                onRegexScope({ ...regexScope, query: "" });
+              }
+            }}
+          />
+          {regexScope.query && (
+            <button
+              type="button"
+              className="search-clear"
+              aria-label="Clear regex search"
+              title="Clear search (Esc)"
+              onClick={() => onRegexScope({ ...regexScope, query: "" })}
+            >
+              <X size={13} aria-hidden="true" />
+            </button>
+          )}
+          <div
+            className="search-field-attached"
+            title={`Search property: ${regexScope.field}`}
+          >
             <select
+              id="search-field"
               aria-label="Search scope property"
               value={regexScope.field}
               onChange={(e) =>
@@ -134,34 +230,17 @@ export function AdvancedSearch({
                 </option>
               ))}
             </select>
-            <span className="property-value" aria-hidden="true">
+            <span className="search-field-label" aria-hidden="true">
               {regexScope.field}
             </span>
-            <ChevronDown size={13} aria-hidden="true" />
-          </div>
-          <div className="regex-input-wrapper">
-            <Search size={13} className="regex-search-icon" />
-            <input
-              type="text"
-              aria-label="Search text or regular expression"
-              placeholder="Search or /regex/…"
-              value={regexScope.query}
-              onChange={(e) =>
-                onRegexScope({ ...regexScope, query: e.target.value })
-              }
+            <ChevronDown
+              size={12}
+              className="search-field-caret"
+              aria-hidden="true"
             />
-            {regexScope.query && (
-              <button
-                type="button"
-                className="chip-remove"
-                aria-label="Clear regex search"
-                onClick={() => onRegexScope({ ...regexScope, query: "" })}
-              >
-                <X size={12} />
-              </button>
-            )}
           </div>
         </div>
+
         {compiled.error && (
           <p className="data-error regex-error" role="alert">
             {compiled.error}
@@ -305,8 +384,37 @@ export function AdvancedSearch({
       </div>
 
       <div className="advanced-results-heading">
-        <span>{matches.length.toLocaleString()} matching samples</span>
-        <div>
+        <div className="heading-left-cluster">
+          <div
+            className="segmented tool-entity-toggle"
+            role="group"
+            aria-label="Entity level"
+          >
+            <button
+              type="button"
+              className={entityMode === "individual" ? "active" : ""}
+              onClick={() => setEntityMode("individual")}
+              aria-pressed={entityMode === "individual"}
+            >
+              Individual
+            </button>
+            <button
+              type="button"
+              className={entityMode === "group" ? "active" : ""}
+              onClick={() => setEntityMode("group")}
+              aria-pressed={entityMode === "group"}
+            >
+              Group
+            </button>
+          </div>
+          <span className="results-count-label">
+            {entityMode === "individual"
+              ? `${matches.length.toLocaleString()} matching samples`
+              : `${groupRows.length.toLocaleString()} matching groups (${matches.length.toLocaleString()} samples)`}
+          </span>
+        </div>
+
+        <div className="heading-right-cluster">
           <button
             className="text-button"
             aria-label="Add all advanced search matches"
@@ -328,37 +436,68 @@ export function AdvancedSearch({
         </div>
       </div>
 
-      {/* Virtualized Metadata Table */}
+      {/* Virtualized Metadata Table (Adjusts between Individual and Group modes) */}
       {table && (
         <div
           className="metadata-table-scroll advanced-table-wrap"
           ref={scroller}
           tabIndex={0}
-          aria-label="Sample metadata table"
+          aria-label={
+            entityMode === "individual"
+              ? "Sample metadata table"
+              : "Group metadata table"
+          }
           onScroll={(e) => setScroll(e.currentTarget.scrollTop)}
         >
           <table className="metadata-table advanced-table">
             <thead>
-              <tr>
-                <th className="select-col" aria-label="Select row">
-                  <input
-                    type="checkbox"
-                    aria-label="Toggle all visible rows"
-                    checked={
-                      matches.length > 0 &&
-                      matches.every((r) => chosen.has(r.id))
-                    }
-                    onChange={(e) => catalogue.select(matches, e.target.checked)}
-                  />
-                </th>
-                <th>Group ID</th>
-                <th>Genetic ID</th>
-                {columns
-                  .filter((c) => c !== "Group ID" && c !== "Genetic ID")
-                  .map((col) => (
-                    <th key={col}>{col}</th>
-                  ))}
-              </tr>
+              {entityMode === "individual" ? (
+                <tr>
+                  <th className="select-col" aria-label="Select row">
+                    <input
+                      type="checkbox"
+                      aria-label="Toggle all visible rows"
+                      checked={
+                        matches.length > 0 &&
+                        matches.every((r) => chosen.has(r.id))
+                      }
+                      onChange={(e) =>
+                        catalogue.select(matches, e.target.checked)
+                      }
+                    />
+                  </th>
+                  <th>Group ID</th>
+                  <th>Genetic ID</th>
+                  {columns
+                    .filter((c) => c !== "Group ID" && c !== "Genetic ID")
+                    .map((col) => (
+                      <th key={col}>{col}</th>
+                    ))}
+                </tr>
+              ) : (
+                <tr>
+                  <th className="select-col" aria-label="Select group">
+                    <input
+                      type="checkbox"
+                      aria-label="Toggle all visible groups"
+                      checked={
+                        matches.length > 0 &&
+                        matches.every((r) => chosen.has(r.id))
+                      }
+                      onChange={(e) =>
+                        catalogue.select(matches, e.target.checked)
+                      }
+                    />
+                  </th>
+                  <th>Group ID</th>
+                  <th>Samples</th>
+                  {columns
+                    .filter((c) => c !== "Group ID" && c !== "Genetic ID")
+                    .map((col) => (
+                      <th key={col}>{col}</th>
+                    ))}
+                </tr>
+              )}
             </thead>
             <tbody>
               {start > 0 && (
@@ -368,32 +507,89 @@ export function AdvancedSearch({
                   className="table-spacer"
                 />
               )}
-              {matches.slice(start, end).map((row) => (
+              {entityMode === "individual"
+                ? matches.slice(start, end).map((row) => (
+                    <tr
+                      key={row.id}
+                      aria-selected={chosen.has(row.id) || undefined}
+                      className={chosen.has(row.id) ? "selected-row" : ""}
+                    >
+                      <td className="select-col">
+                        <input
+                          type="checkbox"
+                          checked={chosen.has(row.id)}
+                          aria-label={`Select table sample ${row.geneticId}`}
+                          onChange={() => catalogue.sample(row)}
+                        />
+                      </td>
+                      <td>{row.group}</td>
+                      <td>{row.geneticId}</td>
+                      {columns
+                        .filter((c) => c !== "Group ID" && c !== "Genetic ID")
+                        .map((col) => (
+                          <td key={col}>{row.metadata?.[col] ?? "–"}</td>
+                        ))}
+                    </tr>
+                  ))
+                : groupRows.slice(start, end).map((group) => {
+                    const allSelected = group.members.every((m) =>
+                      chosen.has(m.id),
+                    );
+                    const someSelected = group.members.some((m) =>
+                      chosen.has(m.id),
+                    );
+                    return (
+                      <tr
+                        key={group.group}
+                        aria-selected={allSelected || undefined}
+                        className={
+                          allSelected
+                            ? "selected-row"
+                            : someSelected
+                              ? "partially-selected-row"
+                              : ""
+                        }
+                      >
+                        <td className="select-col">
+                          <input
+                            type="checkbox"
+                            checked={allSelected}
+                            ref={(el) => {
+                              if (el)
+                                el.indeterminate = !allSelected && someSelected;
+                            }}
+                            aria-label={`Select table group ${group.group}`}
+                            onChange={() => {
+                              if (allSelected) {
+                                catalogue.select(group.members, false);
+                              } else {
+                                catalogue.select(group.members, true);
+                              }
+                            }}
+                          />
+                        </td>
+                        <td className="primary-cell font-medium">
+                          {group.group}
+                        </td>
+                        <td>
+                          <span className="group-sample-count">
+                            {group.sampleCount}{" "}
+                            {group.sampleCount === 1 ? "sample" : "samples"}
+                          </span>
+                        </td>
+                        {columns
+                          .filter((c) => c !== "Group ID" && c !== "Genetic ID")
+                          .map((col) => (
+                            <td key={col} title={group.metadata[col]}>
+                              {group.metadata[col] || "–"}
+                            </td>
+                          ))}
+                      </tr>
+                    );
+                  })}
+              {end < totalCount && (
                 <tr
-                  key={row.id}
-                  aria-selected={chosen.has(row.id) || undefined}
-                  className={chosen.has(row.id) ? "selected-row" : ""}
-                >
-                  <td className="select-col">
-                    <input
-                      type="checkbox"
-                      checked={chosen.has(row.id)}
-                      aria-label={`Select table sample ${row.geneticId}`}
-                      onChange={() => catalogue.sample(row)}
-                    />
-                  </td>
-                  <td>{row.group}</td>
-                  <td>{row.geneticId}</td>
-                  {columns
-                    .filter((c) => c !== "Group ID" && c !== "Genetic ID")
-                    .map((col) => (
-                      <td key={col}>{row.metadata?.[col] ?? "–"}</td>
-                    ))}
-                </tr>
-              ))}
-              {end < matches.length && (
-                <tr
-                  style={{ height: (matches.length - end) * 28 }}
+                  style={{ height: (totalCount - end) * 28 }}
                   aria-hidden="true"
                   className="table-spacer"
                 />

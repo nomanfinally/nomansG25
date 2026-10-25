@@ -66,7 +66,7 @@ export const initialPlotView: PlotView = {
   aspectRatio: "full",
   hullOpacity: 0,
   hiddenTraces: [],
-  title: "Global 25 Custom PCA",
+  title: "",
   subtitle: "",
   dragMode: "pan",
 };
@@ -236,6 +236,8 @@ export function buildFigure(
       if (options.labels) {
         const name = `${i}:${j}`,
           [x, y] = centroid(coordinates);
+        const offset =
+          offsets.get(`${view.x}:${view.y}:${name}`) ?? offsets.get(name);
         annotations.push({
           name,
           x,
@@ -244,8 +246,8 @@ export function buildFigure(
           yref: "y",
           text: escapeHtml(decoration.name),
           textangle: "0",
-          ax: offsets.get(name)?.ax ?? 0,
-          ay: offsets.get(name)?.ay ?? (coordinates.length > 1 ? 0 : -27),
+          ax: offset?.ax ?? 0,
+          ay: offset?.ay ?? (coordinates.length > 1 ? 0 : -27),
           showarrow: view.labelStyle === 0 && view.labelConnector,
           font: { color: shapeColor, size: view.labelStyle === 0 ? 11 : 9 },
           arrowcolor: hexToRgba(shapeColor, 0.7),

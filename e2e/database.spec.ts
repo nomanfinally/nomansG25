@@ -201,3 +201,46 @@ test("keyboard results, rapid selection changes and removing below minimum leave
   await expect(page.locator(".selection-status")).toContainText("at least 3");
   await expect.poll(() => pointCount(page)).toBe(0);
 });
+
+test("Ctrl+click adds population chips without clearing the search query", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await importDatabase(page);
+  await search(page).fill("Synthetic");
+
+  const popA = page.getByRole("button", {
+    name: "Select population Synthetic_A",
+    exact: true,
+  });
+  const popB = page.getByRole("button", {
+    name: "Select population Synthetic_B",
+    exact: true,
+  });
+
+  await expect(popA).toBeVisible();
+  await expect(popB).toBeVisible();
+
+  // Ctrl+click on Synthetic_A
+  await popA.click({ modifiers: ["ControlOrMeta"] });
+  await expect(page.locator(".population-chip")).toHaveCount(1);
+  await expect(page.locator(".population-chip").first()).toContainText("Synthetic_A");
+  // Query should still be "Synthetic" and input focused
+  await expect(search(page)).toHaveValue("Synthetic");
+  await expect(search(page)).toBeFocused();
+
+  // Ctrl+click on Synthetic_B from the still-visible results
+  await popB.click({ modifiers: ["ControlOrMeta"] });
+  await expect(page.locator(".population-chip")).toHaveCount(2);
+  await expect(search(page)).toHaveValue("Synthetic");
+
+  // Regular click without modifiers adds population and clears search
+  const popC = page.getByRole("button", {
+    name: "Select population Synthetic_C",
+    exact: true,
+  });
+  await popC.click();
+  await expect(page.locator(".population-chip")).toHaveCount(3);
+  await expect(search(page)).toHaveValue("");
+});
+

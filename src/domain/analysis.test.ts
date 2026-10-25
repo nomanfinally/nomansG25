@@ -58,8 +58,14 @@ describe("Custom PCA mathematics", () => {
     expect(result.explainedVariance[0]).toBeCloseTo(0.8, 12);
     expect(result.explainedVariance[1]).toBeCloseTo(0.2, 12);
     result.scores.forEach((scores, i) => {
-      expect(scores[0]).toBeCloseTo(result.dataset.samples[i].scaled[0], 12);
-      expect(scores[1]).toBeCloseTo(result.dataset.samples[i].scaled[1], 12);
+      expect(Math.abs(scores[0])).toBeCloseTo(
+        Math.abs(result.dataset.samples[i].scaled[0]),
+        12,
+      );
+      expect(Math.abs(scores[1])).toBeCloseTo(
+        Math.abs(result.dataset.samples[i].scaled[1]),
+        12,
+      );
     });
   });
   test("preserves source vectors and all pairwise distances under a full-rank PCA rotation", () => {
@@ -102,6 +108,24 @@ describe("Custom PCA mathematics", () => {
     expect(raw.dataset.samples[0].source[0]).not.toEqual(
       raw.dataset.samples[0].scaled[0],
     );
+  });
+  test("matches g25views (Vahaduo) Custom PCA axis orientation and numerical values", () => {
+    // 3 samples representing the 3 main genetic poles from the reference image:
+    // West/Ancient North Eurasia (Russia_AfontovaGora3_UP)
+    // South/Near East (Iran_GanjDareh_N)
+    // East/Andamanese (Onge)
+    const testData = [
+      "Russia_AfontovaGora3_UP:AfontovaGora3,0.106994,-0.003047,0.061848,0.113051,-0.084323,0.038487,-0.00987,0.005307,-0.046836,-0.08638,0.024033,-0.015137,0.027056,-0.042526,0.034609,0.041633,-0.001695,0.007601,-0.007416,0.019134,-0.034315,-0.007543,0.012325,-0.019039,0.008023",
+      "Iran_GanjDareh_N:I1945,0.042115,0.065,-0.155751,0.002261,-0.119099,0.034861,0.015746,-0.001846,-0.079969,-0.057587,-0.002598,-0.001049,0.006244,-0.012524,0.033659,0.054362,-0.014342,0.005194,-0.002011,-0.038519,0.00836,0.000495,-0.009737,-0.033258,0.026704",
+      "Onge:onge1,-0.018212,-0.243727,-0.141421,0.099161,0.043701,-0.033746,-0.007285,-0.013846,0.090809,0.091301,-0.002598,-0.004496,0.003568,0.010046,-0.028773,-0.021082,0.028162,-0.002154,-0.006159,-0.029889,-0.009608,-0.020032,0.00986,0.003012,-0.005987",
+    ].join("\n");
+    const result = calculatePca(testData, "scaled");
+    // Under g25views algorithm without artificial sign flipping:
+    expect(result.scores).toHaveLength(3);
+    expect(result.componentCount).toBe(2);
+    expect(result.scores[0][0]).toBeCloseTo(0.1412, 3);
+    expect(result.scores[1][0]).toBeCloseTo(0.1460, 3);
+    expect(result.scores[2][0]).toBeCloseTo(-0.2872, 3);
   });
   test("agrees with the known covariance for more rows than input dimensions", () => {
     const result = calculatePca(Array(8).fill(rectangle).join("\n"), "scaled");

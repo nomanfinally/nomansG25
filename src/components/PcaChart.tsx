@@ -38,12 +38,16 @@ export type ChartAction =
   | "hullOpacity"
   | "regression"
   | "projected";
+import type { ChartImage } from "./composePng";
+
 export interface ChartHandle {
   zoom: (factor: number) => void;
   reset: () => void;
   fit: () => void;
   savePng: (width?: number, height?: number) => Promise<void>;
   capturePng: (width?: number, height?: number) => Promise<string>;
+  captureChartImage: () => Promise<ChartImage>;
+  getPlotLayout: () => { data: any[]; layout: any };
 }
 interface Props {
   result: PcaResult | null;
@@ -126,20 +130,39 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
             return;
           }
           const chart = element as unknown as ChartElement;
-          chart.on("plotly_relayout", (event) => {
+          const RESISTANCE_THRESHOLD = 8;
+          chart.on("plotly_relayout", async (event) => {
             if (!Object.keys(event).some((k) => k.startsWith("annotations[")))
               return;
-            for (const annotation of (chart.layout.annotations ??
-              []) as NamedAnnotation[]) {
+            const annotations = (chart.layout.annotations ??
+              []) as NamedAnnotation[];
+            const snapUpdates: Record<string, number> = {};
+
+            annotations.forEach((annotation, i) => {
               if (
                 annotation.name &&
                 typeof annotation.ax === "number" &&
                 typeof annotation.ay === "number"
-              )
+              ) {
+                let ax = annotation.ax;
+                // Resistance to horizontal deflection with the same intensity as g25views (8px threshold):
+                // If horizontal deflection is within ±8px of the centroid, snap ax to 0 so the line remains straight.
+                if (Math.abs(ax) <= RESISTANCE_THRESHOLD) {
+                  if (ax !== 0) {
+                    ax = 0;
+                    annotation.ax = 0;
+                    snapUpdates[`annotations[${i}].ax`] = 0;
+                  }
+                }
                 offsets.current.set(
                   `${latest.current.view.x}:${latest.current.view.y}:${annotation.name}`,
-                  { ax: annotation.ax, ay: annotation.ay },
+                  { ax, ay: annotation.ay },
                 );
+              }
+            });
+
+            if (Object.keys(snapUpdates).length > 0 && api.current) {
+              await api.current.relayout(element, snapUpdates);
             }
           });
           chart.on("plotly_restyle", (event) => {
@@ -258,12 +281,17 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
         .map(escapeHtml)
         .join("<br>");
       const axis = {
-        zeroline: false,
+        zeroline: true,
+        zerolinecolor: "#c8c8c8",
         showgrid: view.grid,
-        gridcolor: "#eeeeee",
-        showline: false,
-        linecolor: "#999999",
-        tickfont: { color: "#666666", size: 12 },
+        gridcolor: "#e6e6e6",
+        showline: true,
+        linecolor: "#444444",
+        mirror: true,
+        linewidth: 1.25,
+        ticks: "outside" as const,
+        tickcolor: "#444444",
+        tickfont: { color: "#444444", size: 12 },
         showspikes: view.spikes,
         spikemode: "across" as const,
         spikesnap: "cursor" as const,
@@ -448,8 +476,110 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
             exportHost.remove();
           }
         },
+        async captureChartImage(): Promise<ChartImage> {
+          await queue.current;
+          if (!api.current || !host.current || !ready)
+            throw new Error("The chart is still loading. Try again.");
+          const width = host.current.clientWidth || 1200;
+          const height = host.current.clientHeight || 800;
+          const target = document.createElement("div");
+          target.style.cssText = `position:fixed;left:-20000px;top:0;width:${width}px;height:${height}px;`;
+          document.body.appendChild(target);
+          try {
+            const chart = host.current as unknown as ChartElement;
+            const currentLayout = chart.layout;
+            const full = chart._fullLayout;
+            const traces = (figure?.traces ?? []).map((t) => ({ ...t }));
+            const layout: Partial<Layout> = {
+              ...currentLayout,
+              width,
+              height,
+              margin: { l: 46, r: 18, t: 20, b: 26 },
+              title: undefined,
+              showlegend: false,
+              hovermode: false,
+              xaxis: {
+                ...currentLayout.xaxis,
+                showline: true,
+                mirror: true,
+                linecolor: "#444444",
+                linewidth: 1.25,
+                ticks: "outside",
+                tickcolor: "#444444",
+                range: full?.xaxis?.range ? [...full.xaxis.range] : undefined,
+                autorange: false,
+              },
+              yaxis: {
+                ...currentLayout.yaxis,
+                showline: true,
+                mirror: true,
+                linecolor: "#444444",
+                linewidth: 1.25,
+                ticks: "outside",
+                tickcolor: "#444444",
+                range: full?.yaxis?.range ? [...full.yaxis.range] : undefined,
+                autorange: false,
+              },
+            };
+            await api.current.newPlot(target, traces, layout, {
+              staticPlot: true,
+              displayModeBar: false,
+            });
+            const rendered = (target as any)._fullLayout;
+            const plotBox = {
+              x: rendered?.xaxis?._offset ?? 46,
+              y: rendered?.yaxis?._offset ?? 20,
+              width: rendered?.xaxis?._length ?? (width - 64),
+              height: rendered?.yaxis?._length ?? (height - 46),
+            };
+            const bounds = target.getBoundingClientRect();
+            let left = plotBox.x,
+              top = plotBox.y,
+              right = left + plotBox.width,
+              bottom = top + plotBox.height;
+            for (const text of target.querySelectorAll(
+              ".xtick text, .ytick text, .xtitle, .ytitle",
+            )) {
+              const r = text.getBoundingClientRect();
+              if (!r.width || !r.height) continue;
+              left = Math.min(left, r.left - bounds.left);
+              top = Math.min(top, r.top - bounds.top);
+              right = Math.max(right, r.right - bounds.left);
+              bottom = Math.max(bottom, r.bottom - bounds.top);
+            }
+            const axisBounds = {
+              x: left,
+              y: top,
+              width: right - left,
+              height: bottom - top,
+            };
+            const url = await api.current.toImage(target, {
+              format: "png",
+              width,
+              height,
+              scale: 2,
+            });
+            return {
+              url,
+              width,
+              height,
+              plotBox,
+              axisBounds,
+            };
+          } finally {
+            api.current.purge(target);
+            target.remove();
+          }
+        },
+        getPlotLayout() {
+          const chart = host.current as unknown as ChartElement | null;
+          return {
+            data: chart?.data ?? [],
+            layout: chart?.layout ?? {},
+          };
+        },
       }),
-      [ready],
+      [ready, figure],
     );
     return (
       <div

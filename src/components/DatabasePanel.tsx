@@ -1,9 +1,11 @@
 import { useMemo, useRef, useState, useEffect } from "react";
 import {
+  ArrowLeftRight,
   Check,
   ChevronDown,
   ChevronRight,
   FileUp,
+  Minus,
   X,
   Search,
   PanelLeftClose,
@@ -13,6 +15,8 @@ import { belongs, tokenKey, type CatalogueRow } from "../domain/database";
 import { prepareSearch, scoreSearch, type SearchField } from "../domain/search";
 import { filterRows, rowSearch } from "../domain/filters";
 import type { Scaling } from "../domain/g25";
+import { axisTitle, type AddOptions, type PlotView } from "../domain/figure";
+import type { PcaResult } from "../domain/pca";
 
 export function DatabasePanel({
   catalogue,
@@ -25,6 +29,11 @@ export function DatabasePanel({
   advanced,
   criteriaCount,
   onCollapse,
+  options,
+  onOptions,
+  view,
+  patch,
+  result,
 }: {
   catalogue: CatalogueState;
   busy: boolean;
@@ -36,6 +45,11 @@ export function DatabasePanel({
   advanced: boolean;
   criteriaCount: number;
   onCollapse: () => void;
+  options?: AddOptions;
+  onOptions?: (patch: Partial<AddOptions>) => void;
+  view?: PlotView;
+  patch?: (patch: Partial<PlotView>) => void;
+  result?: PcaResult | null;
 }) {
   const { rows, tokens, selected } = catalogue;
   const setQuery = onQuery;
@@ -190,12 +204,18 @@ export function DatabasePanel({
     [selected],
   );
 
-  const chooseGroup = (group: string, origin: CatalogueRow["origin"]) => {
+  const chooseGroup = (
+    group: string,
+    origin: CatalogueRow["origin"],
+    clear = true,
+  ) => {
     const target = available.filter(
       (row) => row.group === group && row.origin === origin,
     );
     catalogue.select(target, !target.every((row) => chosen.has(row.id)));
-    setQuery("");
+    if (clear) {
+      setQuery("");
+    }
     setFocused(true);
     searchInputRef.current?.focus();
   };
@@ -204,9 +224,9 @@ export function DatabasePanel({
     catalogue.sample(row);
     if (clear) {
       setQuery("");
-      setFocused(true);
-      searchInputRef.current?.focus();
     }
+    setFocused(true);
+    searchInputRef.current?.focus();
   };
 
   const sampleButton = (row: CatalogueRow, nested = false) => (
@@ -216,8 +236,12 @@ export function DatabasePanel({
       className={`database-sample${nested ? " nested" : ""}`}
       aria-pressed={chosen.has(row.id)}
       aria-label={`${chosen.has(row.id) ? "Remove" : "Select"} sample ${row.geneticId} in ${row.group}`}
+      title="Click to select. Ctrl+click to keep search."
       onMouseDown={(e) => e.preventDefault()}
-      onClick={() => chooseSample(row, !nested)}
+      onClick={(e) => {
+        const keepQuery = e.ctrlKey || e.metaKey;
+        chooseSample(row, !nested && !keepQuery);
+      }}
     >
       <span className="choice-check">
         {chosen.has(row.id) && <Check size={13} />}
@@ -465,12 +489,13 @@ export function DatabasePanel({
                 }
                 if (event.key === "Enter" && key) {
                   event.preventDefault();
+                  const keepQuery = event.ctrlKey || event.metaKey;
                   // Check exact genetic ID match first
                   const exactSample = matches.samples.find(
                     (s) => s.geneticId.toLowerCase() === key,
                   );
                   if (exactSample) {
-                    chooseSample(exactSample);
+                    chooseSample(exactSample, !keepQuery);
                     return;
                   }
 
@@ -478,14 +503,22 @@ export function DatabasePanel({
                   const highlighted = flatOptions[highlightIndex];
                   if (highlighted) {
                     if (highlighted.type === "group") {
-                      chooseGroup(highlighted.group, highlighted.origin);
+                      chooseGroup(
+                        highlighted.group,
+                        highlighted.origin,
+                        !keepQuery,
+                      );
                     } else {
-                      chooseSample(highlighted.row);
+                      chooseSample(highlighted.row, !keepQuery);
                     }
                   } else if (matches.groups[0]) {
-                    chooseGroup(matches.groups[0].group, matches.groups[0].origin);
+                    chooseGroup(
+                      matches.groups[0].group,
+                      matches.groups[0].origin,
+                      !keepQuery,
+                    );
                   } else if (matches.samples[0]) {
-                    chooseSample(matches.samples[0]);
+                    chooseSample(matches.samples[0], !keepQuery);
                   }
                 }
               }}
@@ -539,6 +572,15 @@ export function DatabasePanel({
                         <div
                           className={`candidate-row population-row ${isHighlighted ? "highlighted" : ""}`}
                           onMouseEnter={() => setHighlightIndex(gIdx)}
+                          onClick={(e) => {
+                            if (
+                              (e.target as HTMLElement).tagName !== "BUTTON" &&
+                              !(e.target as HTMLElement).closest("button")
+                            ) {
+                              const keepQuery = e.ctrlKey || e.metaKey;
+                              chooseGroup(group.group, group.origin, !keepQuery);
+                            }
+                          }}
                         >
                           <button
                             type="button"
@@ -565,6 +607,7 @@ export function DatabasePanel({
                             type="button"
                             className="candidate-pop-select group-select"
                             aria-label={`Select population ${group.group}`}
+                            title="Click to select. Ctrl+click to keep search."
                             aria-pressed={
                               isGroupChosen
                                 ? true
@@ -573,9 +616,23 @@ export function DatabasePanel({
                                   : false
                             }
                             onMouseDown={(e) => e.preventDefault()}
-                            onClick={() => chooseGroup(group.group, group.origin)}
+                            onClick={(e) => {
+                              const keepQuery = e.ctrlKey || e.metaKey;
+                              chooseGroup(
+                                group.group,
+                                group.origin,
+                                !keepQuery,
+                              );
+                            }}
                           >
                             <span className="candidate-pop-label">
+                              <span className="choice-check">
+                                {isGroupChosen ? (
+                                  <Check size={12} strokeWidth={2.5} />
+                                ) : selectedCount > 0 ? (
+                                  <Minus size={11} strokeWidth={3} />
+                                ) : null}
+                              </span>
                               {group.group}
                               {group.origin === "manual" && (
                                 <small className="pasted-badge">pasted</small>
@@ -649,8 +706,106 @@ export function DatabasePanel({
           )}
         </div>
 
+        {/* PC vs PC Axes and Grouping Mode Controls */}
+        <div className="panel-chart-controls">
+          {view && patch && (
+            <div className="panel-control-group panel-axes-controls">
+              <div className="panel-axis-selectors">
+                <label className="axis-picker-label">
+                  <span>X</span>
+                  <select
+                    aria-label="Horizontal component"
+                    value={view.x}
+                    disabled={!result}
+                    title={
+                      result
+                        ? axisTitle(result, view.x)
+                        : "Select populations first"
+                    }
+                    onChange={(e) => patch({ x: Number(e.target.value) })}
+                  >
+                    {Array.from(
+                      { length: result?.componentCount ?? 2 },
+                      (_, i) => (
+                        <option key={i} value={i} disabled={i === view.y}>
+                          PC{i + 1}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                </label>
+
+                <button
+                  type="button"
+                  className="icon-button swap-axes-btn"
+                  aria-label="Swap axes"
+                  title="Swap axes"
+                  disabled={!result}
+                  onClick={() => patch({ x: view.y, y: view.x })}
+                >
+                  <ArrowLeftRight size={13} />
+                </button>
+
+                <label className="axis-picker-label">
+                  <span>Y</span>
+                  <select
+                    aria-label="Vertical component"
+                    value={view.y}
+                    disabled={!result}
+                    title={
+                      result
+                        ? axisTitle(result, view.y)
+                        : "Select populations first"
+                    }
+                    onChange={(e) => patch({ y: Number(e.target.value) })}
+                  >
+                    {Array.from(
+                      { length: result?.componentCount ?? 2 },
+                      (_, i) => (
+                        <option key={i} value={i} disabled={i === view.x}>
+                          PC{i + 1}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                </label>
+              </div>
+            </div>
+          )}
+
+          {options && onOptions && (
+            <div className="panel-control-group panel-grouping-controls">
+              <label htmlFor="grouping-mode-select" className="panel-control-label">
+                Group
+              </label>
+              <div className="panel-grouping-inputs">
+                <select
+                  id="grouping-mode-select"
+                  aria-label="Grouping mode"
+                  value={options.mode}
+                  onChange={(e) =>
+                    onOptions({ mode: e.target.value as AddOptions["mode"] })
+                  }
+                >
+                  <option value="aggregated">Populations</option>
+                  <option value="individual">Individuals</option>
+                  <option value="single">One group</option>
+                </select>
+                {options.mode === "single" && (
+                  <input
+                    aria-label="Custom group name"
+                    placeholder="Group name"
+                    value={options.customName}
+                    onChange={(e) => onOptions({ customName: e.target.value })}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
         <p className="picker-hint">
-          Click a population to add its chip. Expand to toggle individuals.
+          Click a population to add its chip (Ctrl+click to keep search). Expand to toggle individuals.
         </p>
       </section>
 
