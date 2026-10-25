@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   manualRows,
+  selectRows,
   selectedRows,
   toggleGroup,
   toggleSample,
@@ -185,6 +186,8 @@ export function useCatalogue() {
     },
     group: (group: string, origin: CatalogueRow["origin"]) =>
       setTokens((current) => toggleGroup(rows, current, group, origin)),
+    select: (target: CatalogueRow[], selected = true) =>
+      setTokens((current) => selectRows(rows, current, target, selected)),
     sample: (row: CatalogueRow) =>
       setTokens((current) => toggleSample(rows, current, row)),
   };

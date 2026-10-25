@@ -1,4 +1,7 @@
-# G25 Views Custom PCA parity
+# Historical G25 Views parity reference
+
+The original Custom PCA parity audit below describes the earlier source-replica phase. The user's subsequent design direction explicitly replaces that visual identity with PCA_views, ArchaeoBase/G25 Manager panels and Admix_IRE search. Current authority is PRODUCT.md and the PCA surface brief. Source SVG icons, Bootstrap CSS, the gear menu, Run PCA, original marker appearance and four-way source legend layout are no longer part of the UI. Useful plotting cycles, source normalization, component fitting, native interaction mathematics and PNG sizes remain; the custom legend retains G25 click/double-click semantics with explicit eye controls.
+
 
 Reference: `vahaduo/g25views`, commit `64226115636b1cb9951e6749ab8fecf2d7bfcc1b`, root viewer. The user's latest scope is **Custom PCA only**. Regional PCA datasets, Celto-Germanic coordinates and controls for a regional base layer are excluded by that scope.
 

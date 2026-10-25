@@ -1,667 +1,1326 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-24T23:55:36.662588+00:00",
+  "generatedAt": "2026-10-25T00:49:35.554105+00:00",
   "title": "Design System: G25 tools",
   "extensions": {
     "colorMeta": {
       "primary": {
         "role": "primary",
         "displayName": "Primary",
-        "canonical": "#007bff",
-        "tonalRamp": ["oklch(15% 0.2166 257.21)", "oklch(26% 0.2166 257.21)", "oklch(38% 0.2166 257.21)", "oklch(49% 0.2166 257.21)", "oklch(61% 0.2166 257.21)", "oklch(72% 0.2166 257.21)", "oklch(84% 0.2166 257.21)", "oklch(95% 0.2166 257.21)"]
-      },
-      "selection": {
-        "role": "neutral",
-        "displayName": "Selection",
-        "canonical": "#cce5ff",
-        "tonalRamp": ["oklch(15% 0.0445 249.36)", "oklch(26% 0.0445 249.36)", "oklch(38% 0.0445 249.36)", "oklch(49% 0.0445 249.36)", "oklch(61% 0.0445 249.36)", "oklch(72% 0.0445 249.36)", "oklch(84% 0.0445 249.36)", "oklch(95% 0.0445 249.36)"]
-      },
-      "selection-text": {
-        "role": "neutral",
-        "displayName": "Selection Text",
-        "canonical": "#004085",
-        "tonalRamp": ["oklch(15% 0.1295 255.92)", "oklch(26% 0.1295 255.92)", "oklch(38% 0.1295 255.92)", "oklch(49% 0.1295 255.92)", "oklch(61% 0.1295 255.92)", "oklch(72% 0.1295 255.92)", "oklch(84% 0.1295 255.92)", "oklch(95% 0.1295 255.92)"]
-      },
-      "rail": {
-        "role": "neutral",
-        "displayName": "Rail",
-        "canonical": "#24272b",
-        "tonalRamp": ["oklch(15% 0.0086 255.58)", "oklch(26% 0.0086 255.58)", "oklch(38% 0.0086 255.58)", "oklch(49% 0.0086 255.58)", "oklch(61% 0.0086 255.58)", "oklch(72% 0.0086 255.58)", "oklch(84% 0.0086 255.58)", "oklch(95% 0.0086 255.58)"]
-      },
-      "rail-current": {
-        "role": "neutral",
-        "displayName": "Rail Current",
-        "canonical": "#3a4048",
-        "tonalRamp": ["oklch(15% 0.0159 255.61)", "oklch(26% 0.0159 255.61)", "oklch(38% 0.0159 255.61)", "oklch(49% 0.0159 255.61)", "oklch(61% 0.0159 255.61)", "oklch(72% 0.0159 255.61)", "oklch(84% 0.0159 255.61)", "oklch(95% 0.0159 255.61)"]
-      },
-      "rail-icon": {
-        "role": "neutral",
-        "displayName": "Rail Icon",
-        "canonical": "#c8d0db",
-        "tonalRamp": ["oklch(15% 0.0176 256.29)", "oklch(26% 0.0176 256.29)", "oklch(38% 0.0176 256.29)", "oklch(49% 0.0176 256.29)", "oklch(61% 0.0176 256.29)", "oklch(72% 0.0176 256.29)", "oklch(84% 0.0176 256.29)", "oklch(95% 0.0176 256.29)"]
-      },
-      "rail-disabled": {
-        "role": "neutral",
-        "displayName": "Rail Disabled",
-        "canonical": "#929dac",
-        "tonalRamp": ["oklch(15% 0.0254 256.14)", "oklch(26% 0.0254 256.14)", "oklch(38% 0.0254 256.14)", "oklch(49% 0.0254 256.14)", "oklch(61% 0.0254 256.14)", "oklch(72% 0.0254 256.14)", "oklch(84% 0.0254 256.14)", "oklch(95% 0.0254 256.14)"]
-      },
-      "surface": {
-        "role": "neutral",
-        "displayName": "Surface",
-        "canonical": "#fff",
-        "tonalRamp": ["oklch(15% 0.0000 0.00)", "oklch(26% 0.0000 0.00)", "oklch(38% 0.0000 0.00)", "oklch(49% 0.0000 0.00)", "oklch(61% 0.0000 0.00)", "oklch(72% 0.0000 0.00)", "oklch(84% 0.0000 0.00)", "oklch(95% 0.0000 0.00)"]
-      },
-      "text": {
-        "role": "neutral",
-        "displayName": "Text",
-        "canonical": "#212529",
-        "tonalRamp": ["oklch(15% 0.0095 248.19)", "oklch(26% 0.0095 248.19)", "oklch(38% 0.0095 248.19)", "oklch(49% 0.0095 248.19)", "oklch(61% 0.0095 248.19)", "oklch(72% 0.0095 248.19)", "oklch(84% 0.0095 248.19)", "oklch(95% 0.0095 248.19)"]
-      },
-      "field-text": {
-        "role": "neutral",
-        "displayName": "Field Text",
-        "canonical": "#495057",
-        "tonalRamp": ["oklch(15% 0.0147 248.17)", "oklch(26% 0.0147 248.17)", "oklch(38% 0.0147 248.17)", "oklch(49% 0.0147 248.17)", "oklch(61% 0.0147 248.17)", "oklch(72% 0.0147 248.17)", "oklch(84% 0.0147 248.17)", "oklch(95% 0.0147 248.17)"]
-      },
-      "secondary": {
-        "role": "neutral",
-        "displayName": "Secondary",
-        "canonical": "#6c757d",
-        "tonalRamp": ["oklch(15% 0.0165 244.89)", "oklch(26% 0.0165 244.89)", "oklch(38% 0.0165 244.89)", "oklch(49% 0.0165 244.89)", "oklch(61% 0.0165 244.89)", "oklch(72% 0.0165 244.89)", "oklch(84% 0.0165 244.89)", "oklch(95% 0.0165 244.89)"]
-      },
-      "field-line": {
-        "role": "neutral",
-        "displayName": "Field Line",
-        "canonical": "#ced4da",
-        "tonalRamp": ["oklch(15% 0.0106 247.95)", "oklch(26% 0.0106 247.95)", "oklch(38% 0.0106 247.95)", "oklch(49% 0.0106 247.95)", "oklch(61% 0.0106 247.95)", "oklch(72% 0.0106 247.95)", "oklch(84% 0.0106 247.95)", "oklch(95% 0.0106 247.95)"]
-      },
-      "field-focus": {
-        "role": "neutral",
-        "displayName": "Field Focus",
-        "canonical": "#80bdff",
-        "tonalRamp": ["oklch(15% 0.1140 251.29)", "oklch(26% 0.1140 251.29)", "oklch(38% 0.1140 251.29)", "oklch(49% 0.1140 251.29)", "oklch(61% 0.1140 251.29)", "oklch(72% 0.1140 251.29)", "oklch(84% 0.1140 251.29)", "oklch(95% 0.1140 251.29)"]
-      },
-      "disabled-surface": {
-        "role": "neutral",
-        "displayName": "Disabled Surface",
-        "canonical": "#e9ecef",
-        "tonalRamp": ["oklch(15% 0.0052 247.88)", "oklch(26% 0.0052 247.88)", "oklch(38% 0.0052 247.88)", "oklch(49% 0.0052 247.88)", "oklch(61% 0.0052 247.88)", "oklch(72% 0.0052 247.88)", "oklch(84% 0.0052 247.88)", "oklch(95% 0.0052 247.88)"]
-      },
-      "control-line": {
-        "role": "neutral",
-        "displayName": "Control Line",
-        "canonical": "#adb5bd",
-        "tonalRamp": ["oklch(15% 0.0145 248.02)", "oklch(26% 0.0145 248.02)", "oklch(38% 0.0145 248.02)", "oklch(49% 0.0145 248.02)", "oklch(61% 0.0145 248.02)", "oklch(72% 0.0145 248.02)", "oklch(84% 0.0145 248.02)", "oklch(95% 0.0145 248.02)"]
-      },
-      "select-arrow": {
-        "role": "neutral",
-        "displayName": "Select Arrow",
-        "canonical": "#343a40",
-        "tonalRamp": ["oklch(15% 0.0133 248.21)", "oklch(26% 0.0133 248.21)", "oklch(38% 0.0133 248.21)", "oklch(49% 0.0133 248.21)", "oklch(61% 0.0133 248.21)", "oklch(72% 0.0133 248.21)", "oklch(84% 0.0133 248.21)", "oklch(95% 0.0133 248.21)"]
-      },
-      "menu-hover-text": {
-        "role": "neutral",
-        "displayName": "Menu Hover Text",
-        "canonical": "#16181b",
-        "tonalRamp": ["oklch(15% 0.0067 258.37)", "oklch(26% 0.0067 258.37)", "oklch(38% 0.0067 258.37)", "oklch(49% 0.0067 258.37)", "oklch(61% 0.0067 258.37)", "oklch(72% 0.0067 258.37)", "oklch(84% 0.0067 258.37)", "oklch(95% 0.0067 258.37)"]
-      },
-      "menu-line": {
-        "role": "neutral",
-        "displayName": "Menu Line",
-        "canonical": "rgba(0, 0, 0, 0.15)",
-        "tonalRamp": ["oklch(15% 0.0000 0.00 / 0.15)", "oklch(26% 0.0000 0.00 / 0.15)", "oklch(38% 0.0000 0.00 / 0.15)", "oklch(49% 0.0000 0.00 / 0.15)", "oklch(61% 0.0000 0.00 / 0.15)", "oklch(72% 0.0000 0.00 / 0.15)", "oklch(84% 0.0000 0.00 / 0.15)", "oklch(95% 0.0000 0.00 / 0.15)"]
-      },
-      "scrollbar": {
-        "role": "neutral",
-        "displayName": "Scrollbar",
-        "canonical": "#aab2bc",
-        "tonalRamp": ["oklch(15% 0.0169 253.93)", "oklch(26% 0.0169 253.93)", "oklch(38% 0.0169 253.93)", "oklch(49% 0.0169 253.93)", "oklch(61% 0.0169 253.93)", "oklch(72% 0.0169 253.93)", "oklch(84% 0.0169 253.93)", "oklch(95% 0.0169 253.93)"]
-      },
-      "error": {
-        "role": "neutral",
-        "displayName": "Error",
-        "canonical": "#842029",
-        "tonalRamp": ["oklch(15% 0.1344 20.77)", "oklch(26% 0.1344 20.77)", "oklch(38% 0.1344 20.77)", "oklch(49% 0.1344 20.77)", "oklch(61% 0.1344 20.77)", "oklch(72% 0.1344 20.77)", "oklch(84% 0.1344 20.77)", "oklch(95% 0.1344 20.77)"]
-      },
-      "error-surface": {
-        "role": "neutral",
-        "displayName": "Error Surface",
-        "canonical": "#fff5f5",
-        "tonalRamp": ["oklch(15% 0.0107 17.34)", "oklch(26% 0.0107 17.34)", "oklch(38% 0.0107 17.34)", "oklch(49% 0.0107 17.34)", "oklch(61% 0.0107 17.34)", "oklch(72% 0.0107 17.34)", "oklch(84% 0.0107 17.34)", "oklch(95% 0.0107 17.34)"]
-      },
-      "error-line": {
-        "role": "neutral",
-        "displayName": "Error Line",
-        "canonical": "#f1c2c7",
-        "tonalRamp": ["oklch(15% 0.0541 11.09)", "oklch(26% 0.0541 11.09)", "oklch(38% 0.0541 11.09)", "oklch(49% 0.0541 11.09)", "oklch(61% 0.0541 11.09)", "oklch(72% 0.0541 11.09)", "oklch(84% 0.0541 11.09)", "oklch(95% 0.0541 11.09)"]
-      },
-      "invalid": {
-        "role": "neutral",
-        "displayName": "Invalid",
-        "canonical": "#dc3545",
-        "tonalRamp": ["oklch(15% 0.2020 21.24)", "oklch(26% 0.2020 21.24)", "oklch(38% 0.2020 21.24)", "oklch(49% 0.2020 21.24)", "oklch(61% 0.2020 21.24)", "oklch(72% 0.2020 21.24)", "oklch(84% 0.2020 21.24)", "oklch(95% 0.2020 21.24)"]
-      },
-      "plot-text": {
-        "role": "neutral",
-        "displayName": "Plot Text",
-        "canonical": "#444",
-        "tonalRamp": ["oklch(15% 0.0000 0.00)", "oklch(26% 0.0000 0.00)", "oklch(38% 0.0000 0.00)", "oklch(49% 0.0000 0.00)", "oklch(61% 0.0000 0.00)", "oklch(72% 0.0000 0.00)", "oklch(84% 0.0000 0.00)", "oklch(95% 0.0000 0.00)"]
-      },
-      "plot-tick": {
-        "role": "neutral",
-        "displayName": "Plot Tick",
-        "canonical": "#ddd",
-        "tonalRamp": ["oklch(15% 0.0000 0.00)", "oklch(26% 0.0000 0.00)", "oklch(38% 0.0000 0.00)", "oklch(49% 0.0000 0.00)", "oklch(61% 0.0000 0.00)", "oklch(72% 0.0000 0.00)", "oklch(84% 0.0000 0.00)", "oklch(95% 0.0000 0.00)"]
-      },
-      "plot-grid": {
-        "role": "neutral",
-        "displayName": "Plot Grid",
-        "canonical": "rgb(238, 238, 238)",
-        "tonalRamp": ["oklch(15% 0.0000 0.00)", "oklch(26% 0.0000 0.00)", "oklch(38% 0.0000 0.00)", "oklch(49% 0.0000 0.00)", "oklch(61% 0.0000 0.00)", "oklch(72% 0.0000 0.00)", "oklch(84% 0.0000 0.00)", "oklch(95% 0.0000 0.00)"]
-      },
-      "modebar-icon": {
-        "role": "neutral",
-        "displayName": "Modebar Icon",
-        "canonical": "rgba(68, 68, 68, 0.3)",
-        "tonalRamp": ["oklch(15% 0.0000 0.00 / 0.3)", "oklch(26% 0.0000 0.00 / 0.3)", "oklch(38% 0.0000 0.00 / 0.3)", "oklch(49% 0.0000 0.00 / 0.3)", "oklch(61% 0.0000 0.00 / 0.3)", "oklch(72% 0.0000 0.00 / 0.3)", "oklch(84% 0.0000 0.00 / 0.3)", "oklch(95% 0.0000 0.00 / 0.3)"]
-      },
-      "modebar-surface": {
-        "role": "neutral",
-        "displayName": "Modebar Surface",
-        "canonical": "rgba(255, 255, 255, 0.5)",
-        "tonalRamp": ["oklch(15% 0.0000 0.00 / 0.5)", "oklch(26% 0.0000 0.00 / 0.5)", "oklch(38% 0.0000 0.00 / 0.5)", "oklch(49% 0.0000 0.00 / 0.5)", "oklch(61% 0.0000 0.00 / 0.5)", "oklch(72% 0.0000 0.00 / 0.5)", "oklch(84% 0.0000 0.00 / 0.5)", "oklch(95% 0.0000 0.00 / 0.5)"]
-      },
-      "label-shadow": {
-        "role": "neutral",
-        "displayName": "Label Shadow",
-        "canonical": "rgba(0, 0, 0, 0.2)",
-        "tonalRamp": ["oklch(15% 0.0000 0.00 / 0.2)", "oklch(26% 0.0000 0.00 / 0.2)", "oklch(38% 0.0000 0.00 / 0.2)", "oklch(49% 0.0000 0.00 / 0.2)", "oklch(61% 0.0000 0.00 / 0.2)", "oklch(72% 0.0000 0.00 / 0.2)", "oklch(84% 0.0000 0.00 / 0.2)", "oklch(95% 0.0000 0.00 / 0.2)"]
-      },
-      "label-surface": {
-        "role": "neutral",
-        "displayName": "Label Surface",
-        "canonical": "rgba(255,255,255,0.75)",
-        "tonalRamp": ["oklch(15% 0.0000 0.00 / 0.75)", "oklch(26% 0.0000 0.00 / 0.75)", "oklch(38% 0.0000 0.00 / 0.75)", "oklch(49% 0.0000 0.00 / 0.75)", "oklch(61% 0.0000 0.00 / 0.75)", "oklch(72% 0.0000 0.00 / 0.75)", "oklch(84% 0.0000 0.00 / 0.75)", "oklch(95% 0.0000 0.00 / 0.75)"]
-      },
-      "label-static-surface": {
-        "role": "neutral",
-        "displayName": "Label Static Surface",
-        "canonical": "rgba(255,255,255,0.66)",
-        "tonalRamp": ["oklch(15% 0.0000 0.00 / 0.66)", "oklch(26% 0.0000 0.00 / 0.66)", "oklch(38% 0.0000 0.00 / 0.66)", "oklch(49% 0.0000 0.00 / 0.66)", "oklch(61% 0.0000 0.00 / 0.66)", "oklch(72% 0.0000 0.00 / 0.66)", "oklch(84% 0.0000 0.00 / 0.66)", "oklch(95% 0.0000 0.00 / 0.66)"]
-      },
-      "label-transparent": {
-        "role": "neutral",
-        "displayName": "Label Transparent",
-        "canonical": "rgba(255,255,255,0)",
-        "tonalRamp": ["oklch(15% 0.0000 0.00 / 0)", "oklch(26% 0.0000 0.00 / 0)", "oklch(38% 0.0000 0.00 / 0)", "oklch(49% 0.0000 0.00 / 0)", "oklch(61% 0.0000 0.00 / 0)", "oklch(72% 0.0000 0.00 / 0)", "oklch(84% 0.0000 0.00 / 0)", "oklch(95% 0.0000 0.00 / 0)"]
-      },
-      "label-border": {
-        "role": "neutral",
-        "displayName": "Label Border",
-        "canonical": "rgba(255,255,255,1)",
-        "tonalRamp": ["oklch(15% 0.0000 0.00)", "oklch(26% 0.0000 0.00)", "oklch(38% 0.0000 0.00)", "oklch(49% 0.0000 0.00)", "oklch(61% 0.0000 0.00)", "oklch(72% 0.0000 0.00)", "oklch(84% 0.0000 0.00)", "oklch(95% 0.0000 0.00)"]
-      },
-      "marker-01": {
-        "role": "secondary",
-        "displayName": "Marker 01",
-        "canonical": "#1f77b4",
-        "tonalRamp": ["oklch(15% 0.1238 244.60)", "oklch(26% 0.1238 244.60)", "oklch(38% 0.1238 244.60)", "oklch(49% 0.1238 244.60)", "oklch(61% 0.1238 244.60)", "oklch(72% 0.1238 244.60)", "oklch(84% 0.1238 244.60)", "oklch(95% 0.1238 244.60)"]
-      },
-      "marker-02": {
-        "role": "secondary",
-        "displayName": "Marker 02",
-        "canonical": "#d62728",
-        "tonalRamp": ["oklch(15% 0.2090 26.92)", "oklch(26% 0.2090 26.92)", "oklch(38% 0.2090 26.92)", "oklch(49% 0.2090 26.92)", "oklch(61% 0.2090 26.92)", "oklch(72% 0.2090 26.92)", "oklch(84% 0.2090 26.92)", "oklch(95% 0.2090 26.92)"]
-      },
-      "marker-03": {
-        "role": "secondary",
-        "displayName": "Marker 03",
-        "canonical": "#2ca02c",
-        "tonalRamp": ["oklch(15% 0.1840 142.95)", "oklch(26% 0.1840 142.95)", "oklch(38% 0.1840 142.95)", "oklch(49% 0.1840 142.95)", "oklch(61% 0.1840 142.95)", "oklch(72% 0.1840 142.95)", "oklch(84% 0.1840 142.95)", "oklch(95% 0.1840 142.95)"]
-      },
-      "marker-04": {
-        "role": "secondary",
-        "displayName": "Marker 04",
-        "canonical": "#9467bd",
-        "tonalRamp": ["oklch(15% 0.1345 306.90)", "oklch(26% 0.1345 306.90)", "oklch(38% 0.1345 306.90)", "oklch(49% 0.1345 306.90)", "oklch(61% 0.1345 306.90)", "oklch(72% 0.1345 306.90)", "oklch(84% 0.1345 306.90)", "oklch(95% 0.1345 306.90)"]
-      },
-      "marker-05": {
-        "role": "secondary",
-        "displayName": "Marker 05",
-        "canonical": "#ff7f0e",
-        "tonalRamp": ["oklch(15% 0.1851 51.88)", "oklch(26% 0.1851 51.88)", "oklch(38% 0.1851 51.88)", "oklch(49% 0.1851 51.88)", "oklch(61% 0.1851 51.88)", "oklch(72% 0.1851 51.88)", "oklch(84% 0.1851 51.88)", "oklch(95% 0.1851 51.88)"]
-      },
-      "marker-06": {
-        "role": "secondary",
-        "displayName": "Marker 06",
-        "canonical": "#17becf",
-        "tonalRamp": ["oklch(15% 0.1227 206.44)", "oklch(26% 0.1227 206.44)", "oklch(38% 0.1227 206.44)", "oklch(49% 0.1227 206.44)", "oklch(61% 0.1227 206.44)", "oklch(72% 0.1227 206.44)", "oklch(84% 0.1227 206.44)", "oklch(95% 0.1227 206.44)"]
-      },
-      "marker-07": {
-        "role": "secondary",
-        "displayName": "Marker 07",
-        "canonical": "#8c564b",
-        "tonalRamp": ["oklch(15% 0.0745 32.20)", "oklch(26% 0.0745 32.20)", "oklch(38% 0.0745 32.20)", "oklch(49% 0.0745 32.20)", "oklch(61% 0.0745 32.20)", "oklch(72% 0.0745 32.20)", "oklch(84% 0.0745 32.20)", "oklch(95% 0.0745 32.20)"]
-      },
-      "marker-08": {
-        "role": "secondary",
-        "displayName": "Marker 08",
-        "canonical": "#e377c2",
-        "tonalRamp": ["oklch(15% 0.1602 340.05)", "oklch(26% 0.1602 340.05)", "oklch(38% 0.1602 340.05)", "oklch(49% 0.1602 340.05)", "oklch(61% 0.1602 340.05)", "oklch(72% 0.1602 340.05)", "oklch(84% 0.1602 340.05)", "oklch(95% 0.1602 340.05)"]
-      },
-      "marker-09": {
-        "role": "secondary",
-        "displayName": "Marker 09",
-        "canonical": "#bcbd22",
-        "tonalRamp": ["oklch(15% 0.1607 110.04)", "oklch(26% 0.1607 110.04)", "oklch(38% 0.1607 110.04)", "oklch(49% 0.1607 110.04)", "oklch(61% 0.1607 110.04)", "oklch(72% 0.1607 110.04)", "oklch(84% 0.1607 110.04)", "oklch(95% 0.1607 110.04)"]
-      },
-      "marker-10": {
-        "role": "secondary",
-        "displayName": "Marker 10",
-        "canonical": "#4d4d4d",
-        "tonalRamp": ["oklch(15% 0.0000 0.00)", "oklch(26% 0.0000 0.00)", "oklch(38% 0.0000 0.00)", "oklch(49% 0.0000 0.00)", "oklch(61% 0.0000 0.00)", "oklch(72% 0.0000 0.00)", "oklch(84% 0.0000 0.00)", "oklch(95% 0.0000 0.00)"]
-      },
-      "marker-11": {
-        "role": "secondary",
-        "displayName": "Marker 11",
-        "canonical": "#0057e7",
-        "tonalRamp": ["oklch(15% 0.2288 261.46)", "oklch(26% 0.2288 261.46)", "oklch(38% 0.2288 261.46)", "oklch(49% 0.2288 261.46)", "oklch(61% 0.2288 261.46)", "oklch(72% 0.2288 261.46)", "oklch(84% 0.2288 261.46)", "oklch(95% 0.2288 261.46)"]
-      },
-      "marker-12": {
-        "role": "secondary",
-        "displayName": "Marker 12",
-        "canonical": "#d11141",
-        "tonalRamp": ["oklch(15% 0.2139 17.29)", "oklch(26% 0.2139 17.29)", "oklch(38% 0.2139 17.29)", "oklch(49% 0.2139 17.29)", "oklch(61% 0.2139 17.29)", "oklch(72% 0.2139 17.29)", "oklch(84% 0.2139 17.29)", "oklch(95% 0.2139 17.29)"]
-      },
-      "marker-13": {
-        "role": "secondary",
-        "displayName": "Marker 13",
-        "canonical": "#00a676",
-        "tonalRamp": ["oklch(15% 0.1368 164.02)", "oklch(26% 0.1368 164.02)", "oklch(38% 0.1368 164.02)", "oklch(49% 0.1368 164.02)", "oklch(61% 0.1368 164.02)", "oklch(72% 0.1368 164.02)", "oklch(84% 0.1368 164.02)", "oklch(95% 0.1368 164.02)"]
-      },
-      "marker-14": {
-        "role": "secondary",
-        "displayName": "Marker 14",
-        "canonical": "#f37735",
-        "tonalRamp": ["oklch(15% 0.1709 45.63)", "oklch(26% 0.1709 45.63)", "oklch(38% 0.1709 45.63)", "oklch(49% 0.1709 45.63)", "oklch(61% 0.1709 45.63)", "oklch(72% 0.1709 45.63)", "oklch(84% 0.1709 45.63)", "oklch(95% 0.1709 45.63)"]
-      },
-      "marker-15": {
-        "role": "secondary",
-        "displayName": "Marker 15",
-        "canonical": "#7b2cbf",
-        "tonalRamp": ["oklch(15% 0.2135 303.58)", "oklch(26% 0.2135 303.58)", "oklch(38% 0.2135 303.58)", "oklch(49% 0.2135 303.58)", "oklch(61% 0.2135 303.58)", "oklch(72% 0.2135 303.58)", "oklch(84% 0.2135 303.58)", "oklch(95% 0.2135 303.58)"]
-      },
-      "marker-16": {
-        "role": "secondary",
-        "displayName": "Marker 16",
-        "canonical": "#00b4d8",
-        "tonalRamp": ["oklch(15% 0.1286 218.98)", "oklch(26% 0.1286 218.98)", "oklch(38% 0.1286 218.98)", "oklch(49% 0.1286 218.98)", "oklch(61% 0.1286 218.98)", "oklch(72% 0.1286 218.98)", "oklch(84% 0.1286 218.98)", "oklch(95% 0.1286 218.98)"]
-      },
-      "marker-17": {
-        "role": "secondary",
-        "displayName": "Marker 17",
-        "canonical": "#6a994e",
-        "tonalRamp": ["oklch(15% 0.1166 134.90)", "oklch(26% 0.1166 134.90)", "oklch(38% 0.1166 134.90)", "oklch(49% 0.1166 134.90)", "oklch(61% 0.1166 134.90)", "oklch(72% 0.1166 134.90)", "oklch(84% 0.1166 134.90)", "oklch(95% 0.1166 134.90)"]
-      },
-      "marker-18": {
-        "role": "secondary",
-        "displayName": "Marker 18",
-        "canonical": "#c1121f",
-        "tonalRamp": ["oklch(15% 0.2019 25.94)", "oklch(26% 0.2019 25.94)", "oklch(38% 0.2019 25.94)", "oklch(49% 0.2019 25.94)", "oklch(61% 0.2019 25.94)", "oklch(72% 0.2019 25.94)", "oklch(84% 0.2019 25.94)", "oklch(95% 0.2019 25.94)"]
-      },
-      "marker-19": {
-        "role": "secondary",
-        "displayName": "Marker 19",
-        "canonical": "#f4a261",
-        "tonalRamp": ["oklch(15% 0.1269 57.86)", "oklch(26% 0.1269 57.86)", "oklch(38% 0.1269 57.86)", "oklch(49% 0.1269 57.86)", "oklch(61% 0.1269 57.86)", "oklch(72% 0.1269 57.86)", "oklch(84% 0.1269 57.86)", "oklch(95% 0.1269 57.86)"]
-      },
-      "marker-20": {
-        "role": "secondary",
-        "displayName": "Marker 20",
-        "canonical": "#264653",
-        "tonalRamp": ["oklch(15% 0.0438 226.20)", "oklch(26% 0.0438 226.20)", "oklch(38% 0.0438 226.20)", "oklch(49% 0.0438 226.20)", "oklch(61% 0.0438 226.20)", "oklch(72% 0.0438 226.20)", "oklch(84% 0.0438 226.20)", "oklch(95% 0.0438 226.20)"]
-      },
-      "marker-21": {
-        "role": "secondary",
-        "displayName": "Marker 21",
-        "canonical": "#ffbe0b",
-        "tonalRamp": ["oklch(15% 0.1709 83.34)", "oklch(26% 0.1709 83.34)", "oklch(38% 0.1709 83.34)", "oklch(49% 0.1709 83.34)", "oklch(61% 0.1709 83.34)", "oklch(72% 0.1709 83.34)", "oklch(84% 0.1709 83.34)", "oklch(95% 0.1709 83.34)"]
-      },
-      "marker-22": {
-        "role": "secondary",
-        "displayName": "Marker 22",
-        "canonical": "#3a86ff",
-        "tonalRamp": ["oklch(15% 0.1953 259.51)", "oklch(26% 0.1953 259.51)", "oklch(38% 0.1953 259.51)", "oklch(49% 0.1953 259.51)", "oklch(61% 0.1953 259.51)", "oklch(72% 0.1953 259.51)", "oklch(84% 0.1953 259.51)", "oklch(95% 0.1953 259.51)"]
-      },
-      "marker-23": {
-        "role": "secondary",
-        "displayName": "Marker 23",
-        "canonical": "#8338ec",
-        "tonalRamp": ["oklch(15% 0.2478 295.88)", "oklch(26% 0.2478 295.88)", "oklch(38% 0.2478 295.88)", "oklch(49% 0.2478 295.88)", "oklch(61% 0.2478 295.88)", "oklch(72% 0.2478 295.88)", "oklch(84% 0.2478 295.88)", "oklch(95% 0.2478 295.88)"]
-      },
-      "marker-24": {
-        "role": "secondary",
-        "displayName": "Marker 24",
-        "canonical": "#fb5607",
-        "tonalRamp": ["oklch(15% 0.2125 39.04)", "oklch(26% 0.2125 39.04)", "oklch(38% 0.2125 39.04)", "oklch(49% 0.2125 39.04)", "oklch(61% 0.2125 39.04)", "oklch(72% 0.2125 39.04)", "oklch(84% 0.2125 39.04)", "oklch(95% 0.2125 39.04)"]
-      },
-      "marker-25": {
-        "role": "secondary",
-        "displayName": "Marker 25",
-        "canonical": "#06d6a0",
-        "tonalRamp": ["oklch(15% 0.1595 166.57)", "oklch(26% 0.1595 166.57)", "oklch(38% 0.1595 166.57)", "oklch(49% 0.1595 166.57)", "oklch(61% 0.1595 166.57)", "oklch(72% 0.1595 166.57)", "oklch(84% 0.1595 166.57)", "oklch(95% 0.1595 166.57)"]
-      },
-      "marker-26": {
-        "role": "secondary",
-        "displayName": "Marker 26",
-        "canonical": "#7209b7",
-        "tonalRamp": ["oklch(15% 0.2282 304.02)", "oklch(26% 0.2282 304.02)", "oklch(38% 0.2282 304.02)", "oklch(49% 0.2282 304.02)", "oklch(61% 0.2282 304.02)", "oklch(72% 0.2282 304.02)", "oklch(84% 0.2282 304.02)", "oklch(95% 0.2282 304.02)"]
-      },
-      "marker-27": {
-        "role": "secondary",
-        "displayName": "Marker 27",
-        "canonical": "#118ab2",
-        "tonalRamp": ["oklch(15% 0.1120 227.97)", "oklch(26% 0.1120 227.97)", "oklch(38% 0.1120 227.97)", "oklch(49% 0.1120 227.97)", "oklch(61% 0.1120 227.97)", "oklch(72% 0.1120 227.97)", "oklch(84% 0.1120 227.97)", "oklch(95% 0.1120 227.97)"]
-      },
-      "marker-28": {
-        "role": "secondary",
-        "displayName": "Marker 28",
-        "canonical": "#ef476f",
-        "tonalRamp": ["oklch(15% 0.2042 11.07)", "oklch(26% 0.2042 11.07)", "oklch(38% 0.2042 11.07)", "oklch(49% 0.2042 11.07)", "oklch(61% 0.2042 11.07)", "oklch(72% 0.2042 11.07)", "oklch(84% 0.2042 11.07)", "oklch(95% 0.2042 11.07)"]
-      },
-      "marker-29": {
-        "role": "secondary",
-        "displayName": "Marker 29",
-        "canonical": "#073b4c",
-        "tonalRamp": ["oklch(15% 0.0587 225.83)", "oklch(26% 0.0587 225.83)", "oklch(38% 0.0587 225.83)", "oklch(49% 0.0587 225.83)", "oklch(61% 0.0587 225.83)", "oklch(72% 0.0587 225.83)", "oklch(84% 0.0587 225.83)", "oklch(95% 0.0587 225.83)"]
-      },
-      "marker-30": {
-        "role": "secondary",
-        "displayName": "Marker 30",
-        "canonical": "#9b2226",
-        "tonalRamp": ["oklch(15% 0.1568 24.59)", "oklch(26% 0.1568 24.59)", "oklch(38% 0.1568 24.59)", "oklch(49% 0.1568 24.59)", "oklch(61% 0.1568 24.59)", "oklch(72% 0.1568 24.59)", "oklch(84% 0.1568 24.59)", "oklch(95% 0.1568 24.59)"]
-      },
-      "marker-31": {
-        "role": "secondary",
-        "displayName": "Marker 31",
-        "canonical": "#ee9b00",
-        "tonalRamp": ["oklch(15% 0.1621 71.40)", "oklch(26% 0.1621 71.40)", "oklch(38% 0.1621 71.40)", "oklch(49% 0.1621 71.40)", "oklch(61% 0.1621 71.40)", "oklch(72% 0.1621 71.40)", "oklch(84% 0.1621 71.40)", "oklch(95% 0.1621 71.40)"]
-      },
-      "g25-marker-01": {
-        "role": "secondary",
-        "displayName": "G25 Marker 01",
-        "canonical": "#166f4e",
-        "tonalRamp": ["oklch(15% 0.0968 162.74)", "oklch(26% 0.0968 162.74)", "oklch(38% 0.0968 162.74)", "oklch(49% 0.0968 162.74)", "oklch(61% 0.0968 162.74)", "oklch(72% 0.0968 162.74)", "oklch(84% 0.0968 162.74)", "oklch(95% 0.0968 162.74)"]
-      },
-      "g25-marker-02": {
-        "role": "secondary",
-        "displayName": "G25 Marker 02",
-        "canonical": "#da0017",
-        "tonalRamp": ["oklch(15% 0.2278 27.06)", "oklch(26% 0.2278 27.06)", "oklch(38% 0.2278 27.06)", "oklch(49% 0.2278 27.06)", "oklch(61% 0.2278 27.06)", "oklch(72% 0.2278 27.06)", "oklch(84% 0.2278 27.06)", "oklch(95% 0.2278 27.06)"]
-      },
-      "g25-marker-03": {
-        "role": "secondary",
-        "displayName": "G25 Marker 03",
-        "canonical": "#5619a4",
-        "tonalRamp": ["oklch(15% 0.1981 295.44)", "oklch(26% 0.1981 295.44)", "oklch(38% 0.1981 295.44)", "oklch(49% 0.1981 295.44)", "oklch(61% 0.1981 295.44)", "oklch(72% 0.1981 295.44)", "oklch(84% 0.1981 295.44)", "oklch(95% 0.1981 295.44)"]
-      },
-      "g25-marker-04": {
-        "role": "secondary",
-        "displayName": "G25 Marker 04",
-        "canonical": "#de0077",
-        "tonalRamp": ["oklch(15% 0.2369 359.48)", "oklch(26% 0.2369 359.48)", "oklch(38% 0.2369 359.48)", "oklch(49% 0.2369 359.48)", "oklch(61% 0.2369 359.48)", "oklch(72% 0.2369 359.48)", "oklch(84% 0.2369 359.48)", "oklch(95% 0.2369 359.48)"]
-      },
-      "g25-marker-05": {
-        "role": "secondary",
-        "displayName": "G25 Marker 05",
-        "canonical": "#569918",
-        "tonalRamp": ["oklch(15% 0.1679 134.28)", "oklch(26% 0.1679 134.28)", "oklch(38% 0.1679 134.28)", "oklch(49% 0.1679 134.28)", "oklch(61% 0.1679 134.28)", "oklch(72% 0.1679 134.28)", "oklch(84% 0.1679 134.28)", "oklch(95% 0.1679 134.28)"]
-      },
-      "g25-marker-06": {
-        "role": "secondary",
-        "displayName": "G25 Marker 06",
-        "canonical": "#9824d9",
-        "tonalRamp": ["oklch(15% 0.2505 308.72)", "oklch(26% 0.2505 308.72)", "oklch(38% 0.2505 308.72)", "oklch(49% 0.2505 308.72)", "oklch(61% 0.2505 308.72)", "oklch(72% 0.2505 308.72)", "oklch(84% 0.2505 308.72)", "oklch(95% 0.2505 308.72)"]
-      },
-      "g25-marker-07": {
-        "role": "secondary",
-        "displayName": "G25 Marker 07",
-        "canonical": "#6f6317",
-        "tonalRamp": ["oklch(15% 0.0934 99.88)", "oklch(26% 0.0934 99.88)", "oklch(38% 0.0934 99.88)", "oklch(49% 0.0934 99.88)", "oklch(61% 0.0934 99.88)", "oklch(72% 0.0934 99.88)", "oklch(84% 0.0934 99.88)", "oklch(95% 0.0934 99.88)"]
-      },
-      "g25-marker-08": {
-        "role": "secondary",
-        "displayName": "G25 Marker 08",
-        "canonical": "#535353",
-        "tonalRamp": ["oklch(15% 0.0000 0.00)", "oklch(26% 0.0000 0.00)", "oklch(38% 0.0000 0.00)", "oklch(49% 0.0000 0.00)", "oklch(61% 0.0000 0.00)", "oklch(72% 0.0000 0.00)", "oklch(84% 0.0000 0.00)", "oklch(95% 0.0000 0.00)"]
-      },
-      "g25-marker-09": {
-        "role": "secondary",
-        "displayName": "G25 Marker 09",
-        "canonical": "#2b57a0",
-        "tonalRamp": ["oklch(15% 0.1281 259.96)", "oklch(26% 0.1281 259.96)", "oklch(38% 0.1281 259.96)", "oklch(49% 0.1281 259.96)", "oklch(61% 0.1281 259.96)", "oklch(72% 0.1281 259.96)", "oklch(84% 0.1281 259.96)", "oklch(95% 0.1281 259.96)"]
-      },
-      "g25-marker-10": {
-        "role": "secondary",
-        "displayName": "G25 Marker 10",
-        "canonical": "#bb5805",
-        "tonalRamp": ["oklch(15% 0.1493 50.26)", "oklch(26% 0.1493 50.26)", "oklch(38% 0.1493 50.26)", "oklch(49% 0.1493 50.26)", "oklch(61% 0.1493 50.26)", "oklch(72% 0.1493 50.26)", "oklch(84% 0.1493 50.26)", "oklch(95% 0.1493 50.26)"]
-      },
-      "g25-marker-11": {
-        "role": "secondary",
-        "displayName": "G25 Marker 11",
-        "canonical": "#7e0061",
-        "tonalRamp": ["oklch(15% 0.1720 341.60)", "oklch(26% 0.1720 341.60)", "oklch(38% 0.1720 341.60)", "oklch(49% 0.1720 341.60)", "oklch(61% 0.1720 341.60)", "oklch(72% 0.1720 341.60)", "oklch(84% 0.1720 341.60)", "oklch(95% 0.1720 341.60)"]
+        "canonical": "#0055bf",
+        "tonalRamp": [
+          "oklch(15% 0.1809 258.62)",
+          "oklch(26% 0.1809 258.62)",
+          "oklch(38% 0.1809 258.62)",
+          "oklch(49% 0.1809 258.62)",
+          "oklch(61% 0.1809 258.62)",
+          "oklch(72% 0.1809 258.62)",
+          "oklch(84% 0.1809 258.62)",
+          "oklch(95% 0.1809 258.62)"
+        ]
       },
       "population-surface": {
-        "role": "primary",
+        "role": "neutral",
         "displayName": "Population Surface",
-        "canonical": "#e4efff",
-        "tonalRamp": ["oklch(15% 0.0246 257.65)", "oklch(26% 0.0246 257.65)", "oklch(38% 0.0246 257.65)", "oklch(49% 0.0246 257.65)", "oklch(61% 0.0246 257.65)", "oklch(72% 0.0246 257.65)", "oklch(84% 0.0246 257.65)", "oklch(95% 0.0246 257.65)"]
+        "canonical": "#e4edff",
+        "tonalRamp": [
+          "oklch(15% 0.0262 264.44)",
+          "oklch(26% 0.0262 264.44)",
+          "oklch(38% 0.0262 264.44)",
+          "oklch(49% 0.0262 264.44)",
+          "oklch(61% 0.0262 264.44)",
+          "oklch(72% 0.0262 264.44)",
+          "oklch(84% 0.0262 264.44)",
+          "oklch(95% 0.0262 264.44)"
+        ]
       },
       "population-line": {
-        "role": "primary",
+        "role": "neutral",
         "displayName": "Population Line",
-        "canonical": "#a9caff",
-        "tonalRamp": ["oklch(15% 0.0829 259.76)", "oklch(26% 0.0829 259.76)", "oklch(38% 0.0829 259.76)", "oklch(49% 0.0829 259.76)", "oklch(61% 0.0829 259.76)", "oklch(72% 0.0829 259.76)", "oklch(84% 0.0829 259.76)", "oklch(95% 0.0829 259.76)"]
-      },
-      "population-text": {
-        "role": "primary",
-        "displayName": "Population Text",
-        "canonical": "#0056b3",
-        "tonalRamp": ["oklch(15% 0.1639 256.70)", "oklch(26% 0.1639 256.70)", "oklch(38% 0.1639 256.70)", "oklch(49% 0.1639 256.70)", "oklch(61% 0.1639 256.70)", "oklch(72% 0.1639 256.70)", "oklch(84% 0.1639 256.70)", "oklch(95% 0.1639 256.70)"]
-      },
-      "individual-surface": {
-        "role": "secondary",
-        "displayName": "Individual Surface",
-        "canonical": "#f2eafa",
-        "tonalRamp": ["oklch(15% 0.0229 308.19)", "oklch(26% 0.0229 308.19)", "oklch(38% 0.0229 308.19)", "oklch(49% 0.0229 308.19)", "oklch(61% 0.0229 308.19)", "oklch(72% 0.0229 308.19)", "oklch(84% 0.0229 308.19)", "oklch(95% 0.0229 308.19)"]
+        "canonical": "#adc9ff",
+        "tonalRamp": [
+          "oklch(15% 0.0821 263.32)",
+          "oklch(26% 0.0821 263.32)",
+          "oklch(38% 0.0821 263.32)",
+          "oklch(49% 0.0821 263.32)",
+          "oklch(61% 0.0821 263.32)",
+          "oklch(72% 0.0821 263.32)",
+          "oklch(84% 0.0821 263.32)",
+          "oklch(95% 0.0821 263.32)"
+        ]
       },
       "individual-text": {
         "role": "secondary",
         "displayName": "Individual Text",
         "canonical": "#653b83",
-        "tonalRamp": ["oklch(15% 0.1211 309.18)", "oklch(26% 0.1211 309.18)", "oklch(38% 0.1211 309.18)", "oklch(49% 0.1211 309.18)", "oklch(61% 0.1211 309.18)", "oklch(72% 0.1211 309.18)", "oklch(84% 0.1211 309.18)", "oklch(95% 0.1211 309.18)"]
+        "tonalRamp": [
+          "oklch(15% 0.1211 309.18)",
+          "oklch(26% 0.1211 309.18)",
+          "oklch(38% 0.1211 309.18)",
+          "oklch(49% 0.1211 309.18)",
+          "oklch(61% 0.1211 309.18)",
+          "oklch(72% 0.1211 309.18)",
+          "oklch(84% 0.1211 309.18)",
+          "oklch(95% 0.1211 309.18)"
+        ]
+      },
+      "individual-surface": {
+        "role": "secondary",
+        "displayName": "Individual Surface",
+        "canonical": "#f2eafa",
+        "tonalRamp": [
+          "oklch(15% 0.0229 308.19)",
+          "oklch(26% 0.0229 308.19)",
+          "oklch(38% 0.0229 308.19)",
+          "oklch(49% 0.0229 308.19)",
+          "oklch(61% 0.0229 308.19)",
+          "oklch(72% 0.0229 308.19)",
+          "oklch(84% 0.0229 308.19)",
+          "oklch(95% 0.0229 308.19)"
+        ]
       },
       "individual-line": {
         "role": "secondary",
         "displayName": "Individual Line",
         "canonical": "#d0b5e4",
-        "tonalRamp": ["oklch(15% 0.0711 310.65)", "oklch(26% 0.0711 310.65)", "oklch(38% 0.0711 310.65)", "oklch(49% 0.0711 310.65)", "oklch(61% 0.0711 310.65)", "oklch(72% 0.0711 310.65)", "oklch(84% 0.0711 310.65)", "oklch(95% 0.0711 310.65)"]
+        "tonalRamp": [
+          "oklch(15% 0.0711 310.65)",
+          "oklch(26% 0.0711 310.65)",
+          "oklch(38% 0.0711 310.65)",
+          "oklch(49% 0.0711 310.65)",
+          "oklch(61% 0.0711 310.65)",
+          "oklch(72% 0.0711 310.65)",
+          "oklch(84% 0.0711 310.65)",
+          "oklch(95% 0.0711 310.65)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "#fff",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Text",
+        "canonical": "#363636",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "canonical": "#e6e4df",
+        "tonalRamp": [
+          "oklch(15% 0.0071 88.65)",
+          "oklch(26% 0.0071 88.65)",
+          "oklch(38% 0.0071 88.65)",
+          "oklch(49% 0.0071 88.65)",
+          "oklch(61% 0.0071 88.65)",
+          "oklch(72% 0.0071 88.65)",
+          "oklch(84% 0.0071 88.65)",
+          "oklch(95% 0.0071 88.65)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#696969",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "subtle": {
+        "role": "neutral",
+        "displayName": "Subtle",
+        "canonical": "#f7f7f5",
+        "tonalRamp": [
+          "oklch(15% 0.0026 106.45)",
+          "oklch(26% 0.0026 106.45)",
+          "oklch(38% 0.0026 106.45)",
+          "oklch(49% 0.0026 106.45)",
+          "oklch(61% 0.0026 106.45)",
+          "oklch(72% 0.0026 106.45)",
+          "oklch(84% 0.0026 106.45)",
+          "oklch(95% 0.0026 106.45)"
+        ]
+      },
+      "hover": {
+        "role": "neutral",
+        "displayName": "Hover",
+        "canonical": "#f1f1ef",
+        "tonalRamp": [
+          "oklch(15% 0.0027 106.45)",
+          "oklch(26% 0.0027 106.45)",
+          "oklch(38% 0.0027 106.45)",
+          "oklch(49% 0.0027 106.45)",
+          "oklch(61% 0.0027 106.45)",
+          "oklch(72% 0.0027 106.45)",
+          "oklch(84% 0.0027 106.45)",
+          "oklch(95% 0.0027 106.45)"
+        ]
+      },
+      "active": {
+        "role": "neutral",
+        "displayName": "Active",
+        "canonical": "#e9e9e9",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "header": {
+        "role": "neutral",
+        "displayName": "Header",
+        "canonical": "#fbfbfb",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "toolbar": {
+        "role": "neutral",
+        "displayName": "Toolbar",
+        "canonical": "#fcfcfc",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "field-line": {
+        "role": "neutral",
+        "displayName": "Field Line",
+        "canonical": "#d8d5ce",
+        "tonalRamp": [
+          "oklch(15% 0.0101 87.48)",
+          "oklch(26% 0.0101 87.48)",
+          "oklch(38% 0.0101 87.48)",
+          "oklch(49% 0.0101 87.48)",
+          "oklch(61% 0.0101 87.48)",
+          "oklch(72% 0.0101 87.48)",
+          "oklch(84% 0.0101 87.48)",
+          "oklch(95% 0.0101 87.48)"
+        ]
+      },
+      "focus": {
+        "role": "neutral",
+        "displayName": "Focus",
+        "canonical": "#8a8a8a",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "placeholder": {
+        "role": "neutral",
+        "displayName": "Placeholder",
+        "canonical": "#72716d",
+        "tonalRamp": [
+          "oklch(15% 0.0062 95.17)",
+          "oklch(26% 0.0062 95.17)",
+          "oklch(38% 0.0062 95.17)",
+          "oklch(49% 0.0062 95.17)",
+          "oklch(61% 0.0062 95.17)",
+          "oklch(72% 0.0062 95.17)",
+          "oklch(84% 0.0062 95.17)",
+          "oklch(95% 0.0062 95.17)"
+        ]
+      },
+      "selection-surface": {
+        "role": "neutral",
+        "displayName": "Selection Surface",
+        "canonical": "#dceaff",
+        "tonalRamp": [
+          "oklch(15% 0.0323 258.37)",
+          "oklch(26% 0.0323 258.37)",
+          "oklch(38% 0.0323 258.37)",
+          "oklch(49% 0.0323 258.37)",
+          "oklch(61% 0.0323 258.37)",
+          "oklch(72% 0.0323 258.37)",
+          "oklch(84% 0.0323 258.37)",
+          "oklch(95% 0.0323 258.37)"
+        ]
+      },
+      "selection-text": {
+        "role": "neutral",
+        "displayName": "Selection Text",
+        "canonical": "#164c8f",
+        "tonalRamp": [
+          "oklch(15% 0.1241 256.19)",
+          "oklch(26% 0.1241 256.19)",
+          "oklch(38% 0.1241 256.19)",
+          "oklch(49% 0.1241 256.19)",
+          "oklch(61% 0.1241 256.19)",
+          "oklch(72% 0.1241 256.19)",
+          "oklch(84% 0.1241 256.19)",
+          "oklch(95% 0.1241 256.19)"
+        ]
+      },
+      "selected-row": {
+        "role": "neutral",
+        "displayName": "Selected Row",
+        "canonical": "#eaf3ff",
+        "tonalRamp": [
+          "oklch(15% 0.0188 255.53)",
+          "oklch(26% 0.0188 255.53)",
+          "oklch(38% 0.0188 255.53)",
+          "oklch(49% 0.0188 255.53)",
+          "oklch(61% 0.0188 255.53)",
+          "oklch(72% 0.0188 255.53)",
+          "oklch(84% 0.0188 255.53)",
+          "oklch(95% 0.0188 255.53)"
+        ]
+      },
+      "rail": {
+        "role": "neutral",
+        "displayName": "Rail",
+        "canonical": "#292b2d",
+        "tonalRamp": [
+          "oklch(15% 0.0046 247.99)",
+          "oklch(26% 0.0046 247.99)",
+          "oklch(38% 0.0046 247.99)",
+          "oklch(49% 0.0046 247.99)",
+          "oklch(61% 0.0046 247.99)",
+          "oklch(72% 0.0046 247.99)",
+          "oklch(84% 0.0046 247.99)",
+          "oklch(95% 0.0046 247.99)"
+        ]
+      },
+      "rail-current": {
+        "role": "neutral",
+        "displayName": "Rail Current",
+        "canonical": "#414448",
+        "tonalRamp": [
+          "oklch(15% 0.0079 255.54)",
+          "oklch(26% 0.0079 255.54)",
+          "oklch(38% 0.0079 255.54)",
+          "oklch(49% 0.0079 255.54)",
+          "oklch(61% 0.0079 255.54)",
+          "oklch(72% 0.0079 255.54)",
+          "oklch(84% 0.0079 255.54)",
+          "oklch(95% 0.0079 255.54)"
+        ]
+      },
+      "rail-icon": {
+        "role": "neutral",
+        "displayName": "Rail Icon",
+        "canonical": "#bdc3ca",
+        "tonalRamp": [
+          "oklch(15% 0.0119 252.11)",
+          "oklch(26% 0.0119 252.11)",
+          "oklch(38% 0.0119 252.11)",
+          "oklch(49% 0.0119 252.11)",
+          "oklch(61% 0.0119 252.11)",
+          "oklch(72% 0.0119 252.11)",
+          "oklch(84% 0.0119 252.11)",
+          "oklch(95% 0.0119 252.11)"
+        ]
+      },
+      "advanced-surface": {
+        "role": "neutral",
+        "displayName": "Advanced Surface",
+        "canonical": "#fafaf8",
+        "tonalRamp": [
+          "oklch(15% 0.0026 106.45)",
+          "oklch(26% 0.0026 106.45)",
+          "oklch(38% 0.0026 106.45)",
+          "oklch(49% 0.0026 106.45)",
+          "oklch(61% 0.0026 106.45)",
+          "oklch(72% 0.0026 106.45)",
+          "oklch(84% 0.0026 106.45)",
+          "oklch(95% 0.0026 106.45)"
+        ]
       },
       "result-heading": {
         "role": "neutral",
         "displayName": "Result Heading",
-        "canonical": "#f8f9fa",
-        "tonalRamp": ["oklch(15% 0.0017 247.84)", "oklch(26% 0.0017 247.84)", "oklch(38% 0.0017 247.84)", "oklch(49% 0.0017 247.84)", "oklch(61% 0.0017 247.84)", "oklch(72% 0.0017 247.84)", "oklch(84% 0.0017 247.84)", "oklch(95% 0.0017 247.84)"]
+        "canonical": "#fafafa",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
       },
       "result-hover": {
         "role": "neutral",
         "displayName": "Result Hover",
-        "canonical": "#f1f6fd",
-        "tonalRamp": ["oklch(15% 0.0108 256.69)", "oklch(26% 0.0108 256.69)", "oklch(38% 0.0108 256.69)", "oklch(49% 0.0108 256.69)", "oklch(61% 0.0108 256.69)", "oklch(72% 0.0108 256.69)", "oklch(84% 0.0108 256.69)", "oklch(95% 0.0108 256.69)"]
+        "canonical": "#edf4fc",
+        "tonalRamp": [
+          "oklch(15% 0.0131 251.56)",
+          "oklch(26% 0.0131 251.56)",
+          "oklch(38% 0.0131 251.56)",
+          "oklch(49% 0.0131 251.56)",
+          "oklch(61% 0.0131 251.56)",
+          "oklch(72% 0.0131 251.56)",
+          "oklch(84% 0.0131 251.56)",
+          "oklch(95% 0.0131 251.56)"
+        ]
+      },
+      "legend-line": {
+        "role": "neutral",
+        "displayName": "Legend Line",
+        "canonical": "#bcbcbc",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "legend-hover": {
+        "role": "neutral",
+        "displayName": "Legend Hover",
+        "canonical": "#f0f0ed",
+        "tonalRamp": [
+          "oklch(15% 0.0040 106.47)",
+          "oklch(26% 0.0040 106.47)",
+          "oklch(38% 0.0040 106.47)",
+          "oklch(49% 0.0040 106.47)",
+          "oklch(61% 0.0040 106.47)",
+          "oklch(72% 0.0040 106.47)",
+          "oklch(84% 0.0040 106.47)",
+          "oklch(95% 0.0040 106.47)"
+        ]
+      },
+      "legend-hidden": {
+        "role": "neutral",
+        "displayName": "Legend Hidden",
+        "canonical": "#82817d",
+        "tonalRamp": [
+          "oklch(15% 0.0061 95.15)",
+          "oklch(26% 0.0061 95.15)",
+          "oklch(38% 0.0061 95.15)",
+          "oklch(49% 0.0061 95.15)",
+          "oklch(61% 0.0061 95.15)",
+          "oklch(72% 0.0061 95.15)",
+          "oklch(84% 0.0061 95.15)",
+          "oklch(95% 0.0061 95.15)"
+        ]
+      },
+      "error": {
+        "role": "neutral",
+        "displayName": "Error",
+        "canonical": "#a04444",
+        "tonalRamp": [
+          "oklch(15% 0.1229 22.45)",
+          "oklch(26% 0.1229 22.45)",
+          "oklch(38% 0.1229 22.45)",
+          "oklch(49% 0.1229 22.45)",
+          "oklch(61% 0.1229 22.45)",
+          "oklch(72% 0.1229 22.45)",
+          "oklch(84% 0.1229 22.45)",
+          "oklch(95% 0.1229 22.45)"
+        ]
+      },
+      "error-surface": {
+        "role": "neutral",
+        "displayName": "Error Surface",
+        "canonical": "#fff5f5",
+        "tonalRamp": [
+          "oklch(15% 0.0107 17.34)",
+          "oklch(26% 0.0107 17.34)",
+          "oklch(38% 0.0107 17.34)",
+          "oklch(49% 0.0107 17.34)",
+          "oklch(61% 0.0107 17.34)",
+          "oklch(72% 0.0107 17.34)",
+          "oklch(84% 0.0107 17.34)",
+          "oklch(95% 0.0107 17.34)"
+        ]
+      },
+      "error-line": {
+        "role": "neutral",
+        "displayName": "Error Line",
+        "canonical": "#e5c8c8",
+        "tonalRamp": [
+          "oklch(15% 0.0328 17.81)",
+          "oklch(26% 0.0328 17.81)",
+          "oklch(38% 0.0328 17.81)",
+          "oklch(49% 0.0328 17.81)",
+          "oklch(61% 0.0328 17.81)",
+          "oklch(72% 0.0328 17.81)",
+          "oklch(84% 0.0328 17.81)",
+          "oklch(95% 0.0328 17.81)"
+        ]
+      },
+      "search-focus": {
+        "role": "neutral",
+        "displayName": "Search Focus",
+        "canonical": "#4891ff",
+        "tonalRamp": [
+          "oklch(15% 0.1790 258.56)",
+          "oklch(26% 0.1790 258.56)",
+          "oklch(38% 0.1790 258.56)",
+          "oklch(49% 0.1790 258.56)",
+          "oklch(61% 0.1790 258.56)",
+          "oklch(72% 0.1790 258.56)",
+          "oklch(84% 0.1790 258.56)",
+          "oklch(95% 0.1790 258.56)"
+        ]
+      },
+      "search-focus-halo": {
+        "role": "neutral",
+        "displayName": "Search Focus Halo",
+        "canonical": "#e6f0ff",
+        "tonalRamp": [
+          "oklch(15% 0.0229 258.36)",
+          "oklch(26% 0.0229 258.36)",
+          "oklch(38% 0.0229 258.36)",
+          "oklch(49% 0.0229 258.36)",
+          "oklch(61% 0.0229 258.36)",
+          "oklch(72% 0.0229 258.36)",
+          "oklch(84% 0.0229 258.36)",
+          "oklch(95% 0.0229 258.36)"
+        ]
+      },
+      "scrollbar": {
+        "role": "neutral",
+        "displayName": "Scrollbar",
+        "canonical": "#c1c0bc",
+        "tonalRamp": [
+          "oklch(15% 0.0057 95.12)",
+          "oklch(26% 0.0057 95.12)",
+          "oklch(38% 0.0057 95.12)",
+          "oklch(49% 0.0057 95.12)",
+          "oklch(61% 0.0057 95.12)",
+          "oklch(72% 0.0057 95.12)",
+          "oklch(84% 0.0057 95.12)",
+          "oklch(95% 0.0057 95.12)"
+        ]
+      },
+      "separator-active": {
+        "role": "neutral",
+        "displayName": "Separator Active",
+        "canonical": "#bcbab2",
+        "tonalRamp": [
+          "oklch(15% 0.0114 95.20)",
+          "oklch(26% 0.0114 95.20)",
+          "oklch(38% 0.0114 95.20)",
+          "oklch(49% 0.0114 95.20)",
+          "oklch(61% 0.0114 95.20)",
+          "oklch(72% 0.0114 95.20)",
+          "oklch(84% 0.0114 95.20)",
+          "oklch(95% 0.0114 95.20)"
+        ]
+      },
+      "table-line": {
+        "role": "neutral",
+        "displayName": "Table Line",
+        "canonical": "#eeece7",
+        "tonalRamp": [
+          "oklch(15% 0.0070 88.64)",
+          "oklch(26% 0.0070 88.64)",
+          "oklch(38% 0.0070 88.64)",
+          "oklch(49% 0.0070 88.64)",
+          "oklch(61% 0.0070 88.64)",
+          "oklch(72% 0.0070 88.64)",
+          "oklch(84% 0.0070 88.64)",
+          "oklch(95% 0.0070 88.64)"
+        ]
+      },
+      "table-hover": {
+        "role": "neutral",
+        "displayName": "Table Hover",
+        "canonical": "#f1f4f7",
+        "tonalRamp": [
+          "oklch(15% 0.0051 247.88)",
+          "oklch(26% 0.0051 247.88)",
+          "oklch(38% 0.0051 247.88)",
+          "oklch(49% 0.0051 247.88)",
+          "oklch(61% 0.0051 247.88)",
+          "oklch(72% 0.0051 247.88)",
+          "oklch(84% 0.0051 247.88)",
+          "oklch(95% 0.0051 247.88)"
+        ]
+      },
+      "plot-tick": {
+        "role": "neutral",
+        "displayName": "Plot Tick",
+        "canonical": "#666666",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "plot-grid": {
+        "role": "neutral",
+        "displayName": "Plot Grid",
+        "canonical": "#eeeeee",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "marker-01": {
+        "role": "tertiary",
+        "displayName": "Marker 01",
+        "canonical": "#1f77b4",
+        "tonalRamp": [
+          "oklch(15% 0.1238 244.60)",
+          "oklch(26% 0.1238 244.60)",
+          "oklch(38% 0.1238 244.60)",
+          "oklch(49% 0.1238 244.60)",
+          "oklch(61% 0.1238 244.60)",
+          "oklch(72% 0.1238 244.60)",
+          "oklch(84% 0.1238 244.60)",
+          "oklch(95% 0.1238 244.60)"
+        ]
+      },
+      "marker-02": {
+        "role": "tertiary",
+        "displayName": "Marker 02",
+        "canonical": "#d62728",
+        "tonalRamp": [
+          "oklch(15% 0.2090 26.92)",
+          "oklch(26% 0.2090 26.92)",
+          "oklch(38% 0.2090 26.92)",
+          "oklch(49% 0.2090 26.92)",
+          "oklch(61% 0.2090 26.92)",
+          "oklch(72% 0.2090 26.92)",
+          "oklch(84% 0.2090 26.92)",
+          "oklch(95% 0.2090 26.92)"
+        ]
+      },
+      "marker-03": {
+        "role": "tertiary",
+        "displayName": "Marker 03",
+        "canonical": "#2ca02c",
+        "tonalRamp": [
+          "oklch(15% 0.1840 142.95)",
+          "oklch(26% 0.1840 142.95)",
+          "oklch(38% 0.1840 142.95)",
+          "oklch(49% 0.1840 142.95)",
+          "oklch(61% 0.1840 142.95)",
+          "oklch(72% 0.1840 142.95)",
+          "oklch(84% 0.1840 142.95)",
+          "oklch(95% 0.1840 142.95)"
+        ]
+      },
+      "marker-04": {
+        "role": "tertiary",
+        "displayName": "Marker 04",
+        "canonical": "#9467bd",
+        "tonalRamp": [
+          "oklch(15% 0.1345 306.90)",
+          "oklch(26% 0.1345 306.90)",
+          "oklch(38% 0.1345 306.90)",
+          "oklch(49% 0.1345 306.90)",
+          "oklch(61% 0.1345 306.90)",
+          "oklch(72% 0.1345 306.90)",
+          "oklch(84% 0.1345 306.90)",
+          "oklch(95% 0.1345 306.90)"
+        ]
+      },
+      "marker-05": {
+        "role": "tertiary",
+        "displayName": "Marker 05",
+        "canonical": "#ff7f0e",
+        "tonalRamp": [
+          "oklch(15% 0.1851 51.88)",
+          "oklch(26% 0.1851 51.88)",
+          "oklch(38% 0.1851 51.88)",
+          "oklch(49% 0.1851 51.88)",
+          "oklch(61% 0.1851 51.88)",
+          "oklch(72% 0.1851 51.88)",
+          "oklch(84% 0.1851 51.88)",
+          "oklch(95% 0.1851 51.88)"
+        ]
+      },
+      "marker-06": {
+        "role": "tertiary",
+        "displayName": "Marker 06",
+        "canonical": "#17becf",
+        "tonalRamp": [
+          "oklch(15% 0.1227 206.44)",
+          "oklch(26% 0.1227 206.44)",
+          "oklch(38% 0.1227 206.44)",
+          "oklch(49% 0.1227 206.44)",
+          "oklch(61% 0.1227 206.44)",
+          "oklch(72% 0.1227 206.44)",
+          "oklch(84% 0.1227 206.44)",
+          "oklch(95% 0.1227 206.44)"
+        ]
+      },
+      "marker-07": {
+        "role": "tertiary",
+        "displayName": "Marker 07",
+        "canonical": "#8c564b",
+        "tonalRamp": [
+          "oklch(15% 0.0745 32.20)",
+          "oklch(26% 0.0745 32.20)",
+          "oklch(38% 0.0745 32.20)",
+          "oklch(49% 0.0745 32.20)",
+          "oklch(61% 0.0745 32.20)",
+          "oklch(72% 0.0745 32.20)",
+          "oklch(84% 0.0745 32.20)",
+          "oklch(95% 0.0745 32.20)"
+        ]
+      },
+      "marker-08": {
+        "role": "tertiary",
+        "displayName": "Marker 08",
+        "canonical": "#e377c2",
+        "tonalRamp": [
+          "oklch(15% 0.1602 340.05)",
+          "oklch(26% 0.1602 340.05)",
+          "oklch(38% 0.1602 340.05)",
+          "oklch(49% 0.1602 340.05)",
+          "oklch(61% 0.1602 340.05)",
+          "oklch(72% 0.1602 340.05)",
+          "oklch(84% 0.1602 340.05)",
+          "oklch(95% 0.1602 340.05)"
+        ]
+      },
+      "marker-09": {
+        "role": "tertiary",
+        "displayName": "Marker 09",
+        "canonical": "#bcbd22",
+        "tonalRamp": [
+          "oklch(15% 0.1607 110.04)",
+          "oklch(26% 0.1607 110.04)",
+          "oklch(38% 0.1607 110.04)",
+          "oklch(49% 0.1607 110.04)",
+          "oklch(61% 0.1607 110.04)",
+          "oklch(72% 0.1607 110.04)",
+          "oklch(84% 0.1607 110.04)",
+          "oklch(95% 0.1607 110.04)"
+        ]
+      },
+      "marker-10": {
+        "role": "tertiary",
+        "displayName": "Marker 10",
+        "canonical": "#4d4d4d",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "marker-11": {
+        "role": "tertiary",
+        "displayName": "Marker 11",
+        "canonical": "#0057e7",
+        "tonalRamp": [
+          "oklch(15% 0.2288 261.46)",
+          "oklch(26% 0.2288 261.46)",
+          "oklch(38% 0.2288 261.46)",
+          "oklch(49% 0.2288 261.46)",
+          "oklch(61% 0.2288 261.46)",
+          "oklch(72% 0.2288 261.46)",
+          "oklch(84% 0.2288 261.46)",
+          "oklch(95% 0.2288 261.46)"
+        ]
+      },
+      "marker-12": {
+        "role": "tertiary",
+        "displayName": "Marker 12",
+        "canonical": "#d11141",
+        "tonalRamp": [
+          "oklch(15% 0.2139 17.29)",
+          "oklch(26% 0.2139 17.29)",
+          "oklch(38% 0.2139 17.29)",
+          "oklch(49% 0.2139 17.29)",
+          "oklch(61% 0.2139 17.29)",
+          "oklch(72% 0.2139 17.29)",
+          "oklch(84% 0.2139 17.29)",
+          "oklch(95% 0.2139 17.29)"
+        ]
+      },
+      "marker-13": {
+        "role": "tertiary",
+        "displayName": "Marker 13",
+        "canonical": "#00a676",
+        "tonalRamp": [
+          "oklch(15% 0.1368 164.02)",
+          "oklch(26% 0.1368 164.02)",
+          "oklch(38% 0.1368 164.02)",
+          "oklch(49% 0.1368 164.02)",
+          "oklch(61% 0.1368 164.02)",
+          "oklch(72% 0.1368 164.02)",
+          "oklch(84% 0.1368 164.02)",
+          "oklch(95% 0.1368 164.02)"
+        ]
+      },
+      "marker-14": {
+        "role": "tertiary",
+        "displayName": "Marker 14",
+        "canonical": "#f37735",
+        "tonalRamp": [
+          "oklch(15% 0.1709 45.63)",
+          "oklch(26% 0.1709 45.63)",
+          "oklch(38% 0.1709 45.63)",
+          "oklch(49% 0.1709 45.63)",
+          "oklch(61% 0.1709 45.63)",
+          "oklch(72% 0.1709 45.63)",
+          "oklch(84% 0.1709 45.63)",
+          "oklch(95% 0.1709 45.63)"
+        ]
+      },
+      "marker-15": {
+        "role": "tertiary",
+        "displayName": "Marker 15",
+        "canonical": "#7b2cbf",
+        "tonalRamp": [
+          "oklch(15% 0.2135 303.58)",
+          "oklch(26% 0.2135 303.58)",
+          "oklch(38% 0.2135 303.58)",
+          "oklch(49% 0.2135 303.58)",
+          "oklch(61% 0.2135 303.58)",
+          "oklch(72% 0.2135 303.58)",
+          "oklch(84% 0.2135 303.58)",
+          "oklch(95% 0.2135 303.58)"
+        ]
+      },
+      "marker-16": {
+        "role": "tertiary",
+        "displayName": "Marker 16",
+        "canonical": "#00b4d8",
+        "tonalRamp": [
+          "oklch(15% 0.1286 218.98)",
+          "oklch(26% 0.1286 218.98)",
+          "oklch(38% 0.1286 218.98)",
+          "oklch(49% 0.1286 218.98)",
+          "oklch(61% 0.1286 218.98)",
+          "oklch(72% 0.1286 218.98)",
+          "oklch(84% 0.1286 218.98)",
+          "oklch(95% 0.1286 218.98)"
+        ]
+      },
+      "marker-17": {
+        "role": "tertiary",
+        "displayName": "Marker 17",
+        "canonical": "#6a994e",
+        "tonalRamp": [
+          "oklch(15% 0.1166 134.90)",
+          "oklch(26% 0.1166 134.90)",
+          "oklch(38% 0.1166 134.90)",
+          "oklch(49% 0.1166 134.90)",
+          "oklch(61% 0.1166 134.90)",
+          "oklch(72% 0.1166 134.90)",
+          "oklch(84% 0.1166 134.90)",
+          "oklch(95% 0.1166 134.90)"
+        ]
+      },
+      "marker-18": {
+        "role": "tertiary",
+        "displayName": "Marker 18",
+        "canonical": "#c1121f",
+        "tonalRamp": [
+          "oklch(15% 0.2019 25.94)",
+          "oklch(26% 0.2019 25.94)",
+          "oklch(38% 0.2019 25.94)",
+          "oklch(49% 0.2019 25.94)",
+          "oklch(61% 0.2019 25.94)",
+          "oklch(72% 0.2019 25.94)",
+          "oklch(84% 0.2019 25.94)",
+          "oklch(95% 0.2019 25.94)"
+        ]
+      },
+      "marker-19": {
+        "role": "tertiary",
+        "displayName": "Marker 19",
+        "canonical": "#f4a261",
+        "tonalRamp": [
+          "oklch(15% 0.1269 57.86)",
+          "oklch(26% 0.1269 57.86)",
+          "oklch(38% 0.1269 57.86)",
+          "oklch(49% 0.1269 57.86)",
+          "oklch(61% 0.1269 57.86)",
+          "oklch(72% 0.1269 57.86)",
+          "oklch(84% 0.1269 57.86)",
+          "oklch(95% 0.1269 57.86)"
+        ]
+      },
+      "marker-20": {
+        "role": "tertiary",
+        "displayName": "Marker 20",
+        "canonical": "#264653",
+        "tonalRamp": [
+          "oklch(15% 0.0438 226.20)",
+          "oklch(26% 0.0438 226.20)",
+          "oklch(38% 0.0438 226.20)",
+          "oklch(49% 0.0438 226.20)",
+          "oklch(61% 0.0438 226.20)",
+          "oklch(72% 0.0438 226.20)",
+          "oklch(84% 0.0438 226.20)",
+          "oklch(95% 0.0438 226.20)"
+        ]
+      },
+      "marker-21": {
+        "role": "tertiary",
+        "displayName": "Marker 21",
+        "canonical": "#ffbe0b",
+        "tonalRamp": [
+          "oklch(15% 0.1709 83.34)",
+          "oklch(26% 0.1709 83.34)",
+          "oklch(38% 0.1709 83.34)",
+          "oklch(49% 0.1709 83.34)",
+          "oklch(61% 0.1709 83.34)",
+          "oklch(72% 0.1709 83.34)",
+          "oklch(84% 0.1709 83.34)",
+          "oklch(95% 0.1709 83.34)"
+        ]
+      },
+      "marker-22": {
+        "role": "tertiary",
+        "displayName": "Marker 22",
+        "canonical": "#3a86ff",
+        "tonalRamp": [
+          "oklch(15% 0.1953 259.51)",
+          "oklch(26% 0.1953 259.51)",
+          "oklch(38% 0.1953 259.51)",
+          "oklch(49% 0.1953 259.51)",
+          "oklch(61% 0.1953 259.51)",
+          "oklch(72% 0.1953 259.51)",
+          "oklch(84% 0.1953 259.51)",
+          "oklch(95% 0.1953 259.51)"
+        ]
+      },
+      "marker-23": {
+        "role": "tertiary",
+        "displayName": "Marker 23",
+        "canonical": "#8338ec",
+        "tonalRamp": [
+          "oklch(15% 0.2478 295.88)",
+          "oklch(26% 0.2478 295.88)",
+          "oklch(38% 0.2478 295.88)",
+          "oklch(49% 0.2478 295.88)",
+          "oklch(61% 0.2478 295.88)",
+          "oklch(72% 0.2478 295.88)",
+          "oklch(84% 0.2478 295.88)",
+          "oklch(95% 0.2478 295.88)"
+        ]
+      },
+      "marker-24": {
+        "role": "tertiary",
+        "displayName": "Marker 24",
+        "canonical": "#fb5607",
+        "tonalRamp": [
+          "oklch(15% 0.2125 39.04)",
+          "oklch(26% 0.2125 39.04)",
+          "oklch(38% 0.2125 39.04)",
+          "oklch(49% 0.2125 39.04)",
+          "oklch(61% 0.2125 39.04)",
+          "oklch(72% 0.2125 39.04)",
+          "oklch(84% 0.2125 39.04)",
+          "oklch(95% 0.2125 39.04)"
+        ]
+      },
+      "marker-25": {
+        "role": "tertiary",
+        "displayName": "Marker 25",
+        "canonical": "#06d6a0",
+        "tonalRamp": [
+          "oklch(15% 0.1595 166.57)",
+          "oklch(26% 0.1595 166.57)",
+          "oklch(38% 0.1595 166.57)",
+          "oklch(49% 0.1595 166.57)",
+          "oklch(61% 0.1595 166.57)",
+          "oklch(72% 0.1595 166.57)",
+          "oklch(84% 0.1595 166.57)",
+          "oklch(95% 0.1595 166.57)"
+        ]
+      },
+      "marker-26": {
+        "role": "tertiary",
+        "displayName": "Marker 26",
+        "canonical": "#7209b7",
+        "tonalRamp": [
+          "oklch(15% 0.2282 304.02)",
+          "oklch(26% 0.2282 304.02)",
+          "oklch(38% 0.2282 304.02)",
+          "oklch(49% 0.2282 304.02)",
+          "oklch(61% 0.2282 304.02)",
+          "oklch(72% 0.2282 304.02)",
+          "oklch(84% 0.2282 304.02)",
+          "oklch(95% 0.2282 304.02)"
+        ]
+      },
+      "marker-27": {
+        "role": "tertiary",
+        "displayName": "Marker 27",
+        "canonical": "#118ab2",
+        "tonalRamp": [
+          "oklch(15% 0.1120 227.97)",
+          "oklch(26% 0.1120 227.97)",
+          "oklch(38% 0.1120 227.97)",
+          "oklch(49% 0.1120 227.97)",
+          "oklch(61% 0.1120 227.97)",
+          "oklch(72% 0.1120 227.97)",
+          "oklch(84% 0.1120 227.97)",
+          "oklch(95% 0.1120 227.97)"
+        ]
+      },
+      "marker-28": {
+        "role": "tertiary",
+        "displayName": "Marker 28",
+        "canonical": "#ef476f",
+        "tonalRamp": [
+          "oklch(15% 0.2042 11.07)",
+          "oklch(26% 0.2042 11.07)",
+          "oklch(38% 0.2042 11.07)",
+          "oklch(49% 0.2042 11.07)",
+          "oklch(61% 0.2042 11.07)",
+          "oklch(72% 0.2042 11.07)",
+          "oklch(84% 0.2042 11.07)",
+          "oklch(95% 0.2042 11.07)"
+        ]
+      },
+      "marker-29": {
+        "role": "tertiary",
+        "displayName": "Marker 29",
+        "canonical": "#073b4c",
+        "tonalRamp": [
+          "oklch(15% 0.0587 225.83)",
+          "oklch(26% 0.0587 225.83)",
+          "oklch(38% 0.0587 225.83)",
+          "oklch(49% 0.0587 225.83)",
+          "oklch(61% 0.0587 225.83)",
+          "oklch(72% 0.0587 225.83)",
+          "oklch(84% 0.0587 225.83)",
+          "oklch(95% 0.0587 225.83)"
+        ]
+      },
+      "marker-30": {
+        "role": "tertiary",
+        "displayName": "Marker 30",
+        "canonical": "#9b2226",
+        "tonalRamp": [
+          "oklch(15% 0.1568 24.59)",
+          "oklch(26% 0.1568 24.59)",
+          "oklch(38% 0.1568 24.59)",
+          "oklch(49% 0.1568 24.59)",
+          "oklch(61% 0.1568 24.59)",
+          "oklch(72% 0.1568 24.59)",
+          "oklch(84% 0.1568 24.59)",
+          "oklch(95% 0.1568 24.59)"
+        ]
+      },
+      "marker-31": {
+        "role": "tertiary",
+        "displayName": "Marker 31",
+        "canonical": "#ee9b00",
+        "tonalRamp": [
+          "oklch(15% 0.1621 71.40)",
+          "oklch(26% 0.1621 71.40)",
+          "oklch(38% 0.1621 71.40)",
+          "oklch(49% 0.1621 71.40)",
+          "oklch(61% 0.1621 71.40)",
+          "oklch(72% 0.1621 71.40)",
+          "oklch(84% 0.1621 71.40)",
+          "oklch(95% 0.1621 71.40)"
+        ]
+      },
+      "checkbox-accent": {
+        "role": "neutral",
+        "displayName": "Checkbox Accent",
+        "canonical": "#333",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "tool-active-text": {
+        "role": "neutral",
+        "displayName": "Tool Active Text",
+        "canonical": "#222",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.00)",
+          "oklch(26% 0.0000 0.00)",
+          "oklch(38% 0.0000 0.00)",
+          "oklch(49% 0.0000 0.00)",
+          "oklch(61% 0.0000 0.00)",
+          "oklch(72% 0.0000 0.00)",
+          "oklch(84% 0.0000 0.00)",
+          "oklch(95% 0.0000 0.00)"
+        ]
+      },
+      "text-action": {
+        "role": "neutral",
+        "displayName": "Text Action",
+        "canonical": "#434341",
+        "tonalRamp": [
+          "oklch(15% 0.0033 106.56)",
+          "oklch(26% 0.0033 106.56)",
+          "oklch(38% 0.0033 106.56)",
+          "oklch(49% 0.0033 106.56)",
+          "oklch(61% 0.0033 106.56)",
+          "oklch(72% 0.0033 106.56)",
+          "oklch(84% 0.0033 106.56)",
+          "oklch(95% 0.0033 106.56)"
+        ]
+      },
+      "manual-summary": {
+        "role": "neutral",
+        "displayName": "Manual Summary",
+        "canonical": "#55544f",
+        "tonalRamp": [
+          "oklch(15% 0.0081 97.50)",
+          "oklch(26% 0.0081 97.50)",
+          "oklch(38% 0.0081 97.50)",
+          "oklch(49% 0.0081 97.50)",
+          "oklch(61% 0.0081 97.50)",
+          "oklch(72% 0.0081 97.50)",
+          "oklch(84% 0.0081 97.50)",
+          "oklch(95% 0.0081 97.50)"
+        ]
+      },
+      "result-heading-text": {
+        "role": "neutral",
+        "displayName": "Result Heading Text",
+        "canonical": "#62615d",
+        "tonalRamp": [
+          "oklch(15% 0.0064 95.18)",
+          "oklch(26% 0.0064 95.18)",
+          "oklch(38% 0.0064 95.18)",
+          "oklch(49% 0.0064 95.18)",
+          "oklch(61% 0.0064 95.18)",
+          "oklch(72% 0.0064 95.18)",
+          "oklch(84% 0.0064 95.18)",
+          "oklch(95% 0.0064 95.18)"
+        ]
+      },
+      "result-line": {
+        "role": "neutral",
+        "displayName": "Result Line",
+        "canonical": "#ededeb",
+        "tonalRamp": [
+          "oklch(15% 0.0027 106.45)",
+          "oklch(26% 0.0027 106.45)",
+          "oklch(38% 0.0027 106.45)",
+          "oklch(49% 0.0027 106.45)",
+          "oklch(61% 0.0027 106.45)",
+          "oklch(72% 0.0027 106.45)",
+          "oklch(84% 0.0027 106.45)",
+          "oklch(95% 0.0027 106.45)"
+        ]
+      },
+      "choice-line": {
+        "role": "neutral",
+        "displayName": "Choice Line",
+        "canonical": "#b3b2ae",
+        "tonalRamp": [
+          "oklch(15% 0.0057 95.12)",
+          "oklch(26% 0.0057 95.12)",
+          "oklch(38% 0.0057 95.12)",
+          "oklch(49% 0.0057 95.12)",
+          "oklch(61% 0.0057 95.12)",
+          "oklch(72% 0.0057 95.12)",
+          "oklch(84% 0.0057 95.12)",
+          "oklch(95% 0.0057 95.12)"
+        ]
       }
     },
     "typographyMeta": {
       "body": {
         "displayName": "Body",
-        "purpose": "Bootstrap document default."
+        "purpose": "Default UI and graph text."
       },
-      "control": {
-        "displayName": "Control",
-        "purpose": "31 px form controls and source menu/options text."
+      "title": {
+        "displayName": "Title",
+        "purpose": "Panel headings."
       },
-      "marker-choice": {
-        "displayName": "Marker Choice",
-        "purpose": "Marker appearance label/select."
+      "label": {
+        "displayName": "Label",
+        "purpose": "Picker and section labels."
       },
-      "axis-label": {
-        "displayName": "Axis Label",
-        "purpose": "X/Y labels."
+      "chip": {
+        "displayName": "Chip",
+        "purpose": "Population and individual chips."
       },
-      "axis-select": {
-        "displayName": "Axis Select",
-        "purpose": "X/Y selects and error feedback."
+      "table": {
+        "displayName": "Table",
+        "purpose": "Metadata cells and legend names."
       },
-      "plot-title": {
-        "displayName": "Plot Title",
-        "purpose": "Native graph title."
+      "hint": {
+        "displayName": "Hint",
+        "purpose": "Instructions and status."
+      },
+      "count": {
+        "displayName": "Count",
+        "purpose": "Small tabular sample counts."
+      },
+      "plot-tick": {
+        "displayName": "Plot Tick",
+        "purpose": "Readable numeric ticks."
       },
       "plot-subtitle": {
         "displayName": "Plot Subtitle",
-        "purpose": "Escaped optional subtitle."
+        "purpose": "Optional chart subtitle."
       },
       "plot-label": {
         "displayName": "Plot Label",
-        "purpose": "Movable group annotations."
+        "purpose": "Optional group labels; alternate style is 9px."
       },
       "plot-point": {
         "displayName": "Plot Point",
-        "purpose": "Point text and static group labels."
-      },
-      "clear": {
-        "displayName": "Clear",
-        "purpose": "Bootstrap inline clear glyph."
-      },
-      "chip-count": {
-        "displayName": "Chip Count",
-        "purpose": "10 px tabular population chip count at 0.85 opacity."
-      },
-      "search-result": {
-        "displayName": "Search Result",
-        "purpose": "13 px search input and population/sample result rows."
+        "purpose": "Optional individual labels."
       }
     },
     "shadows": [
       {
-        "name": "field-focus",
-        "value": "0 0 0 0.2rem rgba(0, 123, 255, 0.25)",
-        "purpose": "Bootstrap input/select focus."
+        "name": "anchored-menu",
+        "value": "0 5px 16px rgba(0, 0, 0, 0.1)",
+        "purpose": "Search suggestions above adjacent panels."
       },
       {
-        "name": "primary-focus",
-        "value": "0 0 0 0.2rem rgba(0, 123, 255, 0.5)",
-        "purpose": "Bootstrap outline action focus."
-      },
-      {
-        "name": "secondary-focus",
-        "value": "0 0 0 0.2rem rgba(108, 117, 125, 0.5)",
-        "purpose": "Bootstrap menu trigger focus."
-      },
-      {
-        "name": "annotation-text",
-        "value": "1px 1px rgba(0, 0, 0, 0.2)",
-        "purpose": "Annotation text-shadow, not a container box-shadow."
-      },
-      {
-        "name": "picker-focus",
-        "value": "0 0 0 2px #cce5ff",
-        "purpose": "Population token box focus-within, paired with #80bdff border."
+        "name": "search-focus",
+        "value": "0 0 0 2px #e6f0ff",
+        "purpose": "Focused chip field."
       }
     ],
-    "motion": [
-      {
-        "name": "bootstrap-controls",
-        "value": "0.15s ease-in-out",
-        "purpose": "Imported Bootstrap color/border/background/focus transitions; reduced motion disables supported transitions."
-      }
-    ],
+    "motion": [],
     "breakpoints": []
   },
   "components": [
     {
-      "name": "Outline action",
+      "name": "Panel tools",
       "kind": "button",
-      "refersTo": "button-outline-primary",
-      "description": "Run PCA action; source Bootstrap outline-primary and keyboard focus.",
-      "html": "<button class=\"ds-action\" type=\"submit\">Run PCA</button>",
-      "css": ".ds-action{font-family:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";font-size:0.875rem;font-weight:400;line-height:1.5;display:inline-block;text-align:center;vertical-align:middle;background:transparent;color:#007bff;border:1px solid #007bff;padding:0.25rem 0.5rem;border-radius:0.2rem;cursor:pointer;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}.ds-action:hover,.ds-action:active{background:#007bff;color:#fff;border-color:#007bff}.ds-action:focus{box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}.ds-action:focus-visible{outline:2px solid #007bff;outline-offset:1px;}.ds-action:disabled{opacity:.65;cursor:default;color:#007bff;background:transparent}@media(prefers-reduced-motion:reduce){.ds-action{transition:none}}"
+      "refersTo": "tool",
+      "description": "Leading legend/data toggles with compact pressed states.",
+      "html": "<div class=\"ds-tools\" role=\"toolbar\" aria-label=\"Plot tools\"><button class=\"ds-tool\" aria-label=\"Toggle legend\" aria-pressed=\"true\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><rect x=\"1\" y=\"1\" width=\"14\" height=\"14\" rx=\"2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\"/><path d=\"M3 1.5H6V14.5H3Q1.5 14.5 1.5 13V3Q1.5 1.5 3 1.5Z\" fill=\"currentColor\" transform=\"rotate(180 8 8)\"/></svg></button><button class=\"ds-tool\" aria-label=\"Toggle data panel\" aria-pressed=\"true\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><rect x=\"1\" y=\"1\" width=\"14\" height=\"14\" rx=\"2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\"/><path d=\"M3 1.5H6V14.5H3Q1.5 14.5 1.5 13V3Q1.5 1.5 3 1.5Z\" fill=\"currentColor\"/></svg></button></div>",
+      "css": ".ds-tools{display:flex;gap:2px;padding:3px 0;background:#fbfbfb;color:#363636}.ds-tool{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;border:0;border-radius:3px;background:none;cursor:pointer}.ds-tool[aria-pressed=\"true\"]{background:var(--active,#e9e9e9);color:#222}.ds-tool:hover{background:var(--hover,#f1f1ef)}.ds-tool:focus-visible{outline:2px solid #8a8a8a;outline-offset:1px;}"
     },
     {
-      "name": "Data panel and chip search",
-      "kind": "custom",
-      "refersTo": "data-panel",
-      "description": "Source-based panel with local TSV/scaling, wrapping population and individual chips, scrolling results, manual disclosure and status. Synthetic preview; search/selection/import require the application runtime.",
-      "html": "<aside class=\"ds-database-panel\" aria-label=\"PCA data\"><header class=\"ds-data-heading\"><span>Data</span><span class=\"ds-data-count\">4 selected</span></header><section class=\"ds-database-source\"><div class=\"ds-database-load-row\"><button class=\"ds-btn\" type=\"button\">Replace TSV</button><select class=\"ds-custom-select\" aria-label=\"TSV coordinate scaling\"><option>Scaled</option><option>Raw</option></select></div><div class=\"ds-database-file-status\">Synthetic development TSV · 6 samples</div></section><section class=\"ds-population-picker\"><div class=\"ds-picker-heading\"><label for=\"ds-population-search\">Populations / samples</label><button class=\"ds-data-text-action\" type=\"button\">Clear selection</button></div><div class=\"ds-population-token-box\"><span class=\"ds-population-chip\"><span class=\"ds-population-chip-text\">Synthetic_A</span><span class=\"ds-chip-count\">3</span><button type=\"button\" aria-label=\"Remove population Synthetic_A\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"/></svg></button></span><span class=\"ds-population-chip ds-individual\"><span class=\"ds-population-chip-text\">Synthetic_B_01</span><button type=\"button\" aria-label=\"Remove sample Synthetic_B_01\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"/></svg></button></span><input id=\"ds-population-search\" type=\"search\" placeholder=\"Search group ID or genetic ID\" value=\"Synthetic\"></div><p class=\"ds-picker-hint\">Click a population to select it. Expand to choose individual samples.</p></section><div class=\"ds-database-results\"><div class=\"ds-result-heading\">Populations <span>2</span></div><div class=\"ds-database-group-row\"><button class=\"ds-group-expand\" aria-label=\"Expand population Synthetic_A\" aria-expanded=\"false\">›</button><button class=\"ds-group-select\" aria-pressed=\"true\"><span>Synthetic_A</span><span class=\"ds-group-sample-count\">3/3 samples</span></button></div><button class=\"ds-database-sample\" aria-pressed=\"true\"><span class=\"ds-choice-check\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m20 6-11 11-5-5\"/></svg></span><span class=\"ds-sample-copy\">Synthetic_B_01<small>Synthetic_B</small></span></button></div><section class=\"ds-manual-source\"><details open><summary>Paste coordinates</summary><div class=\"ds-manual-entry\"><textarea class=\"ds-form-control\" rows=\"3\" aria-label=\"Global25 coordinates\" placeholder=\"Group:sample,PC1,PC2,…,PC25\"></textarea><div class=\"ds-manual-actions\"><select class=\"ds-custom-select\" aria-label=\"Manual coordinate scaling\"><option>Scaled</option><option>Raw</option></select><button class=\"ds-btn\" type=\"button\" disabled>Add coordinates</button></div><p class=\"ds-picker-hint\">One named G25 row per line. Ctrl/⌘ + Enter to add.</p></div></details></section><div class=\"ds-selection-status\" role=\"status\">4 samples in the current PCA.</div></aside>",
-      "css": ".ds-database-panel{font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\";height:620px;max-width:100%;}.ds-database-panel button,.ds-database-panel input,.ds-database-panel textarea,.ds-database-panel select{font-family:inherit;line-height:1.5;}.ds-database-panel button{cursor:pointer;}.ds-database-panel button:focus-visible,.ds-database-panel input:focus-visible,.ds-database-panel summary:focus-visible,.ds-database-panel textarea:focus-visible,.ds-database-panel select:focus-visible{outline:2px solid #007bff;outline-offset:1px;}.ds-form-control,.ds-custom-select{display:block;width:100%;padding:.25rem .5rem;font-size:.875rem;font-weight:400;line-height:1.5;color:#495057;background-color:#fff;border:1px solid #ced4da;border-radius:.2rem}.ds-custom-select{height:31px}.ds-form-control:focus,.ds-custom-select:focus{outline:0;border-color:#80bdff;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.ds-btn{display:inline-block;padding:.25rem .5rem;font-size:.875rem;color:#007bff;background:transparent;border:1px solid #007bff;border-radius:.2rem}.ds-btn:hover,.ds-btn:active{color:#fff;background:#007bff}.ds-btn:focus-visible{box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}.ds-btn:disabled{opacity:.65;cursor:default}.ds-database-panel {\n  width: 380px;\n  flex: 0 0 380px;\n  min-height: 0;\n  display: flex;\n  flex-direction: column;\n  border-left: 1px solid #ced4da;\n  background: #fff;\n  font-size: 14px;\n  line-height: 1.5;\n  overflow: auto;\n}\n.ds-data-heading {\n  height: 47px;\n  flex-shrink: 0;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 0 14px;\n  border-bottom: 1px solid #e9ecef;\n  font-weight: 600;\n}\n.ds-data-count {\n  color: #6c757d;\n  font-size: 12px;\n  font-weight: 400;\n  font-variant-numeric: tabular-nums;\n}\n.ds-database-source {\n  padding: 14px 14px 0;\n  flex-shrink: 0;\n}\n.ds-database-load-row {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.ds-database-load-row button {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  white-space: nowrap;\n}\n.ds-database-load-row select {\n  width: 82px;\n  margin-left: auto;\n}\n.ds-database-file-status {\n  margin-top: 8px;\n  color: #6c757d;\n  font-size: 12px;\n}\n.ds-database-file-status span {\n  display: block;\n}\n.ds-database-filename {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: #495057;\n}\n.ds-population-picker {\n  padding: 18px 14px 0;\n  flex-shrink: 0;\n}\n.ds-picker-heading {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  gap: 8px;\n  margin-bottom: 6px;\n}\n.ds-picker-heading label {\n  font-weight: 600;\n  margin: 0;\n}\n.ds-data-text-action {\n  border: 0;\n  padding: 0;\n  background: transparent;\n  color: #007bff;\n  font-size: 12px;\n  white-space: nowrap;\n}\n.ds-data-text-action:hover {\n  text-decoration: underline;\n}\n.ds-population-token-box {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  align-content: flex-start;\n  gap: 4px;\n  padding: 7px;\n  min-height: 86px;\n  max-height: 210px;\n  overflow: auto;\n  border: 1px solid #ced4da;\n  border-radius: 3px;\n  cursor: text;\n}\n.ds-population-token-box:focus-within {\n  border-color: #80bdff;\n  box-shadow: 0 0 0 2px #cce5ff;\n}\n.ds-population-token-box input {\n  border: 0;\n  background: transparent;\n  padding: 3px 2px;\n  flex: 1 1 180px;\n  width: 100%;\n  min-width: 0;\n  font-size: 13px;\n  outline: none;\n}\n.ds-population-token-box input:focus-visible {\n  outline: none;\n}\n.ds-population-token-box input::placeholder {\n  color: #6c757d;\n  opacity: 1;\n}\n.ds-population-chip {\n  display: inline-flex;\n  align-items: center;\n  max-width: 100%;\n  gap: 5px;\n  padding: 2px 4px 2px 6px;\n  border: 1px solid #a9caff;\n  background: #e4efff;\n  color: #0056b3;\n  border-radius: 3px;\n  font-size: 12px;\n}\n.ds-population-chip.ds-individual {\n  background: #f2eafa;\n  color: #653b83;\n  border-color: #d0b5e4;\n}\n.ds-population-chip-text {\n  overflow-wrap: anywhere;\n  min-width: 0;\n}\n.ds-chip-count {\n  font-size: 10px;\n  font-variant-numeric: tabular-nums;\n  opacity: 0.85;\n}\n.ds-population-chip button {\n  display: inline-flex;\n  align-items: center;\n  border: 0;\n  padding: 1px;\n  background: transparent;\n  color: inherit;\n  flex-shrink: 0;\n}\n.ds-population-chip button:hover {\n  background: #cce5ff;\n}\n.ds-picker-hint {\n  margin: 6px 0 0;\n  font-size: 12px;\n  color: #6c757d;\n}\n.ds-database-results {\n  margin: 10px 14px 0;\n  min-height: 60px;\n  flex: 1 1 180px;\n  overflow: auto;\n  border-top: 1px solid #e9ecef;\n}\n.ds-database-results:empty {\n  border-top-color: transparent;\n}\n.ds-result-heading {\n  display: flex;\n  justify-content: space-between;\n  padding: 7px 4px;\n  font-size: 12px;\n  font-weight: 600;\n  color: #495057;\n  background: #f8f9fa;\n}\n.ds-result-heading span {\n  color: #6c757d;\n  font-weight: 400;\n}\n.ds-database-group-row {\n  display: flex;\n  align-items: stretch;\n  border-bottom: 1px solid #e9ecef;\n}\n.ds-group-expand {\n  width: 25px;\n  flex: 0 0 25px;\n  border: 0;\n  background: transparent;\n  padding: 6px 0;\n  color: #6c757d;\n}\n.ds-group-select {\n  display: flex;\n  align-items: center;\n  gap: 7px;\n  justify-content: space-between;\n  width: 100%;\n  min-width: 0;\n  border: 0;\n  padding: 8px 4px;\n  text-align: left;\n  background: transparent;\n  color: #212529;\n  font-size: 13px;\n}\n.ds-group-select > span:first-child {\n  overflow-wrap: anywhere;\n  min-width: 0;\n}\n.ds-group-select small {\n  display: block;\n  color: #6c757d;\n  font-size: 11px;\n}\n.ds-group-sample-count {\n  color: #6c757d;\n  font-size: 11px;\n  white-space: nowrap;\n  flex-shrink: 0;\n  font-variant-numeric: tabular-nums;\n}\n.ds-group-select[aria-pressed=\"true\"] {\n  color: #0056b3;\n  background: #e4efff;\n}\n.ds-group-select:hover,\n.ds-group-expand:hover,\n.ds-database-sample:hover {\n  background: #f1f6fd;\n}\n.ds-database-sample {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 7px;\n  border: 0;\n  border-bottom: 1px solid #e9ecef;\n  background: transparent;\n  text-align: left;\n  padding: 7px 5px;\n  color: #212529;\n  font-size: 13px;\n}\n.ds-database-sample.ds-nested {\n  padding-left: 26px;\n  font-size: 12px;\n}\n.ds-database-sample[aria-pressed=\"true\"] {\n  background: #f2eafa;\n  color: #653b83;\n}\n.ds-choice-check {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 16px;\n  height: 16px;\n  flex-shrink: 0;\n  border: 1px solid #adb5bd;\n  border-radius: 2px;\n}\n.ds-sample-copy {\n  min-width: 0;\n  overflow-wrap: anywhere;\n}\n.ds-sample-copy small {\n  display: block;\n  font-size: 11px;\n  color: #6c757d;\n}\n.ds-result-empty,\n.ds-result-limit {\n  padding: 10px 4px;\n  font-size: 12px;\n  color: #6c757d;\n  overflow-wrap: anywhere;\n}\n.ds-more-samples {\n  margin: 7px 0 7px 26px;\n}\n.ds-manual-source {\n  flex-shrink: 0;\n  padding: 10px 14px 12px;\n  border-top: 1px solid #e9ecef;\n}\n.ds-manual-source summary {\n  font-weight: 600;\n  font-size: 13px;\n  cursor: pointer;\n}\n.ds-manual-entry {\n  padding-top: 8px;\n}\n.ds-manual-entry textarea {\n  resize: vertical;\n  min-height: 76px;\n  max-height: 180px;\n  font-size: 12px;\n}\n.ds-manual-entry textarea:focus-visible {\n  outline-offset: 0;\n}\n.ds-manual-actions {\n  display: flex;\n  gap: 8px;\n  justify-content: space-between;\n  margin-top: 8px;\n}\n.ds-manual-actions select {\n  width: 86px;\n}\n.ds-data-error {\n  padding: 7px 8px;\n  margin: 8px 0 0;\n  color: #842029;\n  background: #fff5f5;\n  border: 1px solid #f1c2c7;\n  font-size: 12px;\n  overflow-wrap: anywhere;\n}\n.ds-selection-status {\n  padding: 8px 14px;\n  flex-shrink: 0;\n  border-top: 1px solid #e9ecef;\n  color: #495057;\n  font-size: 12px;\n}\n"
+      "name": "Coordinate entry and action",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Manual coordinates and a compact neutral Add action.",
+      "html": "<div class=\"ds-manual\"><label for=\"ds-coordinates\">Paste coordinates</label><textarea id=\"ds-coordinates\" placeholder=\"Sample,PC1,\u2026,PC25\" rows=\"3\"></textarea><button class=\"ds-add\">Add coordinates</button><span class=\"ds-hint\">Ctrl/\u2318 + Enter</span></div>",
+      "css": ".ds-manual{font:11px Arial,Helvetica,sans-serif;color:#363636;width:280px}.ds-manual textarea{display:block;width:100%;min-height:86px;margin:5px 0 6px;padding:5px 7px;border:1px solid #d8d5ce;border-radius:3px;background:#fff;color:inherit;font:11px/1.5 Arial,Helvetica,sans-serif;resize:vertical}.ds-manual textarea::placeholder{color:#72716d}.ds-add{font:12px Arial,Helvetica,sans-serif;min-height:27px;padding:4px 8px;border:1px solid #d8d5ce;border-radius:3px;background:#fff;color:#363636;cursor:pointer}.ds-add:hover{background:var(--hover,#f1f1ef)}.ds-add:active{background:var(--active,#e9e9e9)}.ds-add:focus-visible,.ds-manual textarea:focus-visible{outline:2px solid #8a8a8a;outline-offset:1px;}.ds-hint{font-size:10.5px;color:var(--muted,#696969);margin-left:7px}"
     },
     {
-      "name": "Grouping dropdown",
-      "kind": "custom",
-      "refersTo": "menu-trigger",
-      "description": "Actual details/summary grouping menu; native open/close works without JavaScript.",
-      "html": "<details class=\"ds-menu\"><summary class=\"ds-trigger\" title=\"Grouping mode\">Aggregated</summary><div class=\"ds-dropdown\"><button class=\"ds-item\" type=\"button\">Aggregated</button><button class=\"ds-item\" type=\"button\">Individual</button><button class=\"ds-item\" type=\"button\">As one group</button></div></details>",
-      "css": ".ds-menu{font-family:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";font-size:0.875rem;font-weight:400;line-height:1.5;position:relative;display:inline-block;margin-left:-1px}.ds-trigger{font-family:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";font-size:0.875rem;font-weight:400;line-height:1.5;list-style:none;display:inline-block;height:31px;white-space:nowrap;cursor:pointer;border:1px solid #6c757d;border-radius:0;padding:.25rem .5rem;background:transparent;color:#6c757d;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}.ds-trigger::-webkit-details-marker{display:none}.ds-trigger::marker{content:\"\"}.ds-trigger::after{display:inline-block;margin-left:.255em;vertical-align:.255em;content:\"\";border-top:.3em solid;border-right:.3em solid transparent;border-bottom:0;border-left:.3em solid transparent}.ds-trigger:hover,.ds-trigger:active,.ds-menu[open]>.ds-trigger{color:#fff;background:#6c757d;border-color:#6c757d}.ds-trigger:focus{box-shadow:0 0 0 .2rem rgba(108,117,125,.5)}.ds-trigger:focus-visible{outline:2px solid #007bff;outline-offset:1px;}.ds-dropdown{display:none;position:absolute;top:100%;left:0;z-index:20;min-width:10rem;padding:.5rem 0;margin:.125rem 0 0;background:#fff;color:#212529;border:1px solid rgba(0,0,0,.15);border-radius:.25rem;max-height:calc(100dvh - 58px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#aab2bc #fff}.ds-menu[open]>.ds-dropdown{display:block}.ds-item{font-family:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";font-size:0.875rem;font-weight:400;line-height:1.5;display:block;width:100%;padding:.25rem 1.5rem;text-align:left;white-space:nowrap;color:#212529;background:transparent;border:0;cursor:pointer}.ds-item:hover,.ds-item:focus{color:#16181b;background:#e9ecef}.ds-item:active{color:#fff;background:#007bff}.ds-item:focus-visible{outline:2px solid #007bff;outline-offset:1px;}@media(prefers-reduced-motion:reduce){.ds-trigger{transition:none}}"
+      "name": "Population and individual chips",
+      "kind": "chip",
+      "refersTo": "population-chip",
+      "description": "Wrapping population/individual chips with inline search.",
+      "html": "<div class=\"ds-picker\"><span class=\"ds-chip\">Population A <button aria-label=\"Remove Population A\">\u00d7</button></span><span class=\"ds-chip ds-individual\">SYN001 <button aria-label=\"Remove SYN001\">\u00d7</button></span><input aria-label=\"Search populations or genetic IDs\" placeholder=\"Search populations or genetic IDs\u2026\"/></div>",
+      "css": ".ds-picker{display:flex;flex-wrap:wrap;align-content:flex-start;align-items:center;gap:4px;width:280px;min-height:72px;padding:5px 7px;border:1px solid #d8d5ce;border-radius:3px;font:12px Arial,Helvetica,sans-serif;background:#fff}.ds-picker:focus-within{border-color:#4891ff;box-shadow:0 0 0 2px #e6f0ff}.ds-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 4px 2px 5px;border:1px solid #adc9ff;border-radius:3px;background:#e4edff;color:#0055bf;font-size:11.5px;line-height:1.4}.ds-individual{color:#653b83;background:#f2eafa;border-color:#d0b5e4}.ds-chip button{border:0;background:none;color:inherit;padding:0;cursor:pointer;font:inherit}.ds-chip button:hover{background:var(--hover,#f1f1ef)}.ds-chip button:focus-visible{outline:2px solid #8a8a8a;outline-offset:1px;}.ds-picker input{flex:1 1 140px;min-width:100px;width:100%;padding:4px 0;border:0;background:none;font:12px Arial,Helvetica,sans-serif;color:#363636}.ds-picker input:focus-visible{outline:0}.ds-picker input::placeholder{color:#72716d}"
     },
     {
-      "name": "Icon-only navigation",
+      "name": "Navigation rail",
       "kind": "nav",
       "refersTo": "rail",
-      "description": "Actual 32 px rail and source Lucide paths, with disabled future tools.",
-      "html": "<nav class=\"ds-rail\" aria-label=\"G25 tools\"><button class=\"ds-rail-icon ds-current\" aria-label=\"G25 PCA\" aria-current=\"page\" title=\"G25 PCA\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"7.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"18.5\" cy=\"5.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"11.5\" cy=\"11.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"7.5\" cy=\"16.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"17.5\" cy=\"14.5\" r=\".5\" fill=\"currentColor\"/><path d=\"M3 3v16a2 2 0 0 0 2 2h16\"/></svg></button><button class=\"ds-rail-icon\" aria-label=\"G25 distances — planned\" title=\"G25 distances — planned\" disabled><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z\"/><path d=\"m14.5 12.5 2-2m-5-1 2-2m-5-1 2-2m7 11 2-2\"/></svg></button><button class=\"ds-rail-icon\" aria-label=\"G25 models — planned\" title=\"G25 models — planned\" disabled><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z\"/><path d=\"M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12\"/><path d=\"M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17\"/></svg></button></nav>",
-      "css": ".ds-rail{width:var(--rail-width,32px);flex:0 0 var(--rail-width,32px);background:var(--rail,#24272b);padding-top:5px}.ds-rail-icon{display:flex;align-items:center;justify-content:center;width:32px;height:36px;border:0;background:transparent;color:#c8d0db;padding:0;cursor:pointer}.ds-rail-icon.ds-current{background:var(--rail-current,#3a4048);color:#fff}.ds-rail-icon:disabled{color:#929dac;cursor:default}.ds-rail-icon:focus-visible{outline:2px solid #007bff;outline-offset:-2px}"
+      "description": "Thin dark rail with active PCA and planned disabled tools.",
+      "html": "<nav class=\"ds-rail\" aria-label=\"Analysis tools\"><button class=\"ds-rail-button ds-current\" aria-label=\"Custom PCA\" aria-current=\"page\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M3 3v18h18\"/><circle cx=\"7.5\" cy=\"14.5\" r=\".5\"/><circle cx=\"11.5\" cy=\"9.5\" r=\".5\"/><circle cx=\"16.5\" cy=\"16.5\" r=\".5\"/><circle cx=\"18.5\" cy=\"7.5\" r=\".5\"/></svg></button><button class=\"ds-rail-button\" aria-label=\"Distances (planned)\" disabled><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M21.3 8.7a1 1 0 0 0 0-1.4l-4.6-4.6a1 1 0 0 0-1.4 0L2.7 15.3a1 1 0 0 0 0 1.4l4.6 4.6a1 1 0 0 0 1.4 0z\"/><path d=\"m7.5 10.5 2 2m1-5 2 2m1-5 2 2m-11 7 2 2\"/></svg></button></nav>",
+      "css": ".ds-rail{width:32px;padding-top:5px;background:#292b2d}.ds-rail-button{display:flex;align-items:center;justify-content:center;width:32px;height:35px;padding:0;border:0;background:none;color:#bdc3ca;cursor:pointer}.ds-rail-button.ds-current{background:#414448;color:#fff}.ds-rail-button:hover:not(:disabled){background:#414448}.ds-rail-button:disabled{opacity:.55;cursor:default}.ds-rail-button:focus-visible{outline:2px solid #8a8a8a;outline-offset:1px;}"
     },
     {
-      "name": "X/Y component selectors",
+      "name": "PCA legend",
       "kind": "custom",
-      "refersTo": "axis-select",
-      "description": "Actual 11 px axis labels and 12 px, 68×29 px Bootstrap selects.",
-      "html": "<div class=\"ds-components\" aria-label=\"Custom PCA components\"><label><span>X</span><select class=\"ds-select\" aria-label=\"Horizontal component\" title=\"PC1\"><option selected>PC1</option><option disabled>PC2</option></select></label><label><span>Y</span><select class=\"ds-select\" aria-label=\"Vertical component\" title=\"PC2\"><option disabled>PC1</option><option selected>PC2</option></select></label></div>",
-      "css": ".ds-components{display:inline-flex;align-items:center;padding:0 6px;gap:6px;border-top:1px solid #ced4da;border-bottom:1px solid #ced4da}.ds-components label{font-family:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";font-size:0.875rem;font-weight:400;line-height:1.5;display:flex;align-items:center;gap:3px;font-size:11px;color:#6c757d;margin:0}.ds-select{font-family:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";font-size:0.875rem;font-weight:400;line-height:1.5;display:inline-block;width:68px;height:29px;padding:3px 1.75rem 3px .5rem;font-size:12px;color:#495057;vertical-align:middle;background:#fff url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e\") right .75rem center/8px 10px no-repeat;border:0;border-radius:.25rem;appearance:none}.ds-select:focus{border-color:#80bdff;outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.ds-select:focus-visible{outline:2px solid #007bff;outline-offset:1px;}.ds-select:disabled{color:#6c757d;background-color:#e9ecef}"
+      "refersTo": "legend",
+      "description": "Compact row with shared mark, count and explicit eye control.",
+      "html": "<section class=\"ds-legend\" aria-label=\"Legend\"><h2>Populations <span>1</span></h2><div class=\"ds-legend-row\"><button class=\"ds-legend-item\" title=\"Synthetic population\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" aria-hidden=\"true\"><circle cx=\"7\" cy=\"7\" r=\"3.5\" fill=\"#1f77b4\" stroke=\"#124568\" stroke-width=\".8\" opacity=\".9\"/></svg><span class=\"ds-legend-name\">Synthetic population</span><span class=\"ds-legend-count\">24</span></button><button class=\"ds-eye\" aria-label=\"Hide Synthetic population\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg></button></div></section>",
+      "css": ".ds-legend{width:215px;border:1px solid #bcbcbc;border-radius:2px;background:#fcfcfc;color:#363636;font:12px Arial,Helvetica,sans-serif}.ds-legend h2{height:30px;margin:0;padding:0 9px;display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600}.ds-legend h2 span{font-size:9px;font-weight:400;color:var(--muted,#696969)}.ds-legend-row{display:flex;align-items:center;min-height:28px;margin:0 4px 5px}.ds-legend-row:hover{background:#f0f0ed}.ds-legend-item{flex:1;min-width:0;display:flex;align-items:center;gap:6px;padding:5px 3px;border:0;background:none;color:inherit;cursor:pointer}.ds-legend-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;font:11px Arial,Helvetica,sans-serif}.ds-legend-count{font:9px Arial,Helvetica,sans-serif;color:var(--muted,#696969)}.ds-eye{width:23px;height:23px;display:flex;align-items:center;justify-content:center;padding:0;border:0;background:none;color:#62615d;cursor:pointer}.ds-eye:hover,.ds-legend-item:hover{background:var(--hover,#f1f1ef)}.ds-eye:focus-visible,.ds-legend-item:focus-visible{outline:2px solid #8a8a8a;outline-offset:1px;}"
     }
   ],
   "narrative": {
-    "northStar": "G25 Views' Custom PCA workspace",
-    "overview": "G25 tools follows the user-pinned G25 Views Custom PCA interface: source-sized Bootstrap controls above one white, viewport-filling Plotly chart. This approved replacement preserves the reference's density, SVG hover tools and native chart behavior.\n\nThe visual additions are the thin charcoal icon rail, compact component selectors, PCA_views' outlined marks and the authorized right Data panel. The panel adapts Admix_IRE's population/sample chip search within Bootstrap's existing form language; the original marker appearance remains available. Data supplies plot color; interface structure stays restrained.",
+    "northStar": "The compact academic G25 workspace",
+    "overview": "The approved visual world follows the user's PCA_views, ArchaeoBase and G25 Manager applications. Dense neutral panels support one continuous white graph; familiar direct controls keep attention on samples and geometry. Admix_IRE supplies population search and blue/purple selection language.\n\nPCA_views governs Arial typography, outlined markers, solid categorical colors, Lucide tools and the compact legend. G25 Views remains an interaction reference for legend gestures and analysis cycles. This document supersedes the former replica identity.",
     "keyCharacteristics": [
-      "32 px icon-only rail; 47 px plot-control strip; 31 px controls; 380 px right Data panel.",
-      "Native hover modebar with original G25 Custom SVG icons.",
-      "White chart, faint ticks, light grid and source margins.",
-      "Bootstrap system typography for controls; native Plotly typography for the graph."
+      "One compact strip",
+      "Resizable left panels and continuous chart",
+      "Arial 12px UI and outlined 7px markers",
+      "Admix-style search and dense metadata"
     ],
     "rules": [
       {
-        "name": "Source Fidelity",
-        "body": "Preserve the pinned Custom PCA composition, control sizing and native hover toolbar.",
-        "section": "layout"
+        "name": "The Data Color Rule",
+        "body": "Reserve marker colors for plot identity; blue and purple distinguish selection scope.",
+        "section": "colors"
       },
       {
-        "name": "Data Color",
-        "body": "Use marker palettes for plot group identity; keep interface chrome in Bootstrap blue and neutral gray, with purple reserved for individual selection in the Data panel.",
-        "section": "colors"
+        "name": "The Working Type Rule",
+        "body": "Preserve compact Arial controls and readable ticks.",
+        "section": "typography"
       }
     ],
     "dos": [
-      "Do retain the 32 px rail, 47 px plot-control strip, 380 px Data panel and remaining-space chart at supported desktop widths.",
-      "Do preserve the original SVG tools, compact dropdowns and native chart interactions.",
-      "Do keep individual points, outlined group marks and the selectable original G25 appearance.",
-      "Do keep the last valid plot visible when coordinate validation fails."
+      "Do preserve the compact strip and continuous graph.",
+      "Do preserve scope, focus and matching legend marks."
     ],
     "donts": [
-      "Don't reintroduce the rejected dashboard shell, permanent plot toolbar or global chart-status footer; data entry and selection status belong in the authorized Data panel.",
-      "Don't add settings dialogs, regional PCA features or mobile layouts to this approved surface.",
-      "Don't replace Bootstrap system typography or source-pinned faint ticks with the previous design tokens."
+      "Don't restore Bootstrap, source SVG tools or the prior right panel.",
+      "Don't add Run PCA, Settings, a native modebar, PC titles or frame lines."
     ]
   }
 }

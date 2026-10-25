@@ -6,6 +6,7 @@ export interface CatalogueRow {
   geneticId: string;
   origin: "database" | "manual";
   sample: G25Sample;
+  metadata?: Record<string, string>;
 }
 export type SelectionToken =
   | {
@@ -20,6 +21,7 @@ export interface DatabaseImport {
   skipped: number;
   total: number;
   scaling: Scaling;
+  columns: string[];
 }
 
 // TSV fields may be quoted, contain tabs/newlines, or escape quotes as "".
@@ -140,12 +142,27 @@ export function parseDatabase(text: string, scaling: Scaling): DatabaseImport {
       group,
       geneticId,
       origin: "database",
+      metadata: Object.fromEntries(
+        table[0]
+          .map((header, j) => [header.trim(), fields[j]])
+          .filter((_, j) => j !== coordsIndex && !pcIndices.includes(j)),
+      ),
       sample,
     });
   }
   if (!rows.length)
     throw new Error("This TSV has no samples with usable G25 coordinates.");
-  return { rows, skipped, total: table.length - 1, scaling };
+  return {
+    rows,
+    skipped,
+    total: table.length - 1,
+    scaling,
+    columns: table[0]
+      .map((h, j) =>
+        j !== coordsIndex && !pcIndices.includes(j) ? h.trim() : "",
+      )
+      .filter(Boolean),
+  };
 }
 
 export function manualRows(
@@ -263,4 +280,45 @@ export function toggleSample(
   return tokens.some((t) => t.kind === "sample" && t.value === row.id)
     ? tokens.filter((t) => !(t.kind === "sample" && t.value === row.id))
     : [...tokens, { kind: "sample", value: row.id }];
+}
+
+/** Set membership on an entire filtered result, without creating duplicate sample chips. */
+export function selectRows(
+  all: CatalogueRow[],
+  tokens: SelectionToken[],
+  target: CatalogueRow[],
+  select = true,
+): SelectionToken[] {
+  if (!target.length) return tokens;
+  const ids = new Set(selectedRows(all, tokens).map((row) => row.id));
+  for (const row of target) {
+    if (select) ids.add(row.id);
+    else ids.delete(row.id);
+  }
+  const affected = new Set(target.map((row) => `${row.origin}:${row.group}`));
+  const byId = new Map(all.map((row) => [row.id, row]));
+  const next = tokens.filter((token) =>
+    token.kind === "group"
+      ? !affected.has(`${token.origin}:${token.value}`)
+      : !affected.has(
+          `${byId.get(token.value)?.origin}:${byId.get(token.value)?.group}`,
+        ),
+  );
+  const groups = new Map<string, CatalogueRow[]>();
+  for (const row of all) {
+    const key = `${row.origin}:${row.group}`;
+    if (!affected.has(key)) continue;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(row);
+  }
+  for (const group of groups.values()) {
+    if (!group.some((row) => ids.has(row.id))) continue;
+    next.push({
+      kind: "group",
+      value: group[0].group,
+      origin: group[0].origin,
+      excluded: group.filter((row) => !ids.has(row.id)).map((row) => row.id),
+    });
+  }
+  return next;
 }

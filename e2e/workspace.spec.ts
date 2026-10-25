@@ -1,445 +1,439 @@
 import { expect, test, type Page } from "@playwright/test";
 import { readFile } from "node:fs/promises";
-import { syntheticG25 } from "./fixtures";
-
-const chart = (page: Page) => page.locator(".pca-chart");
+import { syntheticG25, syntheticDatabase } from "./fixtures";
+const plot = (page: Page) => page.locator(".pca-chart");
 const tool = (page: Page, name: string) =>
-  page.locator(`.modebar-btn[data-title="${name}"]`);
-const tools = {
-  size: "Toggle projected marker size: big / medium / small",
-  points: "Toggle projected labels: none / full name / group name / ID",
-  style: "Toggle group labels style: movable / static / static with background",
-  labels: "Toggle group labels: show for visible projected groups / hide",
-  hulls: "Toggle convex hulls: show for visible projected groups / hide",
-  opacity: "Toggle convex hull opacity: high / medium / low",
-  regression:
-    "Toggle regression lines: show for visible projected groups / hide",
-  visibility: "Toggle projected visibility: show / hide",
-};
-async function hover(page: Page) {
-  await chart(page).hover({ position: { x: 450, y: 200 } });
-  await expect
-    .poll(() =>
-      page
-        .locator(".modebar-group")
-        .first()
-        .evaluate((el) => getComputedStyle(el).opacity),
-    )
-    .toBe("1");
-}
-async function paste(page: Page, text = syntheticG25()) {
-  await page.getByLabel("Global25 coordinates", { exact: true }).fill(text);
-}
-async function run(page: Page) {
-  await page.getByRole("button", { name: "Run PCA", exact: true }).click();
-  await expect(
-    page.getByRole("button", { name: "Run PCA", exact: true }),
-  ).toBeEnabled();
-  await expect
-    .poll(() => chart(page).evaluate((el: any) => el.data?.length ?? 0))
-    .toBeGreaterThan(0);
-}
-async function load(page: Page) {
-  await page.goto("/");
-  await paste(page);
-  await run(page);
-  await hover(page);
-}
-async function menu(page: Page, title: string) {
-  await page.locator(`summary[title="${title}"]`).click();
-}
+  page
+    .getByRole("toolbar", { name: "Plot tools" })
+    .getByRole("button", { name, exact: true });
+const count = (page: Page) =>
+  plot(page).evaluate(
+    (el: any) => el.data?.reduce((n: number, t: any) => n + t.x.length, 0) ?? 0,
+  );
 const ranges = (page: Page) =>
-  chart(page).evaluate((el: any) => ({
+  plot(page).evaluate((el: any) => ({
     x: [...el._fullLayout.xaxis.range],
     y: [...el._fullLayout.yaxis.range],
   }));
-
-test("the reference-height input strip, icon-only rail and genuinely hover-only native toolbar", async ({
-  page,
-}) => {
-  await load(page);
-  expect(
-    await page
-      .locator(".source-controls")
-      .evaluate((el) => el.getBoundingClientRect().height),
-  ).toBe(47);
-  expect(
-    await page
-      .locator(".tool-rail")
-      .evaluate((el) => el.getBoundingClientRect().width),
-  ).toBe(32);
-  expect((await page.locator(".tool-rail").innerText()).trim()).toBe("");
-  await page.mouse.move(12, 450);
-  await expect
-    .poll(() =>
-      page
-        .locator(".modebar-group")
-        .first()
-        .evaluate((el) => getComputedStyle(el).opacity),
-    )
-    .toBe("0");
-  await hover(page);
-  for (const name of [
-    "Zoom",
-    "Pan",
-    "Zoom in",
-    "Zoom out",
-    "Autoscale",
-    "Reset axes",
-    "Add subtitle",
-    ...Object.values(tools),
-  ])
-    await expect(tool(page, name)).toBeVisible();
-  expect(await page.getByRole("dialog").count()).toBe(0);
-  expect(
-    await page.locator(".chart-status,.empty-state,.data-entry").count(),
-  ).toBe(0);
-  expect(await page.evaluate(() => location.hash)).toBe("#Custom");
-});
-
-test("multiline manual entry, strict input errors and preservation of the last valid PCA", async ({
-  page,
-}) => {
-  const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  await load(page);
-  expect(
-    await chart(page).evaluate((el: any) =>
-      el.data.reduce((n: number, t: any) => n + t.x.length, 0),
-    ),
-  ).toBe(180);
-  const original = await chart(page).evaluate((el: any) => el.data[0].x);
+async function load(page: Page) {
+  await page.goto("/");
+  await page.locator(".manual-source summary").click();
   await page
     .getByLabel("Global25 coordinates", { exact: true })
-    .fill("Bad,1,2");
-  await page.getByRole("button", { name: "Run PCA", exact: true }).click();
-  await expect(page.getByRole("alert")).toContainText("25 comma-separated");
-  expect(await chart(page).evaluate((el: any) => el.data[0].x)).toEqual(
-    original,
+    .fill(syntheticG25());
+  await page
+    .getByRole("button", { name: "Add coordinates", exact: true })
+    .click();
+  await expect.poll(() => count(page)).toBe(180);
+}
+async function database(page: Page) {
+  await page.goto("/");
+  await page.locator("input[type=file]").setInputFiles({
+    name: "synthetic.tsv",
+    mimeType: "text/tab-separated-values",
+    buffer: Buffer.from(syntheticDatabase()),
+  });
+  await expect(page.locator(".database-file-status")).toContainText(
+    "180 samples",
   );
-  expect(errors).toEqual([]);
-});
+}
 
-test("all marker sizes, point label contents and group label styles cycle exactly", async ({
+test("PCA tools use panel toggles, small markers and a continuous chart with Plotly credit", async ({
   page,
 }) => {
   await load(page);
-  const size = () => chart(page).evaluate((el: any) => el.data[0].marker.size);
-  expect(await size()).toBe(10);
-  for (const expected of [7, 4, 10]) {
-    await tool(page, tools.size).click();
-    await expect.poll(size).toBe(expected);
-  }
-  for (const [mode, text] of [
-    ["text+markers", "Synthetic_A:sample_1"],
-    ["text+markers", "Synthetic_A"],
-    ["text+markers", "sample_1"],
-    ["markers", "Synthetic_A:sample_1"],
-  ]) {
-    await tool(page, tools.points).click();
-    await expect
-      .poll(() =>
-        chart(page).evaluate((el: any) => [
-          el.data[0].mode,
-          el.data[0].text[0],
-        ]),
-      )
-      .toEqual([mode, text]);
-  }
-  const annotation = () =>
-    chart(page).evaluate((el: any) => ({
-      arrow: el.layout.annotations[0].showarrow,
-      font: el.layout.annotations[0].font.size,
-      bg: el.layout.annotations[0].bgcolor,
-    }));
-  for (const expected of [
-    { arrow: false, font: 9, bg: "rgba(255,255,255,0)" },
-    { arrow: false, font: 9, bg: "rgba(255,255,255,0.66)" },
-    { arrow: true, font: 11, bg: "rgba(255,255,255,0.75)" },
-  ]) {
-    await tool(page, tools.style).click();
-    await expect.poll(annotation).toEqual(expected);
-  }
+  expect(
+    await page
+      .locator(".plot-toolbar button")
+      .first()
+      .getAttribute("aria-label"),
+  ).toBe("Toggle legend");
+  expect(await plot(page).evaluate((el: any) => el.data[0].marker.size)).toBe(
+    7,
+  );
+  expect(
+    await page.locator("body").evaluate((el) => getComputedStyle(el).fontSize),
+  ).toBe("12px");
+  await expect(
+    page.getByRole("button", { name: "Run PCA", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    page.locator('summary[title="Addition options"],.plotly-logomark,.modebar'),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: "Plotly", exact: true }),
+  ).toBeVisible();
+  expect(
+    await plot(page).evaluate((el: any) => ({
+      xTitle: el.layout.xaxis.title?.text ?? "",
+      yTitle: el.layout.yaxis.title?.text ?? "",
+      xLine: el.layout.xaxis.showline,
+      yLine: el.layout.yaxis.showline,
+    })),
+  ).toEqual({ xTitle: "", yTitle: "", xLine: false, yLine: false });
+  const headerHeight = (await page.locator(".app-header").boundingBox())!
+    .height;
+  expect(headerHeight).toBeLessThanOrEqual(40);
+  expect((await plot(page).boundingBox())!.height).toBe(900 - headerHeight);
+  await tool(page, "Toggle data panel").click();
+  await expect(page.locator(".database-panel")).not.toBeVisible();
+  await tool(page, "Toggle data panel").click();
+  await expect(page.locator(".database-panel")).toBeVisible();
+  const panel = await page.locator(".database-panel").boundingBox(),
+    chart = await plot(page).boundingBox();
+  expect(panel!.x).toBe(32);
+  expect(chart!.x).toBeGreaterThan(panel!.x + panel!.width);
+  await page
+    .getByRole("button", { name: "Collapse data panel", exact: true })
+    .click();
+  await expect(page.locator(".database-panel")).not.toBeVisible();
+  await expect
+    .poll(() => plot(page).evaluate((el: any) => el._fullLayout.width))
+    .toBe(1408);
+  await page
+    .getByRole("button", { name: "Open data panel", exact: true })
+    .click();
+  await expect(page.locator(".database-panel")).toBeVisible();
+  const resizer = page.getByRole("separator", { name: "Resize data panel" }),
+    box = await resizer.boundingBox();
+  await page.mouse.move(box!.x + 2, box!.y + 100);
+  await page.mouse.down();
+  await page.mouse.move(box!.x + 122, box!.y + 100, { steps: 8 });
+  await page.mouse.up();
+  expect((await page.locator(".data-panel-layout").boundingBox())!.width).toBe(
+    500,
+  );
+  await resizer.focus();
+  await page.keyboard.press("ArrowLeft");
+  expect((await page.locator(".data-panel-layout").boundingBox())!.width).toBe(
+    480,
+  );
 });
 
-test("hull opacity, geometry visibility and per-trace legend hiding work together", async ({
+test("toolbar icons immediately toggle geometry and preserve the choice through automatic refits", async ({
   page,
 }) => {
   await load(page);
-  const opacity = () =>
-    chart(page).evaluate(
-      (el: any) => el.layout.shapes.find((s: any) => s.type === "path").opacity,
-    );
-  expect(await opacity()).toBe(0.9);
-  for (const value of [0.6, 0.3, 0.9]) {
-    await tool(page, tools.opacity).click();
-    await expect.poll(opacity).toBe(value);
-  }
-  for (const [name, kind] of [
-    [tools.labels, "labels"],
-    [tools.hulls, "hull"],
-    [tools.regression, "regression"],
-  ]) {
-    await tool(page, name).click();
-    await expect
-      .poll(() =>
-        chart(page).evaluate(
-          (el: any, kind) =>
-            kind === "labels"
-              ? el.layout.annotations.every((a: any) => a.visible === false)
-              : el.layout.shapes
-                  .filter((s: any) => s.name.startsWith(kind + ":"))
-                  .every((s: any) => s.visible === false),
-          kind,
-        ),
-      )
-      .toBe(true);
-    await tool(page, name).click();
-  }
-  await page.locator(".legend .traces").first().click();
-  await expect
-    .poll(() => chart(page).evaluate((el: any) => el.data[0].visible))
-    .toBe("legendonly");
+  expect(
+    await plot(page).evaluate((el: any) =>
+      el.layout.annotations.every((a: any) => !a.visible),
+    ),
+  ).toBe(true);
+  for (const label of [
+    "Toggle group labels",
+    "Toggle convex hulls",
+    "Toggle regression lines",
+  ])
+    await tool(page, label).click();
   await expect
     .poll(() =>
-      chart(page).evaluate((el: any) => el.layout.annotations[0].visible),
-    )
-    .toBe(false);
-  await tool(page, tools.visibility).click();
-  await expect
-    .poll(() =>
-      chart(page).evaluate((el: any) =>
-        el.data.every((t: any) => t.visible === "legendonly"),
+      plot(page).evaluate((el: any) =>
+        el.layout.annotations.every((a: any) => a.visible),
       ),
     )
     .toBe(true);
-  await tool(page, tools.visibility).click();
+  expect(
+    await plot(page).evaluate((el: any) =>
+      el.layout.shapes.every((s: any) => s.visible),
+    ),
+  ).toBe(true);
+  await page
+    .getByRole("button", { name: "Remove Synthetic_F", exact: true })
+    .click();
+  await expect.poll(() => count(page)).toBe(150);
+  await expect(tool(page, "Toggle convex hulls")).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
   await expect
     .poll(() =>
-      chart(page).evaluate((el: any) =>
+      plot(page).evaluate((el: any) =>
+        el.layout.shapes
+          .filter((s: any) => s.type === "path")
+          .every((s: any) => s.visible),
+      ),
+    )
+    .toBe(true);
+});
+
+test("legend click toggles, double click isolates/restores, and the eye hides without deselecting", async ({
+  page,
+}) => {
+  await load(page);
+  await tool(page, "Toggle group labels").click();
+  const row = page.getByRole("button", {
+    name: "Legend Synthetic_A",
+    exact: true,
+  });
+  await row.click();
+  await expect
+    .poll(() => plot(page).evaluate((el: any) => el.data[0].visible))
+    .toBe("legendonly");
+  await expect
+    .poll(() =>
+      plot(page).evaluate((el: any) => el.layout.annotations[0].visible),
+    )
+    .toBe(false);
+  await row.click();
+  await expect
+    .poll(() => plot(page).evaluate((el: any) => el.data[0].visible))
+    .toBe(true);
+  await row.dblclick();
+  await expect
+    .poll(() =>
+      plot(page).evaluate(
+        (el: any) => el.data.filter((t: any) => t.visible === true).length,
+      ),
+    )
+    .toBe(1);
+  await row.dblclick();
+  await expect
+    .poll(() =>
+      plot(page).evaluate(
+        (el: any) => el.data.filter((t: any) => t.visible === true).length,
+      ),
+    )
+    .toBe(6);
+  await page
+    .getByRole("button", { name: "Hide population Synthetic_B", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", {
+      name: "Show population Synthetic_B",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(page.locator(".data-count")).toHaveText("180 selected");
+  expect(await count(page)).toBe(180);
+  await page.getByRole("button", { name: "Show all", exact: true }).click();
+  await expect
+    .poll(() =>
+      plot(page).evaluate((el: any) =>
         el.data.every((t: any) => t.visible === true),
       ),
     )
     .toBe(true);
 });
 
-test("wheel/buttons, pan/box zoom, legend toggle and reset axes retain the single canvas", async ({
+test("wheel, zoom modes, reset and legend visibility preserve the single chart", async ({
   page,
 }) => {
   await load(page);
-  const before = await ranges(page),
-    box = await chart(page).boundingBox();
-  await page.mouse.move(box!.x + box!.width * 0.4, box!.y + box!.height * 0.45);
+  const original = await ranges(page),
+    box = await plot(page).boundingBox();
+  await page.mouse.move(box!.x + 200, box!.y + 300);
   await page.mouse.wheel(0, -200);
   await expect
     .poll(async () => {
       const r = await ranges(page);
       return r.x[1] - r.x[0];
     })
-    .toBeLessThan(before.x[1] - before.x[0]);
-  const zoomed = await ranges(page);
-  await page.mouse.wheel(0, 200);
-  await expect
-    .poll(async () => {
-      const r = await ranges(page);
-      return r.x[1] - r.x[0];
-    })
-    .toBeGreaterThan(zoomed.x[1] - zoomed.x[0]);
-  await tool(page, "Zoom in").click();
-  const stable = await ranges(page);
-  await tool(page, "Toggle legend: show / hide").click();
-  await expect
-    .poll(() => chart(page).evaluate((el: any) => el.layout.showlegend))
-    .toBe(false);
-  expect(await chart(page).boundingBox()).toEqual(box);
-  expect(await ranges(page)).toEqual(stable);
+    .toBeLessThan(original.x[1] - original.x[0]);
   await tool(page, "Zoom out").click();
-  await tool(page, "Pan").click();
-  await page.mouse.move(box!.x + 400, box!.y + 400);
-  await page.mouse.down();
-  await page.mouse.move(box!.x + 460, box!.y + 430, { steps: 5 });
-  await page.mouse.up();
+  await tool(page, "Box zoom mode").click();
   await expect
-    .poll(async () => (await ranges(page)).x[0])
-    .not.toBe(stable.x[0]);
-  await tool(page, "Zoom").click();
-  await expect
-    .poll(() => chart(page).evaluate((el: any) => el.layout.dragmode))
+    .poll(() => plot(page).evaluate((el: any) => el.layout.dragmode))
     .toBe("zoom");
-  await page.mouse.move(box!.x + 300, box!.y + 300);
-  await page.mouse.down();
-  await page.mouse.move(box!.x + 600, box!.y + 500, { steps: 5 });
-  await page.mouse.up();
+  const before = await ranges(page);
+  await tool(page, "Toggle legend").click();
+  await expect(
+    page.getByLabel("Population legend", { exact: true }),
+  ).not.toBeVisible();
+  expect(await ranges(page)).toEqual(before);
+  expect(await plot(page).boundingBox()).toEqual(box);
+  await tool(page, "Toggle legend").click();
   await tool(page, "Reset axes").click();
-  await expect.poll(async () => (await ranges(page)).x).toEqual(before.x);
-  await page.getByRole("button", { name: "Reset plot", exact: true }).click();
-  await expect
-    .poll(() => chart(page).evaluate((el: any) => el.data.length))
-    .toBe(0);
-  await expect(page.locator(".population-chip")).toHaveCount(0);
+  await expect.poll(async () => (await ranges(page)).x).toEqual(original.x);
 });
 
-test("grouping modes, custom names, subgroup overlays and creation settings", async ({
+test("marker, point label and group label cycles and custom components remain available", async ({
   page,
 }) => {
-  await page.goto("/");
-  const rows = syntheticG25().split("\n");
-  await paste(
-    page,
-    [...rows.slice(0, 3), ...rows.slice(30, 33), ...rows.slice(60, 63)].join(
-      "\n",
-    ),
-  );
-  await menu(page, "Grouping mode");
-  await page.getByRole("button", { name: "Individual", exact: true }).click();
-  await run(page);
-  await expect
-    .poll(() => chart(page).evaluate((el: any) => el.data.length))
-    .toBe(9);
-  await menu(page, "Grouping mode");
-  await page.getByRole("button", { name: "As one group", exact: true }).click();
-  await page.getByLabel("Custom group name").fill("Combined");
-  await menu(page, "Addition options");
-  await page.locator('label[for="subgroups"]').click();
-  await expect(
-    page.getByLabel("Aggregated subgroups", { exact: true }),
-  ).toBeChecked();
-  await page.locator('label[for="add-regression"]').click();
-  await page.getByRole("button", { name: "Run PCA", exact: true }).click();
-  await expect
-    .poll(() => chart(page).evaluate((el: any) => el.data.length))
-    .toBe(1);
-  expect(await chart(page).evaluate((el: any) => el.data[0].name)).toBe(
-    "Combined",
-  );
-  expect(
-    await chart(page).evaluate((el: any) => el.layout.annotations.length),
-  ).toBe(3);
-  expect(await chart(page).evaluate((el: any) => el.layout.shapes.length)).toBe(
-    3,
-  );
-  await menu(page, "Addition options");
-  await page.locator('label[for="add-labels"]').click();
-  await page.locator('label[for="add-hulls"]').click();
-  await page.getByRole("button", { name: "Run PCA", exact: true }).click();
+  await load(page);
+  for (const size of [5, 9, 7]) {
+    await tool(page, "Cycle marker size").click();
+    await expect
+      .poll(() => plot(page).evaluate((el: any) => el.data[0].marker.size))
+      .toBe(size);
+  }
+  for (const mode of [
+    "text+markers",
+    "text+markers",
+    "text+markers",
+    "markers",
+  ]) {
+    await tool(page, "Cycle point labels").click();
+    await expect
+      .poll(() => plot(page).evaluate((el: any) => el.data[0].mode))
+      .toBe(mode);
+  }
+  await tool(page, "Toggle group labels").click();
+  await tool(page, "Cycle group label style").click();
   await expect
     .poll(() =>
-      chart(page).evaluate((el: any) => [
-        el.layout.annotations.length,
-        el.layout.shapes.length,
-      ]),
+      plot(page).evaluate((el: any) => el.layout.annotations[0].showarrow),
     )
-    .toEqual([0, 0]);
-});
-
-test("source marker option, raw/scaled selector, component selectors and subtitle", async ({
-  page,
-}) => {
-  await load(page);
-  await menu(page, "Addition options");
-  await page
-    .getByLabel("Marker appearance", { exact: true })
-    .selectOption("g25");
-  await run(page);
-  await expect
-    .poll(() => chart(page).evaluate((el: any) => el.data[0].marker.color))
-    .toBe("#166f4e");
-  expect(
-    await chart(page).evaluate((el: any) => el.data[0].marker.symbol),
-  ).toBe(0);
+    .toBe(false);
   await page.getByLabel("Horizontal component").selectOption("2");
+  await expect(page.getByLabel("Horizontal component")).toHaveValue("2");
+  await page
+    .getByLabel("Grouping mode", { exact: true })
+    .selectOption("single");
+  await page.getByLabel("Custom group name").fill("Combined");
   await expect
-    .poll(() => chart(page).evaluate((el: any) => el.data[0].x))
-    .not.toEqual(await chart(page).evaluate((el: any) => el.data[0].y));
-  await hover(page);
-  page.once("dialog", (dialog) => dialog.accept("My custom PCA"));
-  await tool(page, "Add subtitle").click();
-  await expect
-    .poll(() => chart(page).evaluate((el: any) => el.layout.title.text))
-    .toContain("My custom PCA");
-  page.once("dialog", (dialog) => dialog.dismiss());
-  await tool(page, "Add subtitle").click();
-  await expect
-    .poll(() => chart(page).evaluate((el: any) => el.layout.title.text))
-    .toBe("Global 25 Custom PCA");
-  await page.getByLabel("Manual coordinate scaling").selectOption("raw");
-  await expect(page.getByLabel("Manual coordinate scaling")).toHaveValue("raw");
+    .poll(() => plot(page).evaluate((el: any) => el.data.length))
+    .toBe(1);
 });
 
-test("all 18 original image dimensions and a real 800 by 400 PNG download", async ({
+test("advanced search splits left, widens into a virtualized table and adds all matching samples", async ({
+  page,
+}) => {
+  await database(page);
+  await page
+    .getByRole("button", { name: "Advanced search", exact: true })
+    .click();
+  const advanced = page.getByRole("region", {
+    name: "Advanced search",
+    exact: true,
+  });
+  await expect(advanced).toBeVisible();
+  expect((await advanced.boundingBox())!.x).toBeLessThan(
+    (await page.locator(".database-panel").boundingBox())!.x,
+  );
+  await page
+    .getByRole("button", { name: "Add criterion", exact: true })
+    .click();
+  await page.getByLabel("Property 1", { exact: true }).selectOption("Regions");
+  await page.getByLabel("Operator 1", { exact: true }).selectOption("equals");
+  await page.getByLabel("Value 1", { exact: true }).fill("Europe");
+  await expect(advanced).toContainText("90 matching samples");
+  await page
+    .getByRole("button", {
+      name: "Add all advanced search matches",
+      exact: true,
+    })
+    .click();
+  await expect.poll(() => count(page)).toBe(90);
+  const compact = (await page.locator(".data-panel-layout").boundingBox())!
+    .width;
+  await page
+    .getByRole("button", { name: "Expand table view", exact: true })
+    .click();
+  expect(
+    (await page.locator(".data-panel-layout").boundingBox())!.width,
+  ).toBeGreaterThan(compact);
+  await expect(page.locator(".metadata-table")).toBeVisible();
+  expect(
+    await page.locator(".metadata-table tbody tr[aria-selected]").count(),
+  ).toBeLessThan(60);
+  await page
+    .getByLabel("Select table sample Synthetic_A_sample_1", { exact: true })
+    .uncheck();
+  await expect.poll(() => count(page)).toBe(89);
+  await page
+    .getByRole("button", {
+      name: "Add all advanced search matches",
+      exact: true,
+    })
+    .click();
+  await expect.poll(() => count(page)).toBe(90);
+  await page
+    .getByRole("button", { name: "Add criterion", exact: true })
+    .click();
+  await page.getByLabel("Property 2", { exact: true }).selectOption("Year CE");
+  await page.getByLabel("Operator 2", { exact: true }).selectOption("min");
+  await page.getByLabel("Value 2", { exact: true }).fill("0");
+  await expect(advanced).toContainText("65 matching samples");
+  // Changing search criteria scopes results; it never silently deselects the plotted cohort.
+  expect(await count(page)).toBe(90);
+  await page
+    .getByRole("button", { name: "Close advanced search", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Advanced search", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Add criterion", exact: true })
+    .click();
+  await expect(page.getByLabel("Property 3", { exact: true })).toHaveCount(1);
+  await page
+    .getByLabel("Property 3", { exact: true })
+    .selectOption("Molecular Sex");
+  await page.getByLabel("Operator 3", { exact: true }).selectOption("equals");
+  await page.getByLabel("Value 3", { exact: true }).fill("F");
+  await expect(page.getByLabel("Value 1", { exact: true })).toHaveValue(
+    "Europe",
+  );
+  await expect(page.getByLabel("Value 2", { exact: true })).toHaveValue("0");
+  await page
+    .getByRole("button", { name: "Remove criterion 3", exact: true })
+    .click();
+  await expect(page.getByLabel("Property 1", { exact: true })).toHaveCount(1);
+  await expect(page.getByLabel("Property 2", { exact: true })).toHaveCount(1);
+});
+
+test("Admix search ranks fuzzy/accent matches, anchors its menu, and exact genetic ID selects one", async ({
+  page,
+}) => {
+  await database(page);
+  const search = page.getByLabel("Search populations or genetic IDs");
+  await search.fill("synthetic a");
+  await expect(page.locator(".group-select").first()).toContainText(
+    "Synthetic_A",
+  );
+  const menu = page.locator(".database-results"),
+    field = page.locator(".population-token-box");
+  expect((await menu.boundingBox())!.width).toBe(
+    (await field.boundingBox())!.width,
+  );
+  await search.fill("Synthetic_A_sample_7");
+  await search.press("Enter");
+  await expect(page.locator(".population-chip.individual")).toHaveCount(1);
+  await expect(page.locator(".data-count")).toHaveText("1 selected");
+  await search.press("Backspace");
+  await expect(page.locator(".population-chip")).toHaveCount(0);
+  await search.fill("Synthetic");
+  await page
+    .locator(".search-scope-actions")
+    .getByRole("button", { name: "Add all matches", exact: true })
+    .click();
+  await expect.poll(() => count(page)).toBe(180);
+});
+
+test("PNG export retains all 18 dimensions and a matching native export legend", async ({
   page,
 }) => {
   await load(page);
-  await page
-    .locator("summary")
-    .filter({ hasText: /^Save$/ })
-    .click();
-  const images = page.locator(".source-menu[open] .dropdown-item");
-  await expect(images).toHaveCount(18);
-  await expect(
-    page.getByRole("button", { name: "7680×4320 px", exact: true }),
-  ).toBeVisible();
-  const download = page.waitForEvent("download");
+  await page.getByLabel("Save PNG", { exact: true }).click();
+  await expect(page.locator(".export-options button")).toHaveCount(18);
+  const pending = page.waitForEvent("download");
   await page.getByRole("button", { name: "800×400 px", exact: true }).click();
-  const file = await download;
-  const path = await file.path();
-  const bytes = await readFile(path!);
+  const download = await pending,
+    bytes = await readFile((await download.path())!);
   expect(bytes.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
   expect([bytes.readUInt32BE(16), bytes.readUInt32BE(20)]).toEqual([800, 400]);
 });
 
-test("annotation dragging survives toolbar changes and desktop layouts keep the chart maximized", async ({
+test("desktop resize waits for Plotly and keeps chart and panels within the viewport", async ({
   page,
 }) => {
   await load(page);
-  const label = page.locator(".annotation-text").first(),
-    box = await label.boundingBox();
-  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
-  await page.mouse.down();
-  await page.mouse.move(
-    box!.x + box!.width / 2 + 55,
-    box!.y + box!.height / 2 - 25,
-    { steps: 8 },
-  );
-  await page.mouse.up();
-  await expect
-    .poll(() =>
-      chart(page).evaluate((el: any) => Math.abs(el.layout.annotations[0].ax)),
-    )
-    .toBeGreaterThan(10);
-  const offset = await chart(page).evaluate((el: any) => [
-    el.layout.annotations[0].ax,
-    el.layout.annotations[0].ay,
-  ]);
-  await tool(page, tools.size).click();
-  await expect
-    .poll(() =>
-      chart(page).evaluate((el: any) => [
-        el.layout.annotations[0].ax,
-        el.layout.annotations[0].ay,
-      ]),
-    )
-    .toEqual(offset);
   for (const width of [1280, 1440, 1600]) {
     await page.setViewportSize({ width, height: 900 });
     await expect
-      .poll(() =>
-        page
-          .locator(".source-controls")
-          .evaluate((el) => el.getBoundingClientRect().height),
-      )
-      .toBe(47);
-    await expect
-      .poll(() => page.evaluate(() => document.body.scrollWidth))
-      .toBe(width);
-    const bounds = await chart(page).boundingBox();
-    expect(bounds!.width).toBe(width - 32 - 380);
-    await expect
-      .poll(() => chart(page).evaluate((el: any) => el._fullLayout.width))
-      .toBe(width - 32 - 380);
-    expect(bounds!.height).toBe(853);
+      .poll(() => plot(page).evaluate((el: any) => el._fullLayout.width))
+      .toBe(width - 32 - 380 - 5);
+    expect(await page.evaluate(() => document.body.scrollWidth)).toBe(width);
   }
-  await expect(
-    page.getByRole("button", { name: "G25 distances — planned", exact: true }),
-  ).toBeDisabled();
+  await page
+    .getByRole("button", { name: "Advanced search", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Expand table view", exact: true })
+    .click();
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await expect
+    .poll(() => plot(page).evaluate((el: any) => el._fullLayout.width))
+    .toBe(355);
+  expect(await page.evaluate(() => document.body.scrollWidth)).toBe(1280);
 });

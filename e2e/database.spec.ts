@@ -122,6 +122,7 @@ test("manual raw coordinates combine with the database; bad inputs preserve the 
     .slice(60, 63)
     .join("\n")
     .replaceAll("Synthetic_C", "Manual_C");
+  await page.locator(".manual-source summary").click();
   await page.getByLabel("Manual coordinate scaling").selectOption("raw");
   await page.getByLabel("Global25 coordinates", { exact: true }).fill(pasted);
   await page
@@ -171,11 +172,16 @@ test("keyboard results, rapid selection changes and removing below minimum leave
   await search(page).press("ArrowDown");
   await expect(
     page.getByRole("button", {
-      name: "Expand population Synthetic_A",
+      name: "Select population Synthetic_A",
       exact: true,
     }),
   ).toBeFocused();
   await page.keyboard.press("Enter");
+  await expect.poll(() => pointCount(page)).toBe(30);
+  await search(page).fill("Synthetic_A");
+  await page
+    .getByRole("button", { name: "Expand population Synthetic_A", exact: true })
+    .click();
   await expect(
     page.getByRole("button", {
       name: "Collapse population Synthetic_A",
@@ -184,7 +190,6 @@ test("keyboard results, rapid selection changes and removing below minimum leave
   ).toHaveAttribute("aria-expanded", "true");
   await page.keyboard.press("Escape");
   await expect(search(page)).toBeFocused();
-  await population(page, "Synthetic_A");
   await population(page, "Synthetic_B");
   await page
     .getByRole("button", { name: "Clear selection", exact: true })

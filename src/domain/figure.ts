@@ -1,7 +1,7 @@
 import type { Data, PlotData, Annotations, Shape } from "plotly.js";
 import type { PcaResult } from "./pca";
 import { centroid, convexHull, regressionLine, type Point } from "./geometry";
-import { groupMarker } from "./markers";
+import { entryMarkers } from "./markerAssignment";
 
 export interface AddOptions {
   mode: "aggregated" | "individual" | "single";
@@ -10,7 +10,6 @@ export interface AddOptions {
   labels: boolean;
   hulls: boolean;
   regression: boolean;
-  appearance: "g25" | "outlined";
 }
 export const initialAddOptions: AddOptions = {
   mode: "aggregated",
@@ -19,7 +18,6 @@ export const initialAddOptions: AddOptions = {
   labels: true,
   hulls: true,
   regression: true,
-  appearance: "outlined",
 };
 
 export interface PlotView {
@@ -35,20 +33,22 @@ export interface PlotView {
   hullOpacity: number;
   hiddenTraces: number[];
   subtitle: string;
+  dragMode: "pan" | "zoom" | "select" | "lasso";
 }
 export const initialPlotView: PlotView = {
   x: 0,
   y: 1,
   legend: true,
-  labels: true,
-  hulls: true,
-  regression: true,
+  labels: false,
+  hulls: false,
+  regression: false,
   pointLabels: 0,
   labelStyle: 0,
   markerSize: 0,
   hullOpacity: 0,
   hiddenTraces: [],
   subtitle: "",
+  dragMode: "pan",
 };
 export const imageSizes = [
   [800, 400],
@@ -71,20 +71,6 @@ export const imageSizes = [
   [7680, 4320],
 ] as const;
 export const hullOpacities = [0.9, 0.6, 0.3] as const;
-const sourceColors = [
-  "#166f4e",
-  "#da0017",
-  "#5619a4",
-  "#de0077",
-  "#569918",
-  "#9824d9",
-  "#6f6317",
-  "#535353",
-  "#2b57a0",
-  "#bb5805",
-  "#7e0061",
-];
-const sourceSymbols = [0, 13, 14, 15];
 export const escapeHtml = (text: string) =>
   text.replace(
     /[&<>"']/g,
@@ -146,18 +132,14 @@ export function buildFigure(
     annotations: NamedAnnotation[] = [],
     shapes: Partial<Shape>[] = [];
   const entries = createEntries(result, options);
+  const markers = entryMarkers(result, entries, view);
   entries.forEach((entry, i) => {
-    const improved = groupMarker(i);
-    const baseSize = i % 4 === 0 ? 10 : 11;
-    const marker =
-      options.appearance === "g25"
-        ? {
-            color: sourceColors[i % sourceColors.length],
-            symbol: sourceSymbols[i % 4],
-            size: baseSize - view.markerSize * 3,
-            opacity: 0.8,
-          }
-        : { ...improved, size: baseSize - view.markerSize * 3, opacity: 0.8 };
+    const improved = markers[i];
+    const marker = {
+      ...improved,
+      size: [7, 5, 9][view.markerSize],
+      opacity: 1,
+    };
     const points: Point[] = entry.indices.map((index) => [
       result.scores[index][view.x],
       result.scores[index][view.y],

@@ -1,5 +1,5 @@
 // Solid palette and outlined-marker treatment adapted from the user's PCA_views.
-const colors = [
+export const colors = [
   "#1f77b4",
   "#d62728",
   "#2ca02c",
@@ -32,7 +32,7 @@ const colors = [
   "#9b2226",
   "#ee9b00",
 ];
-const symbols = [
+export const symbols = [
   "circle",
   "square",
   "triangle-up",
@@ -75,7 +75,7 @@ export function groupMarker(index: number) {
   return {
     color,
     symbol: symbols[index % symbols.length],
-    size: 7.5,
+    size: 7,
     opacity: 0.9,
     line: { color: outline, width: 0.8 },
   };

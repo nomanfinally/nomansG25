@@ -1,0 +1,39 @@
+/** Plotly's bundled newplotlylogo, kept separate from the analysis toolbar. */
+export function PlotlyCredit() {
+  return (
+    <a
+      className="plotly-credit"
+      href="https://plotly.com/"
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Plotly"
+      title="Plotly"
+    >
+      <svg viewBox="0 0 132 132" width="16" height="16" aria-hidden="true">
+        <rect fill="#000" width="132" height="132" rx="18" />
+        <circle fill="#9EF" cx="102" cy="30" r="6" />
+        <circle fill="#BAC" cx="78" cy="30" r="6" />
+        <circle fill="#BAC" cx="78" cy="54" r="6" />
+        <circle fill="#D69" cx="54" cy="30" r="6" />
+        <circle fill="#F26" cx="30" cy="30" r="6" />
+        <circle fill="#F26" cx="30" cy="54" r="6" />
+        <path
+          fill="#FFF"
+          d="M30,72a6,6,0,0,0-6,6v24a6,6,0,0,0,12,0V78A6,6,0,0,0,30,72Z"
+        />
+        <path
+          fill="#FFF"
+          d="M78,72a6,6,0,0,0-6,6v24a6,6,0,0,0,12,0V78A6,6,0,0,0,78,72Z"
+        />
+        <path
+          fill="#FFF"
+          d="M54,48a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V54A6,6,0,0,0,54,48Z"
+        />
+        <path
+          fill="#FFF"
+          d="M102,48a6,6,0,0,0-6,6v48a6,6,0,0,0,12,0V54A6,6,0,0,0,102,48Z"
+        />
+      </svg>
+    </a>
+  );
+}

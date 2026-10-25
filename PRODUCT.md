@@ -8,57 +8,50 @@ web
 
 ## Stack
 
-Confirmed: a fresh React + TypeScript + Vite application, using Plotly and selectively adapting useful utilities from PCA_views.
+React + TypeScript + Vite, local Plotly SVG scatter, ML.js PCA, Lucide icons. Desktop only.
 
 ## Users
 
-The user and desktop users exploring named Global25 coordinate datasets.
+Desktop users exploring named Global25 coordinate datasets. Custom PCA is the first tool in a broader G25 suite; distances and models remain planned.
 
 ## Product Purpose
 
-A focused G25 analysis tool with Custom PCA implemented first. The product is broader than PCA: G25 distances and G25 models are intended future tools.
+A compact G25 analysis workspace, combining searchable local databases and manual coordinates with an interactive PCA plot.
 
 ## Operating Context
 
-Desktop browser use. G25 coordinates only; no `.evec` import. Both scaled and raw G25 input are confirmed. Reference implementations are `vahaduo/g25views` (local study checkout `g25views/`) and the user's `/home/user/genomics/04_projects/PCA_views`.
+G25 coordinates only; no .evec input. Scaled and raw inputs normalize independently. Files remain local and in browser memory. No backend or database persistence is included.
 
 ## Capabilities and Constraints
 
-- Initial analysis: Custom PCA only. Regional PCA presets are outside the initial scope.
-- Mouse-wheel zoom in/out and zoom controls.
-- Show/hide legend.
-- G25 Views' Custom PCA interface is the exact design and interaction reference. The user rejected the first interpretation and requested the original's sizing, icons, hover toolbar and feature cycles.
-- Native Plotly hover modebar with its stock tools and the original G25 Views Custom PCA SVG icons. No permanent plot toolbar or status footer.
-- All Custom PCA grouping modes: Aggregated, Individual, As one group; custom group naming; main-group/subgroup decorations; creation checkboxes for labels/hulls/regression.
-- Point labels cycle off/full/group/ID; marker sizes cycle big/medium/small; group labels cycle movable/static/static with background; hull opacity cycles 0.9/0.6/0.3. Include projected-group visibility, geometry visibility, native legend interactions, subtitle and the original 18 PNG size choices.
-- Improved outlined markers and shapes from PCA_views, with the original G25 Views marker treatment also available in the compact addition-options dropdown.
-- One chart filling the remaining workspace, no ratio switcher or settings dialog. The 47 px top strip holds plot controls; the user-requested right Data panel holds all input.
-- A 32 px dark icon-only left rail reserves navigation for G25 PCA, G25 distances and G25 models. The latter two analyses remain future work.
-- Desktop adaptation only for now.
-- Ask about optional features before expanding scope. Avoid importing PCA_views' entire customization system.
-- Compact X/Y component selectors remain. PNG export uses G25 Views' Save dropdown and native camera tool, without an export settings dialog.
-- Latest approved extension: a 380 px right Data panel with local TSV loading and an Admix_IRE-style population/sample chip search. Manual G25 coordinate entry moves here from the top strip.
-- Archaeobase TSV uses Group ID, Genetic ID and G25_coords, with extra metadata ignored. Skip/count absent coordinates; reject invalid populated rows and duplicate genetic IDs atomically. Import runs in a worker. Files remain local and in memory, with no persistence/backend added.
-- Clicking a population selects its samples; expanding reveals individual add/remove toggles. Exact genetic-ID search selects only that individual. Remove chips to deselect; overlapping choices are deduplicated. Population exclusions retain the group chip.
-- Selection changes automatically refit Custom PCA. Below-three or rank-deficient selections clear the plot with feedback. Manual and database raw/scaled sources normalize separately before combination.
-- The working interface name is G25 tools; a final product name is not settled.
+- Latest user direction explicitly replaces G25 Views' visual identity with the user's PCA_views, ArchaeoBase and G25 Manager design language. Retain useful analysis behaviors; use original Lucide tools, 12 px Arial UI, compact academic panels and PCA_views palette/shapes.
+- One chart fills the workspace remaining beside a collapsible, pointer/keyboard-resizable left data area. A 32 px dark navigation rail retains PCA, planned distances and planned models.
+- Default markers are 7 px, matching PCA_views. A deterministic nearest-neighbor assignment maximizes color/shape separation near group centroids, using the PCA_views palette and silhouettes. This is a visual heuristic, not a guarantee of unique appearance for unlimited groups.
+- The population picker must follow Admix_IRE: wrapping blue population chips, purple individual chips, removable/editable labels, a full-width anchored suggestion menu, exact/prefix/token/compact/fuzzy ranking, keyboard navigation and exact genetic-ID priority.
+- Manual coordinate entry sits directly beside the chip search. Add coordinates or Ctrl/⌘ + Enter commits valid input; every population/sample selection change automatically refits. No Run PCA button or settings dialog/menu.
+- Advanced search is a second column to the LEFT of the population picker. It shares the search scope and can enlarge into a virtualized metadata table while retaining the picker on its right. It is called Advanced search throughout the UI, not Filters.
+- Advanced search exposes loaded metadata fields, text/equality/numeric criteria, explicit missing-value inclusion/counts, complete matching-sample counts and Add all matches. Criteria scope browsing, without silently removing plotted samples. Group selection uses matching members only; Add all includes results beyond the visible page and deduplicates selections.
+- Archaeobase TSV: Group ID, Genetic ID, G25_coords plus arbitrary retained metadata. Also accept PC1–PC25 columns. Count/skip missing coordinates; atomically reject invalid populated rows and duplicate genetic IDs. Worker-based import, search in memory, virtualized table.
+- Compact permanent plot toolbar uses PCA_views Lucide icons. Legend toggle is its extreme-left action. No duplicated native modebar; the Plotly mark is restored as a small bottom-right chart credit, per the user’s latest request. The unified 37 px top strip combines app identity and plot tools. Data/legend use panel-style icons. Axis titles and axis/frame lines are removed to keep the plot continuous like G25 Views. Labels/hulls/regression toggle immediately through toolbar icons; no creation checkboxes. Preserve marker/label-style/point-label/hull-opacity cycles, zoom/pan/selection, component selectors, subtitle and PNG sizes.
+- Legend looks like PCA_views with visible per-row eye controls. Preserve G25 Views gestures: click toggles trace visibility; double-click isolates/restores. Hide/show never changes the PCA fit or source selection. Export includes matching legend state.
+- Default group labels, hulls and regression visibility are off, following a restrained PCA_views starting view. Marker-size cycle is 7 → 5 → 9 px. Default font is 12 px Arial, Helvetica, sans-serif; plot ticks are readable.
+- Aggregated, Individual and One group display modes remain. Source samples stay separate; original and normalized coordinates stay distinct from fitted scores. Fewer than three samples or rank below two clears the chart with feedback.
+- Ask before expanding optional capabilities. No regional reference PCAs, mobile adaptation, general settings system, online data service or metadata editing.
 
 ## Brand Commitments
 
-The user prefers G25 Views' minimal toolbar/interface and PCA_views' marker appearance. This is a G25 analysis suite rather than a product named or scoped only around PCA.
+PCA_views defines plot controls, type, markers and legend. ArchaeoBase and G25 Manager define compact resizable analysis panels and table structure. Admix_IRE defines population-search strategy and UI. G25 Views remains an interaction reference for legend gestures and some analysis cycles, not the current visual identity.
 
 ## Evidence on Hand
 
-- `G25VIEWS_STUDY.md`: complete study of the upstream reference at commit `6422611`.
-- `PCA_VIEWS_STUDY.md`: local project study and proposed reuse boundaries.
-- `study/pca-views/workspace.png` and `settings.png`: screenshots of the user's existing app with its explicitly synthetic built-in example, captured at 1440×900.
-- `study/pca-views/function-inventory.json`: function locations in the existing app's production `src` files, excluding tests and declaration files.
-- No user-selected G25 example dataset has been supplied for the new app. Synthetic coordinates used for development must be labeled as synthetic.
+Read-only reference projects: /home/user/genomics/04_projects/PCA_views; /home/user/genomics/04_projects/Admix_IRE; /home/user/Desktop/SYNCTHING/genomics_syt/qpAdm/4_projects/ArchaeoBase; /home/user/Desktop/SYNCTHING/genomics_syt/qpAdm/4_projects/G25_Manager.
+
+The user's external Archaeobase TSV has 18,212 coordinate-bearing samples across 4,423 groups; it is tested in place and never bundled. Development fixtures are explicitly synthetic. Earlier source studies and capture evidence remain under ignored study/review directories.
 
 ## Product Principles
 
-- Give the chart most of the desktop workspace.
-- Expose the small agreed set of actions directly.
-- Keep original G25 coordinates distinct from derived PCA scores so later analyses can use the original data.
-- Carry over useful implementation details selectively.
+- Keep chart exploration direct and avoid settings dialogs.
+- Separate source selection, database browsing and chart visibility.
+- Preserve coordinate precision and numerical correctness.
+- Favor compact, familiar scientific-tool controls.
 - Keep optional feature decisions explicit.

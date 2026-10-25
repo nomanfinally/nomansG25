@@ -33,14 +33,23 @@ export function syntheticG25() {
 export function syntheticDatabase() {
   const rows = syntheticG25()
     .split("\n")
-    .map((line) => {
+    .map((line, index) => {
       const [name] = line.split(",");
       const [group, id] = name.split(":");
-      return [group, `${group}_${id}`, line].join("\t");
+      return [
+        group,
+        `${group}_${id}`,
+        line,
+        index < 90 ? "Europe" : "Asia",
+        index < 90 ? "Synthetic country A" : "Synthetic country B",
+        "Synthetic period",
+        index % 5 === 0 ? ".." : index % 2 === 0 ? "F" : "M",
+        String(-500 + index * 20),
+      ].join("\t");
     });
   return [
-    "Group ID\tGenetic ID\tG25_coords",
+    "Group ID\tGenetic ID\tG25_coords\tRegions\tPolitical Entity\tPeriod Name\tMolecular Sex\tYear CE",
     ...rows,
-    "Synthetic_without_coords\tmissing\t",
+    "Synthetic_without_coords\tmissing\t\t\t\t\t\t",
   ].join("\n");
 }

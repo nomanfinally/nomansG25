@@ -202,6 +202,9 @@ describe("plot semantics", () => {
     const result = calculatePca(rectangle, "scaled");
     const figure = buildFigure(result, {
       ...initialPlotView,
+      labels: true,
+      hulls: true,
+      regression: true,
       hiddenTraces: [0],
     });
     expect(figure.traces[0]).toHaveProperty("visible", "legendonly");

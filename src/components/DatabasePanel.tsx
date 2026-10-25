@@ -1,26 +1,94 @@
-import { useMemo, useRef, useState } from "react";
-import { Check, ChevronDown, ChevronRight, FileUp, X } from "lucide-react";
+import { useMemo, useRef, useState, useLayoutEffect, useEffect } from "react";
+import {
+  Check,
+  ChevronDown,
+  ChevronRight,
+  FileUp,
+  X,
+  Search,
+  PanelLeftClose,
+} from "lucide-react";
 import type { CatalogueState } from "../hooks/useCatalogue";
 import { belongs, tokenKey, type CatalogueRow } from "../domain/database";
+import { prepareSearch, scoreSearch } from "../domain/search";
+import { filterRows, rowSearch } from "../domain/filters";
 import type { Scaling } from "../domain/g25";
 
 export function DatabasePanel({
   catalogue,
   busy,
   error,
+  query,
+  onQuery,
+  available,
+  onAdvanced,
+  advanced,
+  criteriaCount,
+  onCollapse,
 }: {
   catalogue: CatalogueState;
   busy: boolean;
   error: string;
+  query: string;
+  onQuery: (value: string) => void;
+  available: CatalogueRow[];
+  onAdvanced: () => void;
+  advanced: boolean;
+  criteriaCount: number;
+  onCollapse: () => void;
 }) {
-  const [query, setQuery] = useState(""),
-    [expanded, setExpanded] = useState(new Set<string>());
+  const { rows, tokens, selected } = catalogue;
+  const setQuery = onQuery;
+  const box = useRef<HTMLDivElement>(null);
+  const [focused, setFocused] = useState(false);
+  const [popup, setPopup] = useState({
+    left: 0,
+    top: 0,
+    width: 300,
+    maxHeight: 310,
+  });
+  useLayoutEffect(() => {
+    const update = () => {
+      const rect = box.current?.getBoundingClientRect();
+      if (rect)
+        setPopup({
+          left: rect.left,
+          top: rect.bottom + 4,
+          width: rect.width,
+          maxHeight: Math.max(
+            100,
+            Math.min(350, window.innerHeight - rect.bottom - 12),
+          ),
+        });
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    if (box.current) observer.observe(box.current);
+    window.addEventListener("resize", update);
+    document.addEventListener("scroll", update, true);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", update);
+      document.removeEventListener("scroll", update, true);
+    };
+  }, [tokens, query, advanced]);
+  useEffect(() => {
+    const outside = (event: PointerEvent) => {
+      if (
+        !box.current?.contains(event.target as Node) &&
+        !results.current?.contains(event.target as Node)
+      )
+        setFocused(false);
+    };
+    document.addEventListener("pointerdown", outside);
+    return () => document.removeEventListener("pointerdown", outside);
+  }, []);
+  const [expanded, setExpanded] = useState(new Set<string>());
   const [databaseScaling, setDatabaseScaling] = useState<Scaling>("scaled");
   const [limits, setLimits] = useState<Record<string, number>>({});
   const search = useRef<HTMLInputElement>(null),
     file = useRef<HTMLInputElement>(null),
     results = useRef<HTMLDivElement>(null);
-  const { rows, tokens, selected } = catalogue;
   const index = useMemo(() => {
     const groups = new Map<
       string,
@@ -29,10 +97,10 @@ export function DatabasePanel({
         group: string;
         origin: CatalogueRow["origin"];
         rows: CatalogueRow[];
-        search: string;
+        prepared: ReturnType<typeof prepareSearch>;
       }
     >();
-    for (const row of rows) {
+    for (const row of available) {
       const key = `${row.origin}:${row.group}`;
       if (!groups.has(key))
         groups.set(key, {
@@ -40,7 +108,7 @@ export function DatabasePanel({
           group: row.group,
           origin: row.origin,
           rows: [],
-          search: row.group.toLowerCase(),
+          prepared: prepareSearch(row.group),
         });
       groups.get(key)!.rows.push(row);
     }
@@ -48,29 +116,45 @@ export function DatabasePanel({
       groups: [...groups.values()].sort((a, b) =>
         a.group.localeCompare(b.group),
       ),
-      samples: rows.map((row) => ({
+      samples: available.map((row) => ({
         row,
-        search: row.geneticId.toLowerCase(),
+        prepared: rowSearch(row),
       })),
     };
-  }, [rows]);
+  }, [available]);
   const key = query.trim().toLowerCase();
   const matches = useMemo(() => {
     if (!key) return { groups: [], samples: [], groupCount: 0, sampleCount: 0 };
-    const score = (value: string) =>
-      value === key ? 0 : value.startsWith(key) ? 1 : 2;
-    const groups = index.groups
-      .filter((group) => group.search.includes(key))
-      .sort(
-        (a, b) =>
-          score(a.search) - score(b.search) || a.group.localeCompare(b.group),
-      );
+    const prepared = prepareSearch(query);
     const samples = index.samples
-      .filter((item) => item.search.includes(key))
+      .map((item) => ({
+        ...item,
+        score: scoreSearch(item.prepared, prepared),
+      }))
+      .filter((item) => Number.isFinite(item.score))
       .sort(
         (a, b) =>
-          score(a.search) - score(b.search) ||
-          a.row.geneticId.localeCompare(b.row.geneticId),
+          a.score - b.score || a.row.geneticId.localeCompare(b.row.geneticId),
+      );
+    const scores = new Map(
+      index.groups.map((group) => [
+        group.key,
+        scoreSearch([group.prepared], prepared),
+      ]),
+    );
+    for (const item of samples) {
+      const groupKey = `${item.row.origin}:${item.row.group}`;
+      scores.set(
+        groupKey,
+        Math.min(scores.get(groupKey) ?? Infinity, item.score + 5),
+      );
+    }
+    const groups = index.groups
+      .filter((group) => Number.isFinite(scores.get(group.key)))
+      .sort(
+        (a, b) =>
+          scores.get(a.key)! - scores.get(b.key)! ||
+          a.group.localeCompare(b.group),
       );
     return {
       groups: groups.slice(0, 40),
@@ -79,12 +163,16 @@ export function DatabasePanel({
       sampleCount: samples.length,
     };
   }, [index, key]);
+
   const chosen = useMemo(
     () => new Set(selected.map((row) => row.id)),
     [selected],
   );
   const chooseGroup = (group: string, origin: CatalogueRow["origin"]) => {
-    catalogue.group(group, origin);
+    const target = available.filter(
+      (row) => row.group === group && row.origin === origin,
+    );
+    catalogue.select(target, !target.every((row) => chosen.has(row.id)));
     setQuery("");
     search.current?.focus();
   };
@@ -115,11 +203,21 @@ export function DatabasePanel({
   );
   return (
     <aside className="database-panel" aria-label="PCA data">
-      <header className="data-heading">
-        <span>Data</span>
-        <span className="data-count">
-          {selected.length.toLocaleString()} selected
-        </span>
+      <header className="panel-heading">
+        <h2>Populations</h2>
+        <div className="heading-actions">
+          <span className="data-count">
+            {selected.length.toLocaleString()} selected
+          </span>
+          <button
+            className="icon-button"
+            aria-label="Collapse data panel"
+            title="Collapse data panel"
+            onClick={onCollapse}
+          >
+            <PanelLeftClose size={15} />
+          </button>
+        </div>
       </header>
       <section className="database-source" aria-label="Database file">
         <div className="database-load-row">
@@ -208,8 +306,30 @@ export function DatabasePanel({
             </button>
           )}
         </div>
+        <div className="search-scope-actions">
+          <button
+            className="text-button"
+            aria-label="Advanced search"
+            aria-pressed={advanced}
+            onClick={onAdvanced}
+          >
+            <Search size={13} />
+            Advanced search
+            {criteriaCount > 0 && (
+              <span className="count-badge">{criteriaCount}</span>
+            )}
+          </button>
+          <button
+            className="text-button"
+            disabled={!available.length}
+            onClick={() => catalogue.select(filterRows(available, query, []))}
+          >
+            Add all matches
+          </button>
+        </div>
         <div
           className="population-token-box"
+          ref={box}
           onClick={(event) => {
             if (!(event.target as HTMLElement).closest("button"))
               search.current?.focus();
@@ -238,7 +358,18 @@ export function DatabasePanel({
                     : `${label} · ${row?.group}`
                 }
               >
-                <span className="population-chip-text">{label}</span>
+                <button
+                  type="button"
+                  className="population-chip-text"
+                  title={`Search ${label}`}
+                  onClick={() => {
+                    setQuery(label);
+                    search.current?.focus();
+                    search.current?.select();
+                  }}
+                >
+                  {label}
+                </button>
                 {token.kind === "group" && (
                   <span className="chip-count">{count}</span>
                 )}
@@ -267,8 +398,14 @@ export function DatabasePanel({
             value={query}
             disabled={!rows.length}
             aria-controls={key ? "population-results" : undefined}
-            onChange={(event) => setQuery(event.target.value)}
+            onFocus={() => setFocused(true)}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setFocused(true);
+            }}
             onKeyDown={(event) => {
+              if (event.key === "Backspace" && !query && tokens.length)
+                catalogue.removeToken(tokens[tokens.length - 1]);
               if (event.key === "Escape") {
                 setQuery("");
                 event.stopPropagation();
@@ -276,7 +413,9 @@ export function DatabasePanel({
               if (event.key === "ArrowDown" && key) {
                 event.preventDefault();
                 results.current
-                  ?.querySelector<HTMLButtonElement>("button")
+                  ?.querySelector<HTMLButtonElement>(
+                    ".group-select,.database-sample",
+                  )
                   ?.focus();
               }
               if (event.key === "Enter" && key) {
@@ -299,9 +438,71 @@ export function DatabasePanel({
           Click a population to select it. Expand to choose individual samples.
         </p>
       </section>
+      <section className="manual-source" aria-label="Manual coordinates">
+        <details>
+          <summary>Paste coordinates</summary>
+          <div className="manual-entry">
+            <textarea
+              aria-label="Global25 coordinates"
+              className="form-control form-control-sm"
+              rows={3}
+              spellCheck={false}
+              value={catalogue.text}
+              placeholder="Group:sample,PC1,PC2,…,PC25"
+              aria-invalid={!!catalogue.manualError}
+              aria-describedby="manual-coordinate-help"
+              onChange={(event) => {
+                catalogue.setText(event.target.value);
+                catalogue.setManualError("");
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+                  event.preventDefault();
+                  catalogue.addManual();
+                }
+              }}
+            />
+            <div className="manual-actions">
+              <select
+                className="custom-select custom-select-sm"
+                aria-label="Manual coordinate scaling"
+                value={catalogue.manualScaling}
+                onChange={(event) =>
+                  catalogue.setManualScaling(event.target.value as Scaling)
+                }
+              >
+                <option value="scaled">Scaled</option>
+                <option value="raw">Raw</option>
+              </select>
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-primary"
+                disabled={!catalogue.text.trim()}
+                onClick={() => catalogue.addManual()}
+              >
+                Add coordinates
+              </button>
+            </div>
+            <p id="manual-coordinate-help" className="picker-hint">
+              One named G25 row per line. Ctrl/⌘ + Enter to add.
+            </p>
+            {catalogue.manualError && (
+              <p className="data-error" role="alert">
+                {catalogue.manualError}
+              </p>
+            )}
+          </div>
+        </details>
+      </section>
       <div
         ref={results}
         className="database-results"
+        style={{
+          position: "fixed",
+          ...popup,
+          display: key && focused ? undefined : "none",
+        }}
+        onPointerDown={(event) => event.preventDefault()}
         id="population-results"
         role="region"
         aria-label="Database search results"
@@ -339,12 +540,7 @@ export function DatabasePanel({
                     selectedCount = group.rows.filter((row) =>
                       chosen.has(row.id),
                     ).length;
-                  const groupChosen = tokens.some(
-                    (token) =>
-                      token.kind === "group" &&
-                      token.value === group.group &&
-                      token.origin === group.origin,
-                  );
+                  const groupChosen = selectedCount === group.rows.length;
                   return (
                     <div key={group.key} className="database-group">
                       <div className="database-group-row">
@@ -445,62 +641,6 @@ export function DatabasePanel({
           </>
         )}
       </div>
-      <section className="manual-source" aria-label="Manual coordinates">
-        <details open>
-          <summary>Paste coordinates</summary>
-          <div className="manual-entry">
-            <textarea
-              aria-label="Global25 coordinates"
-              className="form-control form-control-sm"
-              rows={3}
-              spellCheck={false}
-              value={catalogue.text}
-              placeholder="Group:sample,PC1,PC2,…,PC25"
-              aria-invalid={!!catalogue.manualError}
-              aria-describedby="manual-coordinate-help"
-              onChange={(event) => {
-                catalogue.setText(event.target.value);
-                catalogue.setManualError("");
-              }}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
-                  event.preventDefault();
-                  catalogue.addManual();
-                }
-              }}
-            />
-            <div className="manual-actions">
-              <select
-                className="custom-select custom-select-sm"
-                aria-label="Manual coordinate scaling"
-                value={catalogue.manualScaling}
-                onChange={(event) =>
-                  catalogue.setManualScaling(event.target.value as Scaling)
-                }
-              >
-                <option value="scaled">Scaled</option>
-                <option value="raw">Raw</option>
-              </select>
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-primary"
-                disabled={!catalogue.text.trim()}
-                onClick={() => catalogue.addManual()}
-              >
-                Add coordinates
-              </button>
-            </div>
-            <p id="manual-coordinate-help" className="picker-hint">
-              One named G25 row per line. Ctrl/⌘ + Enter to add.
-            </p>
-            {catalogue.manualError && (
-              <p className="data-error" role="alert">
-                {catalogue.manualError}
-              </p>
-            )}
-          </div>
-        </details>
-      </section>
       <div className="selection-status" role="status" aria-live="polite">
         {busy
           ? "Updating PCA…"

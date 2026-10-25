@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import type { Config, Layout, PlotlyHTMLElement } from "plotly.js";
+import { PlotlyCredit } from "./PlotlyCredit";
 import type { PcaResult } from "../domain/pca";
 import {
   buildFigure,
@@ -17,7 +18,6 @@ import {
   type NamedAnnotation,
 } from "../domain/figure";
 import { paddedRange, wheelPixels, zoomRange } from "../domain/geometry";
-import sourceIcons from "../data/g25-icons.json";
 
 type PlotlyApi = typeof import("plotly.js");
 type ChartElement = PlotlyHTMLElement & {
@@ -38,20 +38,10 @@ export type ChartAction =
   | "hullOpacity"
   | "regression"
   | "projected";
-const customButtons: { index: number; action: ChartAction; title?: string }[] =
-  [
-    { index: 0, action: "subtitle" },
-    { index: 1, action: "legend", title: "Toggle legend: show / hide" },
-    { index: 6, action: "markerSize" },
-    { index: 7, action: "pointLabels" },
-    { index: 8, action: "labelStyle" },
-    { index: 9, action: "labels" },
-    { index: 10, action: "hulls" },
-    { index: 11, action: "hullOpacity" },
-    { index: 12, action: "regression" },
-    { index: 13, action: "projected" },
-  ];
 export interface ChartHandle {
+  zoom: (factor: number) => void;
+  reset: () => void;
+  fit: () => void;
   savePng: (width?: number, height?: number) => Promise<void>;
 }
 interface Props {
@@ -92,41 +82,38 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
           : null,
       [props.result, props.view, props.additions, props.revision],
     );
-  const resetAxes = () => {
-    const element = host.current;
-    if (!element || !api.current) return;
-    queue.current = queue.current.then(async () => {
-      const { result, view } = latest.current;
-      if (!result) {
-        await api.current!.relayout(element, { 'xaxis.autorange': true, 'yaxis.autorange': true });
-        return;
-      }
-      await api.current!.relayout(element, {
-        'xaxis.range': paddedRange(result.scores.map(row => row[view.x])),
-        'yaxis.range': paddedRange(result.scores.map(row => row[view.y])),
-        'xaxis.autorange': false, 'yaxis.autorange': false,
-      });
-    }).catch(() => setError('Unable to reset the axes. Try running PCA again.'));
-  };
-  const makeConfig = (): Partial<Config> => ({
-      displayModeBar: "hover",
+    const resetAxes = () => {
+      const element = host.current;
+      if (!element || !api.current) return;
+      queue.current = queue.current
+        .then(async () => {
+          const { result, view } = latest.current;
+          if (!result) {
+            await api.current!.relayout(element, {
+              "xaxis.autorange": true,
+              "yaxis.autorange": true,
+            });
+            return;
+          }
+          await api.current!.relayout(element, {
+            "xaxis.range": paddedRange(result.scores.map((row) => row[view.x])),
+            "yaxis.range": paddedRange(result.scores.map((row) => row[view.y])),
+            "xaxis.autorange": false,
+            "yaxis.autorange": false,
+          });
+        })
+        .catch(() =>
+          setError(
+            "Unable to reset the axes. Try changing the selection again.",
+          ),
+        );
+    };
+    const makeConfig = (): Partial<Config> => ({
+      displayModeBar: false,
+      displaylogo: false,
       scrollZoom: false,
       responsive: false,
-      showTips: true,
-      displaylogo: true,
       edits: { annotationTail: true },
-      toImageButtonOptions: { format: "png", filename: "G25 Custom PCA" },
-    modeBarButtons: [
-      ['toImage'],
-      ['zoom2d', 'pan2d', 'select2d', 'lasso2d'],
-      ['zoomIn2d', 'zoomOut2d', 'autoScale2d', { name: 'resetScale2d', title: 'Reset axes', icon: api.current!.Icons.home, click: resetAxes }],
-      customButtons.map((button) => ({
-        name: button.title ?? sourceIcons[button.index].name,
-        title: button.title ?? sourceIcons[button.index].name,
-        icon: sourceIcons[button.index].icon,
-        click: () => latest.current.onAction(button.action),
-      })),
-    ] as NonNullable<Config['modeBarButtons']>,
     });
 
     useEffect(() => {
@@ -276,27 +263,32 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
         spikethickness: 1,
         spikesnap: "data" as const,
         showspikes: false,
-        tickfont: { color: "#ddd" },
+        tickfont: { color: "#666666", size: 12 },
+        gridcolor: "#eeeeee",
+        showline: false,
+        linecolor: "#999999",
       };
       const layout: Partial<Layout> = {
         xaxis: { ...axis },
         yaxis: { ...axis },
         hovermode: "closest",
-        dragmode: "pan",
-        margin: { l: 50, r: 20, t: 52, b: 18 },
-        title: {
-          text:
-            "Global 25 Custom PCA" +
-            (view.subtitle
-              ? '<br><span style="font-size: 15px">' +
-                escapeHtml(view.subtitle) +
-                "</span>"
-              : ""),
-          font: { size: 17 },
+        dragmode: view.dragMode,
+        font: {
+          family: "Arial, Helvetica, sans-serif",
+          size: 12,
+          color: "#363636",
         },
-        modebar: { activecolor: "#007bff" },
-        showlegend: view.legend,
-        legend: { itemclick: "toggle", itemdoubleclick: "toggleothers" },
+        margin: { l: 46, r: 18, t: view.subtitle ? 42 : 20, b: 26 },
+        title: {
+          text: view.subtitle ? escapeHtml(view.subtitle) : "",
+          font: { size: 14 },
+        },
+        showlegend: false,
+        legend: {
+          itemclick: "toggle",
+          itemdoubleclick: "toggleothers",
+          font: { size: 12 },
+        },
         annotations: figure?.annotations ?? [],
         shapes: figure?.shapes ?? [],
         uirevision: axesKey,
@@ -324,7 +316,7 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
                 : { autorange: true }),
             };
           }
-          if (same && previous?.dragmode) layout.dragmode = previous.dragmode;
+
           const annotations = (figure?.annotations ?? []).map((annotation) => ({
             ...annotation,
             ...offsets.current.get(`${view.x}:${view.y}:${annotation.name}`),
@@ -345,13 +337,43 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
           setError("");
         })
         .catch(() =>
-          setError("The chart could not render. Try running PCA again."),
+          setError(
+            "The chart could not render. Try changing the selection again.",
+          ),
         );
     }, [ready, figure, props.result, props.view, props.revision]);
 
     useImperativeHandle(
       ref,
       () => ({
+        reset: resetAxes,
+        fit() {
+          const element = host.current;
+          if (!element || !api.current) return;
+          queue.current = queue.current
+            .then(async () => {
+              await api.current!.relayout(element, {
+                "xaxis.autorange": true,
+                "yaxis.autorange": true,
+              });
+            })
+            .catch(() => setError("Unable to fit the axes."));
+        },
+        zoom(factor) {
+          const element = host.current;
+          if (!element || !api.current) return;
+          queue.current = queue.current
+            .then(async () => {
+              const full = (element as unknown as ChartElement)._fullLayout;
+              await api.current!.relayout(element, {
+                "xaxis.range": zoomRange(full.xaxis.range, factor, 0.5),
+                "yaxis.range": zoomRange(full.yaxis.range, factor, 0.5),
+                "xaxis.autorange": false,
+                "yaxis.autorange": false,
+              });
+            })
+            .catch(() => setError("Unable to zoom."));
+        },
         async savePng(width, height) {
           await queue.current;
           if (!api.current || !host.current || !ready)
@@ -366,7 +388,27 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
                 ? " " + latest.current.view.subtitle
                 : ""),
           };
-          await api.current.downloadImage(host.current, options);
+          const exportHost = document.createElement("div");
+          exportHost.style.cssText = "position:fixed;left:-10000px;top:0;";
+          document.body.appendChild(exportHost);
+          try {
+            await api.current.newPlot(
+              exportHost,
+              (host.current as unknown as ChartElement).data,
+              {
+                ...(host.current as unknown as ChartElement).layout,
+                width: options.width,
+                height: options.height,
+                showlegend: latest.current.view.legend,
+                margin: { l: 46, r: 18, t: 30, b: 26 },
+              },
+              { displayModeBar: false, displaylogo: false },
+            );
+            await api.current.downloadImage(exportHost, options);
+          } finally {
+            api.current.purge(exportHost);
+            exportHost.remove();
+          }
         },
       }),
       [ready],
@@ -378,6 +420,7 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
           ref={host}
           aria-label="Custom Global25 PCA plot"
         />
+        <PlotlyCredit />
         {error && (
           <p className="chart-error" role="alert">
             {error}

@@ -1,48 +1,48 @@
 ---
 name: G25 tools
-description: Source-faithful G25 Views Custom PCA for desktop.
+description: Compact local G25 analysis in the PCA_views academic workspace.
 colors:
-  primary: "#007bff"
-  selection: "#cce5ff"
-  selection-text: "#004085"
-  population-surface: "#e4efff"
-  population-line: "#a9caff"
-  population-text: "#0056b3"
-  individual-surface: "#f2eafa"
+  primary: "#0055bf"
+  population-surface: "#e4edff"
+  population-line: "#adc9ff"
   individual-text: "#653b83"
+  individual-surface: "#f2eafa"
   individual-line: "#d0b5e4"
-  result-heading: "#f8f9fa"
-  result-hover: "#f1f6fd"
-  rail: "#24272b"
-  rail-current: "#3a4048"
-  rail-icon: "#c8d0db"
-  rail-disabled: "#929dac"
   surface: "#fff"
-  text: "#212529"
-  field-text: "#495057"
-  secondary: "#6c757d"
-  field-line: "#ced4da"
-  field-focus: "#80bdff"
-  disabled-surface: "#e9ecef"
-  control-line: "#adb5bd"
-  select-arrow: "#343a40"
-  menu-hover-text: "#16181b"
-  menu-line: "rgba(0, 0, 0, 0.15)"
-  scrollbar: "#aab2bc"
-  error: "#842029"
+  text: "#363636"
+  line: "#e6e4df"
+  muted: "#696969"
+  subtle: "#f7f7f5"
+  hover: "#f1f1ef"
+  active: "#e9e9e9"
+  header: "#fbfbfb"
+  toolbar: "#fcfcfc"
+  field-line: "#d8d5ce"
+  focus: "#8a8a8a"
+  placeholder: "#72716d"
+  selection-surface: "#dceaff"
+  selection-text: "#164c8f"
+  selected-row: "#eaf3ff"
+  rail: "#292b2d"
+  rail-current: "#414448"
+  rail-icon: "#bdc3ca"
+  advanced-surface: "#fafaf8"
+  result-heading: "#fafafa"
+  result-hover: "#edf4fc"
+  legend-line: "#bcbcbc"
+  legend-hover: "#f0f0ed"
+  legend-hidden: "#82817d"
+  error: "#a04444"
   error-surface: "#fff5f5"
-  error-line: "#f1c2c7"
-  invalid: "#dc3545"
-  plot-text: "#444"
-  plot-tick: "#ddd"
-  plot-grid: "rgb(238, 238, 238)"
-  modebar-icon: "rgba(68, 68, 68, 0.3)"
-  modebar-surface: "rgba(255, 255, 255, 0.5)"
-  label-shadow: "rgba(0, 0, 0, 0.2)"
-  label-surface: "rgba(255,255,255,0.75)"
-  label-static-surface: "rgba(255,255,255,0.66)"
-  label-transparent: "rgba(255,255,255,0)"
-  label-border: "rgba(255,255,255,1)"
+  error-line: "#e5c8c8"
+  search-focus: "#4891ff"
+  search-focus-halo: "#e6f0ff"
+  scrollbar: "#c1c0bc"
+  separator-active: "#bcbab2"
+  table-line: "#eeece7"
+  table-hover: "#f1f4f7"
+  plot-tick: "#666666"
+  plot-grid: "#eeeeee"
   marker-01: "#1f77b4"
   marker-02: "#d62728"
   marker-03: "#2ca02c"
@@ -74,221 +74,192 @@ colors:
   marker-29: "#073b4c"
   marker-30: "#9b2226"
   marker-31: "#ee9b00"
-  g25-marker-01: "#166f4e"
-  g25-marker-02: "#da0017"
-  g25-marker-03: "#5619a4"
-  g25-marker-04: "#de0077"
-  g25-marker-05: "#569918"
-  g25-marker-06: "#9824d9"
-  g25-marker-07: "#6f6317"
-  g25-marker-08: "#535353"
-  g25-marker-09: "#2b57a0"
-  g25-marker-10: "#bb5805"
-  g25-marker-11: "#7e0061"
+  checkbox-accent: "#333"
+  tool-active-text: "#222"
+  text-action: "#434341"
+  manual-summary: "#55544f"
+  result-heading-text: "#62615d"
+  result-line: "#ededeb"
+  choice-line: "#b3b2ae"
 typography:
   body:
-    fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
-    fontSize: "1rem"
-    fontWeight: 400
-    lineHeight: 1.5
-  control:
-    fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
-    fontSize: "0.875rem"
-    fontWeight: 400
-    lineHeight: 1.5
-  marker-choice:
-    fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
-    fontSize: "0.8rem"
-    fontWeight: 400
-    lineHeight: 1.5
-  chip-count:
-    fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
-    fontSize: "10px"
-    fontWeight: 400
-    lineHeight: 1.5
-  search-result:
-    fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
-    fontSize: "13px"
-    fontWeight: 400
-    lineHeight: 1.5
-  axis-label:
-    fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
-    fontSize: "11px"
-    fontWeight: 400
-    lineHeight: 1.5
-  axis-select:
-    fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
+    fontFamily: "Arial, Helvetica, sans-serif"
     fontSize: "12px"
     fontWeight: 400
+  title:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "12px"
+    fontWeight: 600
+  label:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "11px"
+    fontWeight: 600
+  chip:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "11.5px"
+    fontWeight: 400
+    lineHeight: 1.4
+  table:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "11px"
+    fontWeight: 400
+  hint:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "10.5px"
+    fontWeight: 400
     lineHeight: 1.5
-  plot-title:
-    fontFamily: "\"Open Sans\", verdana, arial, sans-serif"
-    fontSize: "17px"
+  count:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "10px"
+    fontWeight: 400
+  plot-tick:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "12px"
     fontWeight: 400
   plot-subtitle:
-    fontFamily: "\"Open Sans\", verdana, arial, sans-serif"
-    fontSize: "15px"
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "14px"
     fontWeight: 400
   plot-label:
-    fontFamily: "\"Open Sans\", verdana, arial, sans-serif"
+    fontFamily: "Arial, Helvetica, sans-serif"
     fontSize: "11px"
     fontWeight: 400
   plot-point:
-    fontFamily: "\"Open Sans\", verdana, arial, sans-serif"
+    fontFamily: "Arial, Helvetica, sans-serif"
     fontSize: "9px"
     fontWeight: 400
-  clear:
-    fontFamily: "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\""
-    fontSize: "1.5rem"
-    fontWeight: 700
-    lineHeight: 1
 rounded:
-  square: "0"
-  chip: "3px"
-  choice-check: "2px"
-  control: "0.2rem"
-  menu: "0.25rem"
+  control: "3px"
+  legend: "2px"
 spacing:
-  strip-padding: "0.5rem"
-  control-y: "0.25rem"
-  control-x: "0.5rem"
-  menu-item-x: "1.5rem"
-  axis-gap: "6px"
-  axis-label-gap: "3px"
-  marker-gap: "4px"
-  panel-inset: "14px"
-  chip-gap: "5px"
+  panel-x: "10px"
+  chip-gap: "4px"
+  toolbar-gap: "2px"
+  control-x: "8px"
+  control-y: "4px"
 components:
-  button-outline-primary:
-    backgroundColor: "transparent"
-    textColor: "{colors.primary}"
-    typography: "{typography.control}"
+  button:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text}"
+    typography: "{typography.body}"
     rounded: "{rounded.control}"
-    padding: "0.25rem 0.5rem"
-    height: "31px"
-  button-outline-primary-hover:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.surface}"
-  menu-trigger:
-    backgroundColor: "transparent"
-    textColor: "{colors.secondary}"
-    typography: "{typography.control}"
-    rounded: "{rounded.square}"
-    height: "31px"
-    padding: "0.25rem 0.5rem"
-  menu-trigger-open:
-    backgroundColor: "{colors.secondary}"
-    textColor: "{colors.surface}"
-  manual-coordinates:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.field-text}"
-    typography: "{typography.axis-select}"
-    padding: "0.25rem 0.5rem"
-  data-panel:
-    backgroundColor: "{colors.surface}"
-    typography: "{typography.control}"
-    width: "380px"
+    padding: "4px 8px"
+    height: "27px"
+  tool:
+    textColor: "{colors.text}"
+    rounded: "{rounded.control}"
+    width: "26px"
+    height: "26px"
+  tool-active:
+    backgroundColor: "{colors.active}"
   population-chip:
     backgroundColor: "{colors.population-surface}"
-    textColor: "{colors.population-text}"
-    typography: "{typography.axis-select}"
-    rounded: "{rounded.chip}"
-    padding: "2px 4px 2px 6px"
+    textColor: "{colors.primary}"
+    typography: "{typography.chip}"
+    rounded: "{rounded.control}"
+    padding: "2px 4px 2px 5px"
   individual-chip:
     backgroundColor: "{colors.individual-surface}"
     textColor: "{colors.individual-text}"
-    rounded: "{rounded.chip}"
+    rounded: "{rounded.control}"
+  field:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.control}"
+    padding: "5px 7px"
   rail:
     backgroundColor: "{colors.rail}"
     width: "32px"
-  axis-select:
-    textColor: "{colors.field-text}"
-    typography: "{typography.axis-select}"
-    width: "68px"
-    height: "29px"
-  input-error:
-    backgroundColor: "{colors.error-surface}"
-    textColor: "{colors.error}"
-    typography: "{typography.axis-select}"
-    padding: "4px 8px"
+  legend:
+    backgroundColor: "{colors.toolbar}"
+    rounded: "{rounded.legend}"
+    width: "215px"
 ---
 
 # Design System: G25 tools
 
 ## Overview
 
-**Creative North Star: "G25 Views' Custom PCA workspace"**
+**Creative North Star: "The compact academic G25 workspace"**
 
-G25 tools follows the user-pinned G25 Views Custom PCA interface: source-sized Bootstrap controls above one white, viewport-filling Plotly chart. This approved replacement preserves the reference's density, SVG hover tools and native chart behavior.
+The approved visual world follows the user's PCA_views, ArchaeoBase and G25 Manager applications. Dense neutral panels support one continuous white graph; familiar direct controls keep attention on samples and geometry. Admix_IRE supplies population search and blue/purple selection language.
 
-The visual additions are the thin charcoal icon rail, compact component selectors, PCA_views' outlined marks and the authorized right Data panel. The panel adapts Admix_IRE's population/sample chip search within Bootstrap's existing form language; the original marker appearance remains available. Data supplies plot color; interface structure stays restrained.
+PCA_views governs Arial typography, outlined markers, solid categorical colors, Lucide tools and the compact legend. G25 Views remains an interaction reference for legend gestures and analysis cycles. This document supersedes the former replica identity.
 
 **Key Characteristics:**
-- 32 px icon-only rail; 47 px plot-control strip; 31 px controls; 380 px right Data panel.
-- Native hover modebar with original G25 Custom SVG icons.
-- White chart, faint ticks, light grid and source margins.
-- Bootstrap system typography for controls; native Plotly typography for the graph.
 
-This refresh records the explicitly authorized source-led replacement. Authority: PRODUCT.md, .impeccable/surfaces/pca.md, docs/G25_PARITY.md and the SHIP verdicts in .impeccable/review/parity/finish-review.md and .impeccable/review/database/finish-review.md. Implementation sources: src/main.tsx, src/styles.css, src/App.tsx, src/components/PcaChart.tsx, src/components/DatabasePanel.tsx, src/domain/figure.ts and src/domain/markers.ts. No shipping raster assets.
+- One compact tool/identity strip with right-aligned brand.
+- Collapsible, resizable left panels beside an uninterrupted chart.
+- Neutral chrome, explicit metadata scope and categorical plot color.
+- Local data, readable ticks, dense tables and immediate plot controls.
+
+Authority: PRODUCT.md, .impeccable/surfaces/pca.md and the SHIP verdict in .impeccable/review/workspace/final-review.md. Tokens and excerpts derive from src/styles.css, src/App.tsx, DatabasePanel, AdvancedSearch, PlotToolbar, PanelIcon, PcaChart, PcaLegend, PlotlyCredit, src/domain/markers.ts and figure.ts. No raster assets ship.
 
 ## Colors
 
-Bootstrap 4.6.1 owns blue actions, gray form controls and white surfaces. Frontmatter preserves every literal color in src/styles.css, relevant Bootstrap states and the graph's actual defaults. Plotly grid is its computed rgb(238, 238, 238); tick labels deliberately retain #ddd. The rail uses the live --rail and --rail-current properties.
+### Primary
 
-The numbered marker tokens preserve source array order: 31 PCA_views colors and 11 original G25 colors. They are categorical identities, not UI accents. Beyond 31 outlined groups, markers.ts generates a golden-angle hue color. Outlines multiply each RGB channel by 0.58 and use a 0.8 px stroke. Figure rendering sets opacity 0.8 and sizes 10/11 px minus 3/6 px for the medium/small cycles, overriding the marker helper's standalone size/opacity defaults. Original G25 appearance cycles numeric symbols 0/13/14/15; outlined appearance cycles 13 source symbols.
+Population blue identifies selected populations using pale fill and a thin matching border. Brighter blue and a pale halo identify focused search. These selection accents are independent of plot group identity.
 
-Hull fills append hexadecimal alpha 30 to the group color, boundaries append 45; opacity cycles 0.9/0.6/0.3. Two-point hull lines use width 2 and opacity 0.2. Regression uses width 2, dotted lines and opacity 0.5. Movable group labels use the documented translucent white, white border and group-colored arrows with alpha aa.
+### Secondary
 
-Population selections use pale blue #e4efff, #a9caff borders and #0056b3 text. Individual selections use pale purple #f2eafa, #d0b5e4 borders and #653b83 text. These colors distinguish selection scope, independently of plot group colors. Result headings use #f8f9fa; row hover uses #f1f6fd.
+Individual purple identifies selected genetic IDs. Keep its text, pale surface and border together to preserve the population/individual distinction.
 
-**The Data Color Rule.** Use marker palettes for plot group identity; keep interface chrome in Bootstrap blue and neutral gray, with purple reserved for individual selection in the Data panel.
+### Tertiary
+
+The 31 numbered marker tokens preserve PCA_views' ordered solid palette. Thirteen silhouettes and darker outlines reinforce categorical separation. The KD-tree nearest-centroid heuristic favors different nearby appearances; it does not guarantee unlimited unique color/shape combinations. Golden-angle fallback colors apply beyond the base palette. Outlines multiply RGB channels by 0.58 with a 0.8 px stroke; default opacity is 0.9.
+
+### Neutral
+
+White holds the graph and picker; warm near-whites separate Advanced search and headers. Fine neutral rules establish panel scope. Charcoal grounds the navigation rail. Mid-gray numeric ticks remain readable over light grids. Error feedback uses a pale red surface with muted red text and border.
+
+**The Data Color Rule.** Reserve marker colors for plot identity; use blue and purple selection colors for population and individual scope.
 
 ## Typography
 
-The UI inherits Bootstrap's full system stack in frontmatter, with a 1rem body and 1.5 line height. Buttons, input, menus and addition switches use 0.875rem (14 px at the default root). Marker choice uses 0.8rem (12.8 px). Axis labels are 11 px and their selects are 12 px; error copy is 12 px / 1.5. Panel text is 14 px; search and population rows use 13 px; hints, chips, nested samples, manual coordinates and status use 12 px. Counts inside chips deliberately use 10 px tabular numerals at 0.85 opacity; panel headings use weight 600. Chip removal uses a compact SVG button.
+All UI and graph text uses Arial, Helvetica, sans-serif. This explicit user-pinned PCA_views font choice is intentional. There is no display font or decorative heading hierarchy.
 
-Plotly separately supplies its native "Open Sans", verdana, arial, sans-serif stack: 12 px graph text, explicit 17 px title, optional 15 px subtitle, 11 px movable group labels and 9 px static/point labels. The interface has no display heading or monospace coordinate-input treatment.
+Body controls and numeric graph ticks use 12 px regular type; panel headings use 12 px at weight 600. Search labels use 11 px at weight 600. Table cells and legend names use 11 px regular. Chips use 11.5 px with 1.4 line height; hints use 10.5 px with 1.5 line height. Counts use 10 px tabular numerals; legend counts use 9 px. Optional plot subtitles use 14 px; group labels use 11 or 9 px and point labels use 9 px.
+
+**The Working Type Rule.** Preserve compact Arial controls and readable numeric ticks; use weight and placement for hierarchy.
 
 ## Layout
 
-A flex shell fills 100dvh; body minimum width is 1040 px and overflow is hidden. Supported reviewed widths are 1280, 1440 and 1600 px, with no mobile breakpoint. The rail is 32 px wide with 5 px top padding and 32×36 px icon buttons; icons are 18 px. Future distances/models are disabled and identified by accessible names/tooltips, without visible text.
+The desktop flex shell fills 100dvh with a minimum body width of 1100 px. Reviewed widths are 1280, 1440 and 1600 px. A single top strip measures 37 px including its border; tools span the available width and the brand sits at the right. The first action is the right-panel legend glyph; the second is the left-data-panel glyph. Most SVG tools are 16 px; zoom symbols are 17 px. The dark navigation rail is 32 px wide with 35 px tall buttons.
 
-The source plot-control row has 8 px padding and 31 px controls, totaling 47 px. Manual coordinate entry has moved into the Data panel; the optional custom-name input remains 10em without growth. X/Y selects are 68×29 px, inside a 6 px-padded group with 6 px gaps and 3 px label gaps. The chart fills all remaining space between the rail and the fixed 380 px right panel. Its explicit margins are left 50, right 20, top 52, bottom 18 px; native legend placement may expand internal margins.
+The default left picker is 380 px wide plus a 5 px pointer/keyboard separator. Advanced search opens to the picker's left: compact total width is 720 px with the picker fixed at 300 px. Table mode widens the advanced portion. Maximum panel width is window width minus 392 px, retaining about 355 px of chart beside the separator. Collapsing data restores the full remaining graph; restoration retains selection and criteria.
 
-The panel is a bordered white flex column with a 47 px heading and 14 px horizontal insets. Loading and scaling sit above a wrapping chip/search box (86 px minimum, 210 px maximum height). Results use the available height with independent scrolling; manual entry and the panel selection-status footer remain below. The textarea is vertically resizable from 76 to 180 px. The panel itself can scroll when height is constrained.
+Panel headings are 36 px tall with 10 px horizontal insets. The wrapping chip field ranges from 72 to 210 px tall. Its anchored full-width suggestion menu scrolls independently. Manual paste follows directly below search. Advanced criteria scroll within at most 42% of their column. The metadata table fills the remainder with sticky headers and virtualized 28 px rows.
 
-Dropdowns anchor to the strip. Addition options align right, have 265 px minimum width and remain a compact menu. Other menus scroll within calc(100dvh - 58px). Error feedback overlays at top 47 px / left 8 px so it does not resize the plot. The native modebar sits right 1rem with translate(0, -0.8rem), appears on graph hover and remains visible with keyboard focus.
-
-**The Source Fidelity Rule.** Preserve the pinned Custom PCA composition, control sizing and native hover toolbar.
+Plot margins are left 46, right 18, top 20 (42 with subtitle), bottom 26 px. Light grids and numeric ticks remain; PC axis titles, zero lines and axis/frame lines are absent. The legend docks top-right, 14 px from the right and 12 px from the top, at 215 px wide and at most 36% of the chart. Maximum height is chart height minus 62 px. The official bundled Plotly mark is a 16 px SVG in a 20 px link, 6 px from the right and 5 px from the bottom.
 
 ## Elevation & Depth
 
-Flat surfaces use borders, source colors and native plot geometry. There are no card shadows or modal layers. Dropdown borders use Bootstrap's translucent black; input/button focus uses Bootstrap blue shadows plus the explicit 2 px keyboard outline with 1 px offset. Rail focus moves the offset inward to -2 px. Plot annotations retain text-shadow: 1px 1px rgba(0, 0, 0, 0.2). Exact focus/shadow and 150 ms Bootstrap transition values live in the sidecar; reduced-motion behavior follows the imported Bootstrap stylesheet.
+The workspace is flat: borders, tone and adjacency communicate structure. The anchored search menu alone uses a restrained shadow (0 5px 16px rgba(0, 0, 0, 0.1)); the focused chip field uses a 2 px pale-blue halo. Keyboard focus uses a 2 px gray outline with 1 px offset. Buttons change surface immediately; no decorative animation or card layering is established.
 
 ## Shapes
 
-Small controls use Bootstrap's 0.2rem corners; dropdown surfaces use 0.25rem. Joined input-group edges are square; menu summaries explicitly have radius 0. Plotly markers, hulls and dotted regression lines carry data geometry. Panel search boxes and rectangular chips use 3 px corners; member-selection checks are 16 px squares with 2 px corners. The interface does not use decorative cards or pill-shaped chips.
+Controls, chip fields and chips use 3 px corners. Legend and selection checks use 2 px corners. Icons are compact line drawings, with filled panel segments distinguishing data and legend toggles. Marks use the 13 PCA_views silhouettes; default marker size is 7 px with a 7 → 5 → 9 px cycle. The plot stays white and unframed.
 
 ## Components
 
-- **Outline actions:** Reset plot and Run PCA use btn-outline-primary; hover/active fills blue with white text, and disabled/busy states follow Bootstrap.
-- **Data panel:** local TSV load/replace action, visible file/count status and independent Scaled/Raw source controls; loading text changes to “Loading TSV…”. Search matches population/group IDs and genetic IDs. Wrapping removable blue population chips and purple individual chips share the search box. A separate chevron expands members; selecting a population and toggling a member are separate actions. Selected rows show checked states, and population exclusions retain their group chip. Exact genetic-ID Enter selects the individual; arrow keys navigate results and Escape returns to search.
-- **Manual coordinates:** an initially open native “Paste coordinates” disclosure contains the three-row textarea, independent scaling select, Add coordinates action and shortcut hint (Ctrl/⌘ + Enter). Invalid input exposes aria-invalid and an adjacent red alert using the existing error surface/border tokens; failed manual input or TSV imports retain valid data and plot. Blank manual entry disables Add. No-match results name both searchable ID types.
-- **Selection feedback:** additions/removals deduplicate and automatically refit PCA. The panel footer announces updating, selected sample counts and errors. Fewer than three samples or rank-deficient selections clear the chart with feedback. Run PCA also refits; Reset clears selection and manual catalogue while retaining the loaded database, draft text and options.
-- **Dropdowns:** native details/summary plus Bootstrap styling. Save retains all 18 source export sizes; grouping and gear options remain in the plot-control strip. Source scaling controls live beside TSV loading and manual entry in the panel. Escape/outside click close menus; keyboard focus is visible.
-- **Rail:** source Lucide SVG paths at 18 px, active gray background, white active icon and muted disabled icons. It stays icon-only.
-- **Component selectors:** compact X/Y controls; unavailable/duplicate components are disabled and the tooltip reports explained variance.
-- **Chart:** native Plotly camera/zoom/pan/selection/fit/reset plus ten applicable original G25 SVG actions. Point-label, marker-size, label-style and hull-opacity cycles remain source-defined; annotations are movable. Wheel zoom anchors to the cursor. No imitation static toolbar substitutes for the native modebar.
+- **Direct toolbar:** neutral icon buttons with gray pressed state. Panel glyphs lead; pan, zoom, selection, fit, labels, hulls, regression and appearance cycles follow. Labels, hulls and regression start off. Component selectors, grouping and PNG export remain direct controls. Tooltips and accessible names identify actions.
+- **Navigation rail:** charcoal and icon-only; the active icon is white on a lighter charcoal block. Planned distances/models remain disabled.
+- **Picker and chips:** wrapping blue populations/purple individuals, separate edit/remove actions and anchored suggestions. Exact genetic IDs have priority, then exact/prefix/token/compact/fuzzy ranking. Arrow keys navigate, Enter selects and Escape returns to search. Group expansion and selection are separate actions. Selection automatically refits.
+- **Manual entry:** nearby Paste coordinates disclosure with textarea, independent scaling, Add coordinates and Ctrl/⌘ + Enter. Inline errors retain the last valid data and chart.
+- **Advanced search:** AND criteria expose operators, values, explicit missing inclusion/counts and complete match counts. Add all matches targets the complete result set and deduplicates. Criteria scope browsing without removing plotted samples. Property selection keeps native semantics under a transparent select, with a visible React label and Lucide chevron. Controls are keyed by view identity for stable paint. Reopening preserves criteria; new IDs use maximum current ID plus one.
+- **Metadata table:** sticky warm-neutral header, 28 px virtualized rows, clipped cells and pale selection/hover surfaces. The picker remains on the right when expanded.
+- **Legend:** thin-border PCA_views panel with shared swatches, counts, explicit eyes and truncated names with full tooltips. Single click toggles visibility; double click isolates/restores. Neither gesture refits the cohort. Export respects legend state.
+- **Chart and credit:** local Plotly SVG scatter with direct controls and a separate official bottom-right logo link. Hidden populations preserve fitted coordinates. The native modebar is disabled. Labels, hulls, regression and point labels remain optional toggles/cycles.
 
-The sidecar contains five self-contained HTML/CSS excerpts of the actual action, Data panel/chip-search/manual-entry pattern, dropdown, rail and X/Y controls. Classes are scoped only for preview; Bootstrap declarations are included so no external runtime or CSS bundle is needed.
+The sidecar contains five source-derived, self-contained HTML/CSS snippets for panel tools, coordinate entry/action, population/individual chips, navigation rail and legend. Preview classes are scoped, SVGs inline, and hover/focus states included.
 
 ## Do's and Don'ts
 
-- Do retain the 32 px rail, 47 px plot-control strip, 380 px Data panel and remaining-space chart at supported desktop widths.
-- Do preserve the original SVG tools, compact dropdowns and native chart interactions.
-- Do keep individual points, outlined group marks and the selectable original G25 appearance.
-- Do keep the last valid plot visible when coordinate validation fails.
-
-- Don't reintroduce the rejected dashboard shell, permanent plot toolbar or global chart-status footer; data entry and selection status belong in the authorized Data panel.
-- Don't add settings dialogs, regional PCA features or mobile layouts to this approved surface.
-- Don't replace Bootstrap system typography or source-pinned faint ticks with the previous design tokens.
+- Do preserve the compact strip, collapsible left data area and continuous chart.
+- Do preserve population/individual selection colors and matching plot/legend marks.
+- Do keep metadata browsing separate from plotted cohort and visibility state.
+- Do keep keyboard focus, readable numeric ticks and source counts explicit.
+- Don't restore Bootstrap styling, source SVG toolbar icons, a separate input strip or the prior right-panel composition.
+- Don't add Run PCA, Settings/gear menus, a duplicate native modebar, PC axis titles or frame lines.
+- Don't add mobile layouts, decorative imagery or optional capabilities without user direction.

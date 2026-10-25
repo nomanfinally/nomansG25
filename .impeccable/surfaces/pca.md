@@ -1,29 +1,31 @@
-# G25 PCA workspace
+# G25 analysis workspace
 
-Mode: Operate. Code-first web application. The user explicitly rejected the prior interpretation and pinned the original G25 Views UI/UX, including tools, icons, sizing and hover behavior. Their latest correction keeps Custom PCA only; regional datasets, base-layer controls and Celto-Germanic are excluded by that correction.
-
-The reference is the local upstream g25views checkout at 6422611. Captured original evidence is under .impeccable/review/parity/reference-*.png and reference-metrics.json. The Bootstrap 4.6.1 stylesheet, reference form classes, 47 px input strip, original gear SVG and applicable custom modebar SVG paths are reused as the authority. The previous dashboard shell, permanent icon toolbar, boxed chart and status footer remain excluded. The later database request supersedes the previous ban on a coordinate panel.
-
-All Custom PCA behavior is mapped in docs/G25_PARITY.md: grouping modes, main/subgroup creation options, original point-label/marker-size/group-label/hull-opacity cycles, geometry visibility, subtitle and 18 image sizes. Native Plotly supplies hover-only camera/zoom/pan/selection/fit/reset and legend interactions. The original's base-only visibility/hover/color/labels controls have no data layer in Custom PCA and are outside this scoped build.
-
-The additions requested on top of this base are a 32 px dark icon-only rail, wheel zoom, the clearer outlined PCA_views marker appearance (with original marker option), component selectors, desktop-only adaptation and a single viewport-filling plot. Distances and Models remain disabled future tools. No settings dialogs, new palettes, regional references, metadata tables or standalone plotting engine. The latest user request explicitly adds a right Data panel as described below.
-
-Defaults match the original Custom plotting flow: Aggregated; scaled coordinates; group labels/hulls/regression created by default; point labels off; big markers; movable group labels; high hull opacity. Selection changes automatically refit Custom PCA. Run also refits and applies creation options. Reset plot clears selection/results and manual catalogue, retains the loaded database/draft text/options. Invalid manual input or failed imports retain existing data/results.
+Mode: Operate. Code-led desktop app. The latest user request explicitly moves away from the prior G25 Views visual replica toward the user's PCA_views, ArchaeoBase and G25 Manager. Admix_IRE remains the exact search-interaction authority. This supersedes the previous right panel, 47 px source input strip, gear menu, source SVG tools, faint ticks and large marker defaults.
 
 ## Direction contract
 
-THESIS: Reproduce G25 Views' Custom PCA workspace, then add only the user's specified improvements. The reference itself, not a fresh aesthetic interpretation, owns the composition.
+THESIS: A compact academic G25 workspace whose left source/browsing panels and direct plot tools feel native to the user's existing applications.
 
-OWN-WORLD: Bootstrap 4.6.1 system typography and 31 px controls in a 47 px strip; white Plotly graph, faint tick labels and light grid; original SVG hover-tool icons. A 32 px charcoal rail has icons only. Data marks can use PCA_views colors, outlines and shapes.
+OWN-WORLD: PCA_views' 12 px Arial/Helvetica UI, 7 px outlined points, solid palette and varied silhouettes, Lucide icons and compact legend. ArchaeoBase/G25 Manager contribute white/warm-neutral panels, clear scope boundaries, draggable separators and dense metadata tables. Admix_IRE contributes blue/purple chips, an anchored full-width candidate menu and ranked exact/prefix/token/compact/subsequence search. No decorative imagery or settings system.
 
-STORY: Load local TSV or paste named G25 rows in the right Data panel; search group/genetic IDs and select chips; selection automatically refits; choose grouping; explore with the original hover tools and cycles; export through the original size list. Manual entry and database search share the requested right panel; no settings dialog interrupts the chart.
+STORY: Load TSV or paste nearby; search populations/genetic IDs; select chips and fit automatically. Open Advanced search to the left of the picker, refine metadata criteria, enlarge it into a table, and select rows or all matches. Collapse the entire data area to regain chart space. Direct toolbar icons control the plotted view; the legend toggles visibility without changing the fitted cohort.
 
-FIRST VIEWPORT: The rail consumes 32 px. A 380 px right Data panel holds loading, search chips, expandable results and manual entry. One source-sized plot-control row occupies 47 px above the graph. The graph fills the remaining area, with title inside its 52 px top margin and a modebar revealed by hovering the graph. No permanent plot toolbar, hero, data card or footer. Desktop widths 1280/1440/1600 are supported.
+FIRST VIEWPORT: One 37 px top strip combines tool identity and plot controls. A 32 px dark rail precedes a default 380 px left population picker with a draggable separator. The remaining workspace holds one continuous chart with no PC axis titles or axis/frame lines. The top strip’s extreme-left panel icon toggles the PCA_views-style legend; the adjacent panel icon toggles the left data area. Advanced search expands the left data area into two columns; table mode widens the advanced column, keeping the picker on its right. The area can collapse entirely and restore without losing search/selection state. Desktop1280/1440/1600 px; no mobile deliverable.
 
-FORM: Precisely user-pinned source interface, with reference captures and a source-behavior parity matrix. No concept tournament or image composition applies.
+FORM: User-pinned existing application systems; no visual-world tournament or image comp. Preserve numerical engine and local-data guarantees. No Run PCA or gear/settings menu; toolbar label/hull/regression toggles act immediately. A small official bundled Plotly mark sits at the chart’s bottom right, separate from the toolbar. Retain source legend single/double-click gestures with added explicit eye buttons.
 
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+FINISH: Render and validate data, criteria, expanded table, collapsed/resized panels, toolbar/legend interactions, search, empty/error states and PNG export. Finish review and token-bearing DESIGN.md/sidecar are required. No raster assets ship.
 
-## Database extension authority
+## Reference evidence
 
-The user supplied Admix_IRE chip-search screenshots and its local source, plus an Archaeobase TSV. Retain the existing Bootstrap/Plotly world and adapt the familiar wrapping chips, full-width search and population/sample results inside a 380 px right panel. Load and manual entry remain visible; results scroll in available height. Whole-group selection is one chip; individual selection is one sample chip; expansion reveals toggleable member rows. No drag/presets/bookmarks/metadata table or backend is implied. Input parsing is worker-based; search is in memory. Each selection change refits, without a confirmation dialog.
+PCA_views: src/styles.css, components/PlotTools.tsx, Legend.tsx, MarkerSwatch.tsx; domain/colors.ts and viewState.ts. Its actual default marker size is7px, type12pxArial.
+
+ArchaeoBase: src/app/globals.css, components/Explorer.tsx panel splitter, DataTable.tsx virtualization patterns and FilterBuilder.tsx. G25 Manager: styles.css and academic panel scope guidance. These remain read-only references.
+
+Admix_IRE: src/components/shared/PopulationField.jsx and shared/searchText.cjs. The typed search port retains its prepared-field ranking and matching-sample population promotion. User-requested expandable group members remain available.
+
+## Scope guards
+
+Advanced criteria affect database browsing. Add all targets the complete matching rows, not the visible virtualized page. Missing metadata is explicit; no inferred sex/date/region values. Population exclusions prevent filtered group selection from including non-matching members. Geometry visibility and hidden populations do not refit; selection changes do. Only Custom PCA is implemented.
+
+The latest user corrections further prioritize chart area: a single compact strip replaces separate app/toolbars; panel-style glyphs control data and legend; no PC1/PC2 axis titles, no plot border/axis lines; retain the light G25-style continuous plot and restore the Plotly icon in the bottom-right corner. The metadata property selector uses native semantics with a visible React-rendered label and chevron so selected text paints reliably in both compact/table modes.
