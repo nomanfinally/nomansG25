@@ -47,7 +47,7 @@ test("PCA tools use panel toggles, small markers and a continuous chart with Plo
       .locator(".plot-toolbar button")
       .first()
       .getAttribute("aria-label"),
-  ).toBe("Toggle legend");
+  ).toBe("Toggle data panel");
   expect(await plot(page).evaluate((el: any) => el.data[0].marker.size)).toBe(
     7,
   );
@@ -437,3 +437,40 @@ test("desktop resize waits for Plotly and keeps chart and panels within the view
     .toBe(355);
   expect(await page.evaluate(() => document.body.scrollWidth)).toBe(1280);
 });
+
+test("toolbar unfolds and folds cleanly without scrollbars, and export dialog operates with PCA_views options", async ({
+  page,
+}) => {
+  await load(page);
+
+  // Check toolbar has no overflow scrollbar
+  const overflowX = await page
+    .locator(".plot-toolbar-inner")
+    .evaluate((el) => getComputedStyle(el).overflowX);
+  expect(overflowX).not.toBe("scroll");
+  expect(overflowX).not.toBe("auto");
+
+  // Fold toolbar
+  await page.getByRole("button", { name: "Fold toolbar", exact: true }).click();
+  await expect(page.locator(".plot-toolbar-inner")).not.toBeVisible();
+  const unfoldBtn = page.getByRole("button", { name: "Unfold toolbar", exact: true });
+  await expect(unfoldBtn).toBeVisible();
+
+  // Unfold toolbar back
+  await unfoldBtn.click();
+  await expect(page.locator(".plot-toolbar-inner")).toBeVisible();
+
+  // Open Export dialog
+  await page.getByLabel("Save PNG", { exact: true }).click();
+  const dialog = page.locator(".export-dialog");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel("Export title")).toBeVisible();
+  await expect(dialog.getByLabel("Export subtitle")).toBeVisible();
+  await expect(dialog.getByLabel("Include population legend")).toBeVisible();
+  await expect(page.locator(".export-options button")).toHaveCount(18);
+
+  // Close Export dialog
+  await page.getByRole("button", { name: "Close Export", exact: true }).click();
+  await expect(dialog).not.toBeVisible();
+});
+

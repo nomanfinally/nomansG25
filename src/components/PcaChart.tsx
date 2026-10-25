@@ -43,6 +43,7 @@ export interface ChartHandle {
   reset: () => void;
   fit: () => void;
   savePng: (width?: number, height?: number) => Promise<void>;
+  capturePng: (width?: number, height?: number) => Promise<string>;
 }
 interface Props {
   result: PcaResult | null;
@@ -62,14 +63,10 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
     const queue = useRef<Promise<unknown>>(Promise.resolve());
     const renderId = useRef(0),
       renderedAxes = useRef("");
-    const offsets = useRef(new Map<string, LabelOffset>()),
-      offsetRevision = useRef(props.revision);
+    const offsets = useRef(new Map<string, LabelOffset>());
     const [ready, setReady] = useState(false),
       [error, setError] = useState("");
-    if (offsetRevision.current !== props.revision) {
-      offsets.current.clear();
-      offsetRevision.current = props.revision;
-    }
+
     const figure = useMemo(
       () =>
         props.result
@@ -254,35 +251,44 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
 
     useEffect(() => {
       if (!ready || !api.current || !host.current) return;
-      const { result, view, revision } = props,
-        axesKey = `${revision}:${view.x}:${view.y}`;
+      const { result, view, revision } = props;
+      const axesKey = `${revision}:${view.x}:${view.y}`;
+      const heading = [view.title, view.subtitle]
+        .filter(Boolean)
+        .map(escapeHtml)
+        .join("<br>");
       const axis = {
         zeroline: false,
-        spikemode: "across" as const,
-        spikedash: "dot" as const,
-        spikethickness: 1,
-        spikesnap: "data" as const,
-        showspikes: false,
-        tickfont: { color: "#666666", size: 12 },
+        showgrid: view.grid,
         gridcolor: "#eeeeee",
         showline: false,
         linecolor: "#999999",
+        tickfont: { color: "#666666", size: 12 },
+        showspikes: view.spikes,
+        spikemode: "across" as const,
+        spikesnap: "cursor" as const,
+        spikedash: "dot" as const,
+        spikethickness: 1,
+        spikecolor: "#888888",
       };
       const layout: Partial<Layout> = {
         xaxis: { ...axis },
-        yaxis: { ...axis },
-        hovermode: "closest",
+        yaxis: {
+          ...axis,
+          scaleanchor: view.equalScale ? "x" : undefined,
+          scaleratio: 1,
+        },
+        hovermode: view.hover === "off" ? false : "closest",
         dragmode: view.dragMode,
         font: {
           family: "Arial, Helvetica, sans-serif",
           size: 12,
           color: "#363636",
         },
-        margin: { l: 46, r: 18, t: view.subtitle ? 42 : 20, b: 26 },
-        title: {
-          text: view.subtitle ? escapeHtml(view.subtitle) : "",
-          font: { size: 14 },
-        },
+        margin: { l: 46, r: 18, t: heading ? (view.subtitle ? 46 : 32) : 20, b: 26 },
+        title: heading
+          ? { text: heading, font: { size: 14 } }
+          : undefined,
         showlegend: false,
         legend: {
           itemclick: "toggle",
@@ -383,7 +389,7 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
             width: width ?? host.current.clientWidth,
             height: height ?? host.current.clientHeight,
             filename:
-              "G25 Custom PCA" +
+              (latest.current.view.title || "G25 Custom PCA") +
               (latest.current.view.subtitle
                 ? " " + latest.current.view.subtitle
                 : ""),
@@ -410,11 +416,54 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
             exportHost.remove();
           }
         },
+        async capturePng(width, height) {
+          await queue.current;
+          if (!api.current || !host.current || !ready)
+            throw new Error("The chart is still loading. Try again.");
+          const w = width ?? host.current.clientWidth ?? 800;
+          const h = height ?? host.current.clientHeight ?? 400;
+          const exportHost = document.createElement("div");
+          exportHost.style.cssText = "position:fixed;left:-10000px;top:0;";
+          document.body.appendChild(exportHost);
+          try {
+            await api.current.newPlot(
+              exportHost,
+              (host.current as unknown as ChartElement).data,
+              {
+                ...(host.current as unknown as ChartElement).layout,
+                width: w,
+                height: h,
+                showlegend: latest.current.view.legend,
+                margin: { l: 46, r: 18, t: 30, b: 26 },
+              },
+              { displayModeBar: false, displaylogo: false },
+            );
+            return await api.current.toImage(exportHost, {
+              format: "png",
+              width: w,
+              height: h,
+            });
+          } finally {
+            api.current.purge(exportHost);
+            exportHost.remove();
+          }
+        },
       }),
       [ready],
     );
     return (
-      <>
+      <div
+        className={`plot-container ${props.view.aspectRatio !== "full" ? "has-ratio" : ""}`}
+        style={
+          {
+            "--plot-ratio":
+              props.view.aspectRatio === "full"
+                ? 1
+                : Number(props.view.aspectRatio.split(":")[0]) /
+                  Number(props.view.aspectRatio.split(":")[1]),
+          } as React.CSSProperties
+        }
+      >
         <div
           className="pca-chart"
           ref={host}
@@ -426,7 +475,7 @@ export const PcaChart = forwardRef<ChartHandle, Props>(
             {error}
           </p>
         )}
-      </>
+      </div>
     );
   },
 );

@@ -6,6 +6,7 @@ import {
   Columns2,
   Maximize2,
   ChevronDown,
+  Search,
 } from "lucide-react";
 import type { CatalogueState } from "../hooks/useCatalogue";
 import type { CatalogueRow } from "../domain/database";
@@ -13,12 +14,16 @@ import {
   fieldValue,
   filterError,
   isMissing,
+  compileSearch,
   type MetadataFilter,
 } from "../domain/filters";
+
 export function AdvancedSearch({
   catalogue,
   criteria,
   onCriteria,
+  regexScope,
+  onRegexScope,
   matches,
   scope,
   table,
@@ -28,6 +33,8 @@ export function AdvancedSearch({
   catalogue: CatalogueState;
   criteria: MetadataFilter[];
   onCriteria: (value: MetadataFilter[]) => void;
+  regexScope: { field: string; query: string };
+  onRegexScope: (scope: { field: string; query: string }) => void;
   matches: CatalogueRow[];
   scope: CatalogueRow[];
   table: boolean;
@@ -44,13 +51,21 @@ export function AdvancedSearch({
     ],
     [catalogue.database],
   );
-  const [scroll, setScroll] = useState(0),
-    [height, setHeight] = useState(400);
+
+  const [scroll, setScroll] = useState(0);
+  const [height, setHeight] = useState(400);
   const scroller = useRef<HTMLDivElement>(null);
+
+  const compiled = useMemo(
+    () => compileSearch(regexScope.query),
+    [regexScope.query],
+  );
+
   useEffect(() => {
     setScroll(0);
     scroller.current?.scrollTo(0, 0);
   }, [matches]);
+
   useEffect(() => {
     if (!scroller.current) return;
     const observer = new ResizeObserver((entries) =>
@@ -59,16 +74,20 @@ export function AdvancedSearch({
     observer.observe(scroller.current);
     return () => observer.disconnect();
   }, [table]);
+
   const chosen = useMemo(
     () => new Set(catalogue.selected.map((row) => row.id)),
     [catalogue.selected],
   );
-  const start = Math.max(0, Math.floor(scroll / 28) - 6),
-    end = Math.min(matches.length, start + Math.ceil(height / 28) + 14);
+
+  const start = Math.max(0, Math.floor(scroll / 28) - 6);
+  const end = Math.min(matches.length, start + Math.ceil(height / 28) + 14);
+
   const patch = (id: number, change: Partial<MetadataFilter>) =>
     onCriteria(
       criteria.map((rule) => (rule.id === id ? { ...rule, ...change } : rule)),
     );
+
   return (
     <section
       className={`advanced-search ${table ? "with-table" : ""}`}
@@ -78,9 +97,9 @@ export function AdvancedSearch({
         <h2>Advanced search</h2>
         <div className="heading-actions">
           <button
-            className="icon-button"
-            aria-label={table ? "Compact advanced search" : "Expand table view"}
-            title={table ? "Compact advanced search" : "Expand table view"}
+            className={`icon-button ${table ? "active" : ""}`}
+            aria-label={table ? "Compact table view" : "Expand table view"}
+            title={table ? "Compact table view" : "Expand table view (full width)"}
             aria-pressed={table}
             onClick={onTable}
           >
@@ -89,21 +108,78 @@ export function AdvancedSearch({
           <button
             className="icon-button"
             aria-label="Close advanced search"
+            title="Close advanced search"
             onClick={onClose}
           >
             <X size={15} />
           </button>
         </div>
       </header>
+
+      {/* Regex-Compatible Property Search Bar (G25_Manager / ArchaeoBase style) */}
+      <div className="advanced-regex-bar" role="search" aria-label="Metadata search">
+        <div className="regex-scope-row">
+          <div className="property-select regex-property-select">
+            <select
+              aria-label="Search scope property"
+              value={regexScope.field}
+              onChange={(e) =>
+                onRegexScope({ ...regexScope, field: e.target.value })
+              }
+            >
+              <option value="All fields">All fields</option>
+              {columns.map((col) => (
+                <option key={col} value={col}>
+                  {col}
+                </option>
+              ))}
+            </select>
+            <span className="property-value" aria-hidden="true">
+              {regexScope.field}
+            </span>
+            <ChevronDown size={13} aria-hidden="true" />
+          </div>
+          <div className="regex-input-wrapper">
+            <Search size={13} className="regex-search-icon" />
+            <input
+              type="text"
+              aria-label="Search text or regular expression"
+              placeholder="Search or /regex/…"
+              value={regexScope.query}
+              onChange={(e) =>
+                onRegexScope({ ...regexScope, query: e.target.value })
+              }
+            />
+            {regexScope.query && (
+              <button
+                type="button"
+                className="chip-remove"
+                aria-label="Clear regex search"
+                onClick={() => onRegexScope({ ...regexScope, query: "" })}
+              >
+                <X size={12} />
+              </button>
+            )}
+          </div>
+        </div>
+        {compiled.error && (
+          <p className="data-error regex-error" role="alert">
+            {compiled.error}
+          </p>
+        )}
+      </div>
+
+      {/* Structured Criteria Filters (G25_Manager style) */}
       <div className="advanced-criteria">
         <p className="section-hint">
-          Match all criteria. Search by group or genetic ID in the population
-          picker.
+          Match all criteria. Use the top bar for regex or field-specific queries.
         </p>
+
         {criteria.map((rule) => {
           const missing = scope.filter((row) =>
             isMissing(fieldValue(row, rule.field)),
           ).length;
+
           const values = [
             ...new Set(
               scope
@@ -113,6 +189,7 @@ export function AdvancedSearch({
           ]
             .sort()
             .slice(0, 80);
+
           return (
             <div
               className="criterion"
@@ -146,6 +223,7 @@ export function AdvancedSearch({
                   <X size={13} />
                 </button>
               </div>
+
               <div className="criterion-value">
                 <select
                   aria-label={`Operator ${rule.id}`}
@@ -174,6 +252,7 @@ export function AdvancedSearch({
                   ))}
                 </datalist>
               </div>
+
               <label className="missing-choice">
                 <input
                   type="checkbox"
@@ -185,6 +264,7 @@ export function AdvancedSearch({
                 Include missing{" "}
                 <span>({missing.toLocaleString()} in search scope)</span>
               </label>
+
               {filterError(rule) && (
                 <p role="alert" className="data-error">
                   {filterError(rule)}
@@ -193,6 +273,7 @@ export function AdvancedSearch({
             </div>
           );
         })}
+
         <div className="criteria-actions">
           <button
             className="text-button"
@@ -222,6 +303,7 @@ export function AdvancedSearch({
           )}
         </div>
       </div>
+
       <div className="advanced-results-heading">
         <span>{matches.length.toLocaleString()} matching samples</span>
         <div>
@@ -237,82 +319,87 @@ export function AdvancedSearch({
           </button>
           {!table && (
             <button
-              className="icon-button"
-              aria-label="Open advanced search table"
-              title="Open table"
+              className="text-button open-table-action"
               onClick={onTable}
             >
-              <Table2 size={15} />
+              Open table view
             </button>
           )}
         </div>
       </div>
-      {table ? (
+
+      {/* Virtualized Metadata Table */}
+      {table && (
         <div
+          className="metadata-table-scroll advanced-table-wrap"
           ref={scroller}
-          className="metadata-table-scroll"
+          tabIndex={0}
+          aria-label="Sample metadata table"
           onScroll={(e) => setScroll(e.currentTarget.scrollTop)}
         >
-          <table className="metadata-table">
+          <table className="metadata-table advanced-table">
             <thead>
               <tr>
-                <th aria-label="Selection" />
-                {columns.map((column) => (
-                  <th key={column} title={column}>
-                    {column}
-                  </th>
-                ))}
+                <th className="select-col" aria-label="Select row">
+                  <input
+                    type="checkbox"
+                    aria-label="Toggle all visible rows"
+                    checked={
+                      matches.length > 0 &&
+                      matches.every((r) => chosen.has(r.id))
+                    }
+                    onChange={(e) => catalogue.select(matches, e.target.checked)}
+                  />
+                </th>
+                <th>Group ID</th>
+                <th>Genetic ID</th>
+                {columns
+                  .filter((c) => c !== "Group ID" && c !== "Genetic ID")
+                  .map((col) => (
+                    <th key={col}>{col}</th>
+                  ))}
               </tr>
             </thead>
             <tbody>
               {start > 0 && (
-                <tr aria-hidden="true">
-                  <td
-                    colSpan={columns.length + 1}
-                    style={{ height: start * 28, padding: 0 }}
-                  />
-                </tr>
+                <tr
+                  style={{ height: start * 28 }}
+                  aria-hidden="true"
+                  className="table-spacer"
+                />
               )}
               {matches.slice(start, end).map((row) => (
-                <tr key={row.id} aria-selected={chosen.has(row.id)}>
-                  <td>
+                <tr
+                  key={row.id}
+                  aria-selected={chosen.has(row.id) || undefined}
+                  className={chosen.has(row.id) ? "selected-row" : ""}
+                >
+                  <td className="select-col">
                     <input
                       type="checkbox"
-                      aria-label={`Select table sample ${row.geneticId}`}
                       checked={chosen.has(row.id)}
+                      aria-label={`Select table sample ${row.geneticId}`}
                       onChange={() => catalogue.sample(row)}
                     />
                   </td>
-                  {columns.map((column) => (
-                    <td key={column} title={fieldValue(row, column)}>
-                      {fieldValue(row, column) || "—"}
-                    </td>
-                  ))}
+                  <td>{row.group}</td>
+                  <td>{row.geneticId}</td>
+                  {columns
+                    .filter((c) => c !== "Group ID" && c !== "Genetic ID")
+                    .map((col) => (
+                      <td key={col}>{row.metadata?.[col] ?? "–"}</td>
+                    ))}
                 </tr>
               ))}
               {end < matches.length && (
-                <tr aria-hidden="true">
-                  <td
-                    colSpan={columns.length + 1}
-                    style={{ height: (matches.length - end) * 28, padding: 0 }}
-                  />
-                </tr>
+                <tr
+                  style={{ height: (matches.length - end) * 28 }}
+                  aria-hidden="true"
+                  className="table-spacer"
+                />
               )}
             </tbody>
           </table>
-          {!matches.length && (
-            <p className="result-empty">No samples match these criteria.</p>
-          )}
-        </div>
-      ) : (
-        <div className="advanced-intro">
-          <Table2 size={20} />
-          <p>
-            Expand table view to inspect metadata and select samples directly.
-          </p>
-          <button className="text-button" onClick={onTable}>
-            Open table view
-          </button>
         </div>
       )}
     </section>

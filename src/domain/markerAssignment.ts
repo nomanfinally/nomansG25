@@ -1,57 +1,23 @@
 import { colors, symbols, groupMarker } from "./markers";
 import type { PcaResult } from "./pca";
 import type { Entry, PlotView } from "./figure";
-interface Node {
-  index: number;
-  axis: number;
-  left?: Node;
-  right?: Node;
-}
+
 type Position = [number, number];
-function tree(
-  indices: number[],
-  positions: Position[],
-  depth = 0,
-): Node | undefined {
-  if (!indices.length) return;
-  const axis = depth % 2;
-  indices.sort((a, b) => positions[a][axis] - positions[b][axis] || a - b);
-  const mid = indices.length >> 1;
-  return {
-    index: indices[mid],
-    axis,
-    left: tree(indices.slice(0, mid), positions, depth + 1),
-    right: tree(indices.slice(mid + 1), positions, depth + 1),
-  };
+
+export interface MarkerAppearance {
+  color: string;
+  symbol: string;
+  size: number;
+  opacity: number;
+  line: { color: string; width: number };
+  colorIndex: number;
+  symbolIndex: number;
 }
-function neighbors(
-  index: number,
-  root: Node | undefined,
-  points: Position[],
-  count = 16,
-) {
-  const found: { index: number; distance: number }[] = [];
-  function visit(node?: Node) {
-    if (!node) return;
-    const p = points[index],
-      q = points[node.index];
-    const distance = (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2;
-    if (node.index !== index) {
-      found.push({ index: node.index, distance });
-      found.sort((a, b) => a.distance - b.distance || a.index - b.index);
-      if (found.length > count) found.pop();
-    }
-    const delta = p[node.axis] - q[node.axis];
-    visit(delta < 0 ? node.left : node.right);
-    if (found.length < count || delta ** 2 <= found[found.length - 1].distance)
-      visit(delta < 0 ? node.right : node.left);
-  }
-  visit(root);
-  return found;
-}
+
 const rgb = (hex: string) =>
   [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
 const colorVectors = colors.map(rgb);
+
 const colorDistance = (a: number, b: number) =>
   Math.sqrt(
     colorVectors[a].reduce(
@@ -60,27 +26,36 @@ const colorDistance = (a: number, b: number) =>
       0,
     ),
   );
-const family = (symbol: number) =>
-  symbol === 0 || symbol >= 9
-    ? 0
-    : symbol === 5 || symbol === 6
-      ? 1
-      : symbol === 1 || symbol === 3
-        ? 2
-        : 3;
-const cache = new WeakMap<
-  PcaResult,
-  Map<string, ReturnType<typeof groupMarker>[]>
->();
-/** Deterministic local contrast: discourage similar colors AND silhouettes among nearest group centroids. */
+
+// Group symbols into visual shape families
+const family = (symbolIdx: number) => {
+  // 0: circle, 1: square, 2: tri-up, 3: diamond, 4: tri-down, 5: cross, 6: x,
+  // 7: tri-left, 8: tri-right, 9: hexagon, 10: pentagon, 11: star, 12: octagon
+  if (symbolIdx === 0 || symbolIdx === 9 || symbolIdx === 10 || symbolIdx === 12) return 0; // round / polygon
+  if (symbolIdx === 1 || symbolIdx === 3) return 1; // square / diamond
+  if (symbolIdx === 2 || symbolIdx === 4 || symbolIdx === 7 || symbolIdx === 8) return 2; // triangles
+  return 3; // crosses
+};
+
+/** Persistent group marker registry so dots/marker shape and color don't change once assigned */
+const persistentRegistry = new Map<string, MarkerAppearance>();
+
+export function resetMarkerRegistry() {
+  persistentRegistry.clear();
+}
+
+/**
+ * Deterministic local contrast algorithm:
+ * 1. Preserves existing assigned markers for known groups.
+ * 2. For newly added groups, chooses color & dot shape pairs that maximize visual
+ *    contrast against nearby groups in the active 2D projection.
+ */
 export function entryMarkers(
   result: PcaResult,
   entries: Entry[],
   view: Pick<PlotView, "x" | "y">,
-) {
-  const key = `${view.x}:${view.y}:${entries.map((entry) => entry.name).join("\u0000")}`;
-  const stored = cache.get(result)?.get(key);
-  if (stored) return stored;
+): MarkerAppearance[] {
+  // Compute 2D centroid position for each entry
   const positions: Position[] = entries.map((entry) => {
     let x = 0,
       y = 0;
@@ -90,6 +65,8 @@ export function entryMarkers(
     }
     return [x, y];
   });
+
+  // Calculate bounding ranges for normalized distance calculation
   const ranges = [0, 1].map((axis) => {
     let min = Infinity,
       max = -Infinity;
@@ -99,60 +76,114 @@ export function entryMarkers(
     }
     return Math.max(max - min, 1e-12);
   });
-  const normalized = positions.map(
-    (p) => [p[0] / ranges[0], p[1] / ranges[1]] as Position,
+
+  const normalized: Position[] = positions.map(
+    (p) => [p[0] / ranges[0], p[1] / ranges[1]],
   );
-  const root = tree(
-    entries.map((_, i) => i),
-    normalized,
-  );
-  const assignments: { color: number; symbol: number }[] = [];
-  const uses = new Map<number, number>();
+
+  // Keep track of how many times each (color, symbol), color, and symbol is used
+  const pairUsage = new Map<string, number>();
+  const colorUsage = new Map<number, number>();
+  const symbolUsage = new Map<number, number>();
+
+  for (const m of persistentRegistry.values()) {
+    const pairKey = `${m.colorIndex}:${m.symbolIndex}`;
+    pairUsage.set(pairKey, (pairUsage.get(pairKey) ?? 0) + 1);
+    colorUsage.set(m.colorIndex, (colorUsage.get(m.colorIndex) ?? 0) + 1);
+    symbolUsage.set(m.symbolIndex, (symbolUsage.get(m.symbolIndex) ?? 0) + 1);
+  }
+
+  // Assign markers for any entries not yet registered
   for (let i = 0; i < entries.length; i++) {
-    const near = neighbors(i, root, normalized).filter(
-      (n) => assignments[n.index],
-    );
-    let best = 0,
-      bestScore = -Infinity;
-    for (let c = 0; c < colors.length * symbols.length; c++) {
-      const color = c % colors.length,
-        symbol = Math.floor(c / colors.length);
-      let separation = near.length ? Infinity : 1;
-      for (const neighbor of near) {
-        const other = assignments[neighbor.index];
-        const contrast =
-          colorDistance(color, other.color) +
-          (symbol === other.symbol
-            ? 0
-            : family(symbol) !== family(other.symbol)
-              ? 0.8
-              : 0.35);
-        separation = Math.min(
-          separation,
-          contrast * (1 + Math.min(Math.sqrt(neighbor.distance), 1)),
-        );
-      }
-      // Prefer unused combinations, then visual contrast nearby; never tie color and shape periods together.
-      const score = separation - (uses.get(c) ?? 0) * 0.3 - c * 1e-7;
-      if (score > bestScore) {
-        bestScore = score;
-        best = c;
+    const entry = entries[i];
+    if (persistentRegistry.has(entry.name)) {
+      continue;
+    }
+
+    const pos = normalized[i];
+
+    // Find nearby entries that already have an assigned marker
+    const neighbors: { distance: number; marker: MarkerAppearance }[] = [];
+    for (let j = 0; j < entries.length; j++) {
+      if (i === j) continue;
+      const otherEntry = entries[j];
+      const otherMarker = persistentRegistry.get(otherEntry.name);
+      if (otherMarker) {
+        const otherPos = normalized[j];
+        const d2 = (pos[0] - otherPos[0]) ** 2 + (pos[1] - otherPos[1]) ** 2;
+        neighbors.push({ distance: Math.sqrt(d2), marker: otherMarker });
       }
     }
-    assignments[i] = {
-      color: best % colors.length,
-      symbol: Math.floor(best / colors.length),
+
+    // Sort neighbors by proximity (closest first)
+    neighbors.sort((a, b) => a.distance - b.distance);
+
+    let bestColorIdx = 0;
+    let bestSymbolIdx = 0;
+    let bestPenalty = Infinity;
+
+    // Test all combinations of 31 colors and 13 symbols
+    // Order pairs so that both color and symbol rotate systematically
+    for (let c = 0; c < colors.length; c++) {
+      for (let s = 0; s < symbols.length; s++) {
+        let penalty = 0;
+
+        // Base usage penalty to encourage variety across whole plot
+        const pairKey = `${c}:${s}`;
+        const pairsUsed = pairUsage.get(pairKey) ?? 0;
+        const colUsed = colorUsage.get(c) ?? 0;
+        const symUsed = symbolUsage.get(s) ?? 0;
+
+        penalty += pairsUsed * 1000;
+        penalty += colUsed * 15;
+        penalty += symUsed * 10;
+
+        // Proximity penalty against nearby neighbors in the plot
+        for (const { distance, marker } of neighbors) {
+          // Weight decays with distance: close neighbors have dominant influence
+          const weight = 1 / (distance * distance + 0.05);
+
+          // Identical symbol penalty (heavily penalize same dot shape nearby)
+          if (s === marker.symbolIndex) {
+            penalty += 120 * weight;
+          } else if (family(s) === family(marker.symbolIndex)) {
+            penalty += 40 * weight;
+          }
+
+          // Identical or close color penalty (heavily penalize same or similar colors nearby)
+          if (c === marker.colorIndex) {
+            penalty += 140 * weight;
+          } else {
+            const cd = colorDistance(c, marker.colorIndex);
+            if (cd < 0.4) {
+              penalty += (0.4 - cd) * 100 * weight;
+            }
+          }
+        }
+
+        if (penalty < bestPenalty) {
+          bestPenalty = penalty;
+          bestColorIdx = c;
+          bestSymbolIdx = s;
+        }
+      }
+    }
+
+    // Construct the assigned marker
+    const base = groupMarker(bestColorIdx);
+    const assigned: MarkerAppearance = {
+      ...base,
+      symbol: symbols[bestSymbolIdx],
+      colorIndex: bestColorIdx,
+      symbolIndex: bestSymbolIdx,
     };
-    uses.set(best, (uses.get(best) ?? 0) + 1);
+
+    persistentRegistry.set(entry.name, assigned);
+    const pairKey = `${bestColorIdx}:${bestSymbolIdx}`;
+    pairUsage.set(pairKey, (pairUsage.get(pairKey) ?? 0) + 1);
+    colorUsage.set(bestColorIdx, (colorUsage.get(bestColorIdx) ?? 0) + 1);
+    symbolUsage.set(bestSymbolIdx, (symbolUsage.get(bestSymbolIdx) ?? 0) + 1);
   }
-  const markers = assignments.map((style) => ({
-    ...groupMarker(style.color),
-    symbol: symbols[style.symbol],
-  }));
-  if (!cache.has(result)) cache.set(result, new Map());
-  // Bound the cache to the last few component/grouping combinations.
-  const bucket = cache.get(result)!;
-  if (bucket.size >= 6) bucket.delete(bucket.keys().next().value!);
-  bucket.set(key, markers);
-  return markers;
+
+  return entries.map((entry) => persistentRegistry.get(entry.name)!);
 }

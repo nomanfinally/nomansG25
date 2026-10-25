@@ -72,14 +72,6 @@ export function PcaLegend({
         <h2>
           Legend <span>{entries.length}</span>
         </h2>
-        <button
-          className="icon-button"
-          aria-label="Hide legend"
-          title="Hide legend"
-          onClick={onClose}
-        >
-          <X size={14} />
-        </button>
       </header>
       <div className="legend-actions">
         <button onClick={() => onHidden([])}>Show all</button>

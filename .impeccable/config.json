@@ -1,4 +1,5 @@
 {
+  "buildPath": "code",
   "detector": {
     "ignoreRules": [],
     "ignoreFiles": [],
@@ -10,5 +11,12 @@
         "reason": "Agent design decision accepted by the independent finish review: Arial/Helvetica intentionally follows the user-pinned G25 Views and PCA_views scientific interface references; Operate mode permits familiar system fonts."
       }
     ]
+  },
+  "hook": {
+    "enabled": true,
+    "limits": {
+      "maxFindings": 5,
+      "maxChars": 8000
+    }
   }
 }

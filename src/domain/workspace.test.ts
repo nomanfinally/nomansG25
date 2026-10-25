@@ -18,6 +18,7 @@ import {
   initialPlotView,
   createEntries,
   buildFigure,
+  imageSizes,
 } from "./figure";
 import { entryMarkers } from "./markerAssignment";
 const coords = (id: string, x: number, y: number) =>
@@ -123,3 +124,40 @@ test("nearby groups receive deterministic distinct color/shape pairs using the P
   expect((figure.traces[0] as any).marker.size).toBe(7);
   expect(figure.annotations.every((a) => a.visible === false)).toBe(true);
 });
+
+test("markers remain persistent and do not change shape or color when new populations are added", () => {
+  const t1 = [
+    coords("PopA:1", 0.01, 0.02),
+    coords("PopB:2", 0.05, 0.06),
+    coords("PopC:3", 0.09, 0.01),
+  ].join("\n");
+  const r1 = calculatePca(t1, "scaled");
+  const e1 = createEntries(r1, initialAddOptions);
+  const m1 = entryMarkers(r1, e1, initialPlotView);
+
+  const t2 = [
+    coords("PopA:1", 0.01, 0.02),
+    coords("PopB:2", 0.05, 0.06),
+    coords("PopC:3", 0.09, 0.01),
+    coords("PopD:4", 0.03, 0.04),
+  ].join("\n");
+  const r2 = calculatePca(t2, "scaled");
+  const e2 = createEntries(r2, initialAddOptions);
+  const m2 = entryMarkers(r2, e2, initialPlotView);
+
+  // PopA, PopB, PopC must preserve their exact color and symbol!
+  expect(m2[0].color).toBe(m1[0].color);
+  expect(m2[0].symbol).toBe(m1[0].symbol);
+  expect(m2[1].color).toBe(m1[1].color);
+  expect(m2[1].symbol).toBe(m1[1].symbol);
+  expect(m2[2].color).toBe(m1[2].color);
+  expect(m2[2].symbol).toBe(m1[2].symbol);
+});
+
+test("export imageSizes contains all 18 dimensions matching PCA_views requirements", () => {
+  expect(imageSizes).toHaveLength(18);
+  expect(imageSizes[0]).toEqual([800, 400]);
+  expect(imageSizes.some(([w, h]) => w === 1920 && h === 1080)).toBe(true);
+  expect(imageSizes.some(([w, h]) => w === 3840 && h === 2160)).toBe(true);
+});
+

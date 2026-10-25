@@ -29,9 +29,19 @@ export interface PlotView {
   regression: boolean;
   pointLabels: number;
   labelStyle: number;
+  labelConnector: boolean;
   markerSize: number;
+  pointOpacity: number;
+  outlineOpacity: number;
+  grayscale: boolean;
+  spikes: boolean;
+  hover: "closest" | "off";
+  grid: boolean;
+  equalScale: boolean;
+  aspectRatio: "full" | "1:1" | "16:9" | "4:3" | "3:2";
   hullOpacity: number;
   hiddenTraces: number[];
+  title: string;
   subtitle: string;
   dragMode: "pan" | "zoom" | "select" | "lasso";
 }
@@ -44,9 +54,19 @@ export const initialPlotView: PlotView = {
   regression: false,
   pointLabels: 0,
   labelStyle: 0,
+  labelConnector: true,
   markerSize: 0,
+  pointOpacity: 1,
+  outlineOpacity: 1,
+  grayscale: false,
+  spikes: false,
+  hover: "closest",
+  grid: true,
+  equalScale: false,
+  aspectRatio: "full",
   hullOpacity: 0,
   hiddenTraces: [],
+  title: "Global 25 Custom PCA",
   subtitle: "",
   dragMode: "pan",
 };
@@ -122,6 +142,33 @@ export interface LabelOffset {
   ay: number;
 }
 
+export function toGrayscale(hex: string): string {
+  if (hex.startsWith("#")) {
+    const raw = hex.slice(1);
+    const r = parseInt(raw.slice(0, 2), 16) || 0;
+    const g = parseInt(raw.slice(2, 4), 16) || 0;
+    const b = parseInt(raw.slice(4, 6), 16) || 0;
+    const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+    const h = gray.toString(16).padStart(2, "0");
+    return `#${h}${h}${h}`;
+  }
+  return "#777777";
+}
+
+export function hexToRgba(color: string, alpha: number): string {
+  if (color.startsWith("#")) {
+    const raw = color.slice(1);
+    const r = parseInt(raw.slice(0, 2), 16) || 0;
+    const g = parseInt(raw.slice(2, 4), 16) || 0;
+    const b = parseInt(raw.slice(4, 6), 16) || 0;
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+  if (color.startsWith("rgb(")) {
+    return color.replace("rgb(", "rgba(").replace(")", `,${alpha})`);
+  }
+  return color;
+}
+
 export function buildFigure(
   result: PcaResult,
   view: PlotView,
@@ -135,10 +182,20 @@ export function buildFigure(
   const markers = entryMarkers(result, entries, view);
   entries.forEach((entry, i) => {
     const improved = markers[i];
+    const baseColor = view.grayscale ? toGrayscale(improved.color) : improved.color;
+    const baseLineColor = view.grayscale
+      ? toGrayscale(improved.line?.color ?? "#ffffff")
+      : (improved.line?.color ?? "#ffffff");
+
     const marker = {
       ...improved,
+      color: hexToRgba(baseColor, view.pointOpacity),
       size: [7, 5, 9][view.markerSize],
-      opacity: 1,
+      opacity: view.pointOpacity,
+      line: {
+        color: hexToRgba(baseLineColor, view.outlineOpacity),
+        width: improved.line?.width ?? 0.8,
+      },
     };
     const points: Point[] = entry.indices.map((index) => [
       result.scores[index][view.x],
@@ -165,9 +222,9 @@ export function buildFigure(
         ),
       ),
       hovertext: names.map(escapeHtml),
-      hoverinfo: "text+name" as PlotData["hoverinfo"],
+      hoverinfo: (view.hover === "off" ? "none" : "text+name") as PlotData["hoverinfo"],
       textposition: "top center",
-      textfont: { size: 9, color: marker.color },
+      textfont: { size: 9, color: baseColor },
       marker,
     });
     entry.decorations.forEach((decoration, j) => {
@@ -175,6 +232,7 @@ export function buildFigure(
         result.scores[index][view.x],
         result.scores[index][view.y],
       ]);
+      const shapeColor = view.grayscale ? toGrayscale(improved.color) : improved.color;
       if (options.labels) {
         const name = `${i}:${j}`,
           [x, y] = centroid(coordinates);
@@ -188,9 +246,9 @@ export function buildFigure(
           textangle: "0",
           ax: offsets.get(name)?.ax ?? 0,
           ay: offsets.get(name)?.ay ?? (coordinates.length > 1 ? 0 : -27),
-          showarrow: view.labelStyle === 0,
-          font: { color: marker.color, size: view.labelStyle === 0 ? 11 : 9 },
-          arrowcolor: marker.color + "aa",
+          showarrow: view.labelStyle === 0 && view.labelConnector,
+          font: { color: shapeColor, size: view.labelStyle === 0 ? 11 : 9 },
+          arrowcolor: hexToRgba(shapeColor, 0.7),
           arrowside: "end+start" as Annotations["arrowside"],
           arrowsize: 1,
           startarrowsize: 1,
@@ -222,7 +280,7 @@ export function buildFigure(
             y1: coordinates[1][1],
             xref: "x",
             yref: "y",
-            line: { color: marker.color, width: 2 },
+            line: { color: shapeColor, width: 2 },
             opacity: 0.2,
             visible: view.hulls && !hidden,
           });
@@ -233,8 +291,8 @@ export function buildFigure(
               name: `hull:${i}:${j}`,
               type: "path",
               path: `M ${hull.map((p) => p.join(",")).join(" L ")} Z`,
-              fillcolor: marker.color + "30",
-              line: { color: marker.color + "45", width: 1 },
+              fillcolor: hexToRgba(shapeColor, 0.2),
+              line: { color: hexToRgba(shapeColor, 0.45), width: 1 },
               opacity: hullOpacities[view.hullOpacity],
               visible: view.hulls && !hidden,
             });
@@ -252,7 +310,7 @@ export function buildFigure(
             y1: line[1][1],
             xref: "x",
             yref: "y",
-            line: { color: marker.color, width: 2, dash: "dot" },
+            line: { color: shapeColor, width: 2, dash: "dot" },
             opacity: 0.5,
             visible: view.regression && !hidden,
           });
