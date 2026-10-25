@@ -1,6 +1,6 @@
 # G25 tools
 
-A desktop G25 Custom PCA viewer built around [G25 Views](https://github.com/vahaduo/g25views)' original interface and interaction model, with outlined markers from [PCA_views](https://github.com/nomanfinally/PCA_views), wheel zoom and a thin tool-navigation rail.
+A desktop G25 Custom PCA viewer built around [G25 Views](https://github.com/vahaduo/g25views)' original interface and interaction model, with outlined markers from [PCA_views](https://github.com/nomanfinally/PCA_views), wheel zoom, a thin tool-navigation rail and a searchable local TSV database.
 
 ## Run
 
@@ -15,9 +15,15 @@ Open the URL printed by Vite. The supported desktop widths start at 1280 pixels.
 
 ## Use
 
-Paste named G25 coordinates into the visible top field. Multiline clipboard paste and space-separated rows work; each sample needs a name followed by 25 comma-separated finite values. Choose Scaled or Raw, then press Enter or Run PCA.
+The right-hand Data panel accepts a database TSV or pasted G25 coordinates. Click **Load database TSV**, select Scaled or Raw for that file, then choose a local file. Import happens in a worker; files stay in browser memory and are not uploaded or bundled with the application.
 
-Names such as `Group:sample` supply a group prefix and sample ID. Aggregated keeps all sample points in one trace per group; Individual creates one trace per sample; As one group accepts an optional custom name. The compact gear dropdown controls whether the next run creates labels, hulls and regression for the main group or aggregated subgroups. It also offers PCA_views-style outlined markers or the original G25 marker appearance.
+The Archaeobase table layout is supported directly: `Group ID`, `Genetic ID`, and `G25_coords` (a full named G25 row or 25 comma-separated values). Extra metadata columns are allowed. A TSV with `group_id`, `genetic_id` and `PC1` through `PC25` also works. Empty coordinate cells are skipped and counted; populated invalid rows or duplicate genetic IDs reject the import while retaining the previous database. A successful replacement clears database selections and retains manually added samples.
+
+Search by group ID or genetic ID. Clicking a population adds its selection chip and all of its samples. Expand the population to select or remove individual samples; excluded members stay excluded without losing the population chip. Clicking an individual result, or pressing Enter on an exact genetic ID, selects only that sample. Remove a chip with ×. Overlapping population/sample selections never double-count a sample. Arrow keys navigate results; Escape clears the search.
+
+Paste manual coordinates in the same panel, choose their Scaled/Raw interpretation and click **Add coordinates** (or Ctrl/⌘ + Enter). Each row needs a name and 25 comma-separated finite values. Manual and database sources are normalized separately and can be used together. Manual population chips select the pasted rows. Invalid additions preserve the previous valid selection and plot.
+
+Selection changes automatically refit Custom PCA. At least three samples with two independent directions are needed; smaller or degenerate selections clear the graph with an explanation. The compact top toolbar retains grouping, addition options and X/Y selectors. Run PCA explicitly reapplies the current creation options. Aggregated retains every sample in one trace per group; Individual creates one trace per sample; As one group accepts an optional custom name.
 
 Hover over the chart to reveal the actual Plotly toolbar and original G25 custom icons:
 
@@ -31,11 +37,11 @@ Hover over the chart to reveal the actual Plotly toolbar and original G25 custom
 
 Mouse-wheel zoom anchors at the pointer. X/Y selectors choose fitted components. The Save dropdown includes all 18 original image dimensions, through 7680×4320; it downloads PNGs directly without an export dialog. The native camera remains available too.
 
-Group labels, hulls and regression are created by default, matching G25 Views. Gear choices apply to the next Run. View-tool changes preserve zoom; label offsets survive toolbar changes and are retained per component pair. Run refits/replaces the Custom plot and resets its view cycles. Reset plot clears the plot while keeping input/options. Invalid input keeps the previous successful result.
+Group labels, hulls and regression are created by default, matching G25 Views. Gear choices apply to the next Run. View-tool changes preserve zoom; label offsets survive toolbar changes and are retained per component pair. Run refits/replaces the Custom plot and resets its view cycles. Reset plot clears the selection and plot; the loaded database, draft manual text and creation options remain. Clear selection also discards the manual catalogue; manual rows can be pasted again.
 
 ## Scope and numerical behavior
 
-**Custom PCA only.** Regional reference PCAs and Celto-Germanic data are not included. The 32 px icon-only rail reserves Distances and Models as disabled future tools. There is no settings dialog, data panel, status footer, permanent plot toolbar, ratio switcher or mobile adaptation.
+**Custom PCA only.** Regional reference PCAs and Celto-Germanic data are not included. The 32 px icon-only rail reserves Distances and Models as disabled future tools. The right Data panel is the only data-entry surface. There is no settings dialog, permanent plot toolbar, ratio switcher or mobile adaptation. The single chart fills the remaining workspace.
 
 See [the complete Custom PCA parity matrix](docs/G25_PARITY.md) for the source-by-source behavior mapping and intentional Custom-only exclusions.
 
@@ -46,7 +52,10 @@ Custom PCA uses ML.js SVD with centering and no per-column standardization. It k
 ## Structure
 
 ```text
-src/App.tsx                 Original-style input strip, menus and view state
+src/App.tsx                 Compact plot controls, automatic fitting and view state
+src/components/DatabasePanel.tsx TSV loading, searchable chips and manual entry
+src/hooks/useCatalogue.ts   Import lifecycle and selection state
+src/domain/database.ts     Strict TSV parsing, normalization and sample selection
 src/components/PcaChart.tsx Native hover modebar, SVG icons, zoom, label offsets, export
 src/data/g25-*.json          Reference SVG icon paths
 src/domain/g25.ts           Parser and raw/scaled conversion
@@ -54,7 +63,7 @@ src/domain/pca.ts           Validated numerical PCA engine
 src/domain/figure.ts        Grouping, labels, marker cycles and owned geometry
 src/domain/geometry.ts      Hull, regression, centroid, range and zoom math
 src/domain/markers.ts       PCA_views-style palette and outlines
-src/workers/                Background parsing/fitting
+src/workers/                Background TSV import and PCA fitting
 ```
 
 The reference Bootstrap 4.6.1 CSS is installed locally for the same font and control dimensions; no Bootstrap JavaScript or jQuery runtime is used. Plotly is bundled locally and loaded lazily. The chart is SVG scatter; large-data performance is not guaranteed.

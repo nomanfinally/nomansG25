@@ -32,12 +32,16 @@ Desktop browser use. G25 coordinates only; no `.evec` import. Both scaled and ra
 - All Custom PCA grouping modes: Aggregated, Individual, As one group; custom group naming; main-group/subgroup decorations; creation checkboxes for labels/hulls/regression.
 - Point labels cycle off/full/group/ID; marker sizes cycle big/medium/small; group labels cycle movable/static/static with background; hull opacity cycles 0.9/0.6/0.3. Include projected-group visibility, geometry visibility, native legend interactions, subtitle and the original 18 PNG size choices.
 - Improved outlined markers and shapes from PCA_views, with the original G25 Views marker treatment also available in the compact addition-options dropdown.
-- One viewport-filling chart, no ratio switcher, no settings dialog. Top input strip matches the original 47 px height.
+- One chart filling the remaining workspace, no ratio switcher or settings dialog. The 47 px top strip holds plot controls; the user-requested right Data panel holds all input.
 - A 32 px dark icon-only left rail reserves navigation for G25 PCA, G25 distances and G25 models. The latter two analyses remain future work.
 - Desktop adaptation only for now.
 - Ask about optional features before expanding scope. Avoid importing PCA_views' entire customization system.
 - Compact X/Y component selectors remain. PNG export uses G25 Views' Save dropdown and native camera tool, without an export settings dialog.
-- Input entry is the original-style single-line coordinate field, accepting multiline clipboard paste and space-separated rows. No separate data-entry panel. The working interface name is G25 tools; a final product name is not settled.
+- Latest approved extension: a 380 px right Data panel with local TSV loading and an Admix_IRE-style population/sample chip search. Manual G25 coordinate entry moves here from the top strip.
+- Archaeobase TSV uses Group ID, Genetic ID and G25_coords, with extra metadata ignored. Skip/count absent coordinates; reject invalid populated rows and duplicate genetic IDs atomically. Import runs in a worker. Files remain local and in memory, with no persistence/backend added.
+- Clicking a population selects its samples; expanding reveals individual add/remove toggles. Exact genetic-ID search selects only that individual. Remove chips to deselect; overlapping choices are deduplicated. Population exclusions retain the group chip.
+- Selection changes automatically refit Custom PCA. Below-three or rank-deficient selections clear the plot with feedback. Manual and database raw/scaled sources normalize separately before combination.
+- The working interface name is G25 tools; a final product name is not settled.
 
 ## Brand Commitments
 

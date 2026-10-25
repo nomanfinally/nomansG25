@@ -6,16 +6,16 @@ The original application was inspected live and its DOM metrics captured. The in
 
 | Original Custom PCA behavior | Implementation |
 |---|---|
-| Single-line coordinate field; multiple named rows; Enter runs | Visible original-style input. Multiline clipboard input becomes space-separated G25 rows; Enter submits. |
-| Clear input | The same inline × button clears entry/error without clearing the last plot. |
-| Scaled / Raw | Compact dropdown; raw uses the original square-root-eigenvalue conversion. |
+| Single-line coordinate field; multiple named rows; Enter runs | Moved to the requested right Data panel. Multiline manual coordinates use Add coordinates or Ctrl/⌘ + Enter; database chips automatically refit. The top strip now contains only plot controls. |
+| Clear input | The manual textarea can be edited or cleared directly; chip × buttons remove selected populations/samples. |
+| Scaled / Raw | Compact source-specific selectors in the Data panel; raw uses the original square-root-eigenvalue conversion. Database and manual input can have different scaling. |
 | Aggregated | One trace per group prefix, sorted by group; every sample stays a separate point. |
 | Individual | One trace per sample in input order, named by its full name. |
 | As one group | One trace, optional custom name, defaulting to the first sample's group. |
 | Main group / Aggregated subgroups | Labels, hulls and regression can decorate the whole single trace or its original subgroups. |
 | Addition options | Original compact gear dropdown with group-label, hull and regression creation switches. All three default on. They apply on Run, as in the original. |
 | Custom fit and rerun | Each Run fits the submitted vectors and replaces the Custom plot. It resets view cycles while retaining entry and addition options. |
-| Reset plot | Clears the plotted result, selections, label offsets and view cycles. Keeps input, scaling and addition choices. |
+| Reset plot | Clears plotted result, selection chips, manual catalogue, label offsets and view cycles. Keeps the loaded database, draft manual text, scaling and addition choices. |
 | Native hover toolbar | Appears on chart hover, fades away outside the graph, and remains available on keyboard focus. No permanent plot toolbar or status footer. |
 | Native plot tools | Camera, box zoom, pan, box/lasso selection, zoom in/out, autoscale and reset axes. The reset action explicitly restores the original fit range even after view-only redraws. |
 | Legend interaction | Native click-to-hide and double-click isolation. A dedicated G25-icon show/hide button toggles the complete legend. |
@@ -43,6 +43,10 @@ The source's base-PCA-only visibility, hover, grayscale and base-label buttons h
 - Compact Custom X/Y component selectors, with explained variance in their tooltips.
 - Strict finite-coordinate validation and worker-based calculation; a rejected input retains the prior valid plot.
 
-The chart fills the area below the source-sized input strip and beside the thin rail. There are no chart-ratio variants, mobile layouts, separate data-entry panels, settings dialogs or permanent toolbars. Native legend placement can change the graph's internal margins, as in G25 Views; the outer chart size and current data ranges remain stable.
+The chart fills the area below the source-sized input strip and beside the thin rail. The later database request adds one 380 px right Data panel and moves all coordinate entry there. There are no chart-ratio variants, mobile layouts, settings dialogs or permanent plotting toolbars. Native legend placement can change the graph's internal margins, as in G25 Views; the outer chart size and current data ranges remain stable.
 
 PCA mathematics remain full-precision, centered and unstandardized. Like any PCA, component signs are arbitrary; the implementation keeps its established deterministic sign convention. This redesign does not change the validated numeric engine.
+
+## Subsequent database extension
+
+The user requested local TSV loading, Admix_IRE-style selection chips, expandable group members, genetic-ID search and automatic refitting. This intentionally changes the original one-line input workflow. `Group ID`, `Genetic ID` and `G25_coords` are read from the supplied Archaeobase layout; absent coordinates are skipped and counted. Original metadata is not added to the UI. Selection maintains per-population exclusions and deduplicates overlapping choices. Failed imports/manual additions preserve prior data; selections that cannot form a 2D PCA clear the chart with feedback. No server, persisted database or bundled private dataset is introduced.

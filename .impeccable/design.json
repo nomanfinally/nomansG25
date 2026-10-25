@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-24T20:19:19.893356+00:00",
+  "generatedAt": "2026-10-24T23:55:36.662588+00:00",
   "title": "Design System: G25 tools",
   "extensions": {
     "colorMeta": {
@@ -453,6 +453,54 @@
         "displayName": "G25 Marker 11",
         "canonical": "#7e0061",
         "tonalRamp": ["oklch(15% 0.1720 341.60)", "oklch(26% 0.1720 341.60)", "oklch(38% 0.1720 341.60)", "oklch(49% 0.1720 341.60)", "oklch(61% 0.1720 341.60)", "oklch(72% 0.1720 341.60)", "oklch(84% 0.1720 341.60)", "oklch(95% 0.1720 341.60)"]
+      },
+      "population-surface": {
+        "role": "primary",
+        "displayName": "Population Surface",
+        "canonical": "#e4efff",
+        "tonalRamp": ["oklch(15% 0.0246 257.65)", "oklch(26% 0.0246 257.65)", "oklch(38% 0.0246 257.65)", "oklch(49% 0.0246 257.65)", "oklch(61% 0.0246 257.65)", "oklch(72% 0.0246 257.65)", "oklch(84% 0.0246 257.65)", "oklch(95% 0.0246 257.65)"]
+      },
+      "population-line": {
+        "role": "primary",
+        "displayName": "Population Line",
+        "canonical": "#a9caff",
+        "tonalRamp": ["oklch(15% 0.0829 259.76)", "oklch(26% 0.0829 259.76)", "oklch(38% 0.0829 259.76)", "oklch(49% 0.0829 259.76)", "oklch(61% 0.0829 259.76)", "oklch(72% 0.0829 259.76)", "oklch(84% 0.0829 259.76)", "oklch(95% 0.0829 259.76)"]
+      },
+      "population-text": {
+        "role": "primary",
+        "displayName": "Population Text",
+        "canonical": "#0056b3",
+        "tonalRamp": ["oklch(15% 0.1639 256.70)", "oklch(26% 0.1639 256.70)", "oklch(38% 0.1639 256.70)", "oklch(49% 0.1639 256.70)", "oklch(61% 0.1639 256.70)", "oklch(72% 0.1639 256.70)", "oklch(84% 0.1639 256.70)", "oklch(95% 0.1639 256.70)"]
+      },
+      "individual-surface": {
+        "role": "secondary",
+        "displayName": "Individual Surface",
+        "canonical": "#f2eafa",
+        "tonalRamp": ["oklch(15% 0.0229 308.19)", "oklch(26% 0.0229 308.19)", "oklch(38% 0.0229 308.19)", "oklch(49% 0.0229 308.19)", "oklch(61% 0.0229 308.19)", "oklch(72% 0.0229 308.19)", "oklch(84% 0.0229 308.19)", "oklch(95% 0.0229 308.19)"]
+      },
+      "individual-text": {
+        "role": "secondary",
+        "displayName": "Individual Text",
+        "canonical": "#653b83",
+        "tonalRamp": ["oklch(15% 0.1211 309.18)", "oklch(26% 0.1211 309.18)", "oklch(38% 0.1211 309.18)", "oklch(49% 0.1211 309.18)", "oklch(61% 0.1211 309.18)", "oklch(72% 0.1211 309.18)", "oklch(84% 0.1211 309.18)", "oklch(95% 0.1211 309.18)"]
+      },
+      "individual-line": {
+        "role": "secondary",
+        "displayName": "Individual Line",
+        "canonical": "#d0b5e4",
+        "tonalRamp": ["oklch(15% 0.0711 310.65)", "oklch(26% 0.0711 310.65)", "oklch(38% 0.0711 310.65)", "oklch(49% 0.0711 310.65)", "oklch(61% 0.0711 310.65)", "oklch(72% 0.0711 310.65)", "oklch(84% 0.0711 310.65)", "oklch(95% 0.0711 310.65)"]
+      },
+      "result-heading": {
+        "role": "neutral",
+        "displayName": "Result Heading",
+        "canonical": "#f8f9fa",
+        "tonalRamp": ["oklch(15% 0.0017 247.84)", "oklch(26% 0.0017 247.84)", "oklch(38% 0.0017 247.84)", "oklch(49% 0.0017 247.84)", "oklch(61% 0.0017 247.84)", "oklch(72% 0.0017 247.84)", "oklch(84% 0.0017 247.84)", "oklch(95% 0.0017 247.84)"]
+      },
+      "result-hover": {
+        "role": "neutral",
+        "displayName": "Result Hover",
+        "canonical": "#f1f6fd",
+        "tonalRamp": ["oklch(15% 0.0108 256.69)", "oklch(26% 0.0108 256.69)", "oklch(38% 0.0108 256.69)", "oklch(49% 0.0108 256.69)", "oklch(61% 0.0108 256.69)", "oklch(72% 0.0108 256.69)", "oklch(84% 0.0108 256.69)", "oklch(95% 0.0108 256.69)"]
       }
     },
     "typographyMeta": {
@@ -495,6 +543,14 @@
       "clear": {
         "displayName": "Clear",
         "purpose": "Bootstrap inline clear glyph."
+      },
+      "chip-count": {
+        "displayName": "Chip Count",
+        "purpose": "10 px tabular population chip count at 0.85 opacity."
+      },
+      "search-result": {
+        "displayName": "Search Result",
+        "purpose": "13 px search input and population/sample result rows."
       }
     },
     "shadows": [
@@ -517,6 +573,11 @@
         "name": "annotation-text",
         "value": "1px 1px rgba(0, 0, 0, 0.2)",
         "purpose": "Annotation text-shadow, not a container box-shadow."
+      },
+      {
+        "name": "picker-focus",
+        "value": "0 0 0 2px #cce5ff",
+        "purpose": "Population token box focus-within, paired with #80bdff border."
       }
     ],
     "motion": [
@@ -538,12 +599,12 @@
       "css": ".ds-action{font-family:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";font-size:0.875rem;font-weight:400;line-height:1.5;display:inline-block;text-align:center;vertical-align:middle;background:transparent;color:#007bff;border:1px solid #007bff;padding:0.25rem 0.5rem;border-radius:0.2rem;cursor:pointer;transition:color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out}.ds-action:hover,.ds-action:active{background:#007bff;color:#fff;border-color:#007bff}.ds-action:focus{box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}.ds-action:focus-visible{outline:2px solid #007bff;outline-offset:1px;}.ds-action:disabled{opacity:.65;cursor:default;color:#007bff;background:transparent}@media(prefers-reduced-motion:reduce){.ds-action{transition:none}}"
     },
     {
-      "name": "Single-line coordinate field",
-      "kind": "input",
-      "refersTo": "coordinate-input",
-      "description": "Source coordinate field, system typography and blue focus treatment.",
-      "html": "<input class=\"ds-coordinates\" type=\"text\" aria-label=\"Global25 coordinates\" placeholder=\"Paste single or multiple Global 25 coordinates here.\" spellcheck=\"false\">",
-      "css": ".ds-coordinates{font-family:-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans\", \"Liberation Sans\", sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";font-size:0.875rem;font-weight:400;line-height:1.5;display:block;width:100%;height:31px;min-width:10em;padding:.25rem 1.5rem .25rem .5rem;color:#495057;background:#fff;border:1px solid #ced4da;border-radius:0;transition:border-color .15s ease-in-out,box-shadow .15s ease-in-out}.ds-coordinates::placeholder{color:#6c757d;opacity:1}.ds-coordinates:focus{border-color:#80bdff;outline:0;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.ds-coordinates:focus-visible{outline:2px solid #007bff;outline-offset:1px;}@media(prefers-reduced-motion:reduce){.ds-coordinates{transition:none}}"
+      "name": "Data panel and chip search",
+      "kind": "custom",
+      "refersTo": "data-panel",
+      "description": "Source-based panel with local TSV/scaling, wrapping population and individual chips, scrolling results, manual disclosure and status. Synthetic preview; search/selection/import require the application runtime.",
+      "html": "<aside class=\"ds-database-panel\" aria-label=\"PCA data\"><header class=\"ds-data-heading\"><span>Data</span><span class=\"ds-data-count\">4 selected</span></header><section class=\"ds-database-source\"><div class=\"ds-database-load-row\"><button class=\"ds-btn\" type=\"button\">Replace TSV</button><select class=\"ds-custom-select\" aria-label=\"TSV coordinate scaling\"><option>Scaled</option><option>Raw</option></select></div><div class=\"ds-database-file-status\">Synthetic development TSV · 6 samples</div></section><section class=\"ds-population-picker\"><div class=\"ds-picker-heading\"><label for=\"ds-population-search\">Populations / samples</label><button class=\"ds-data-text-action\" type=\"button\">Clear selection</button></div><div class=\"ds-population-token-box\"><span class=\"ds-population-chip\"><span class=\"ds-population-chip-text\">Synthetic_A</span><span class=\"ds-chip-count\">3</span><button type=\"button\" aria-label=\"Remove population Synthetic_A\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"/></svg></button></span><span class=\"ds-population-chip ds-individual\"><span class=\"ds-population-chip-text\">Synthetic_B_01</span><button type=\"button\" aria-label=\"Remove sample Synthetic_B_01\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"/></svg></button></span><input id=\"ds-population-search\" type=\"search\" placeholder=\"Search group ID or genetic ID\" value=\"Synthetic\"></div><p class=\"ds-picker-hint\">Click a population to select it. Expand to choose individual samples.</p></section><div class=\"ds-database-results\"><div class=\"ds-result-heading\">Populations <span>2</span></div><div class=\"ds-database-group-row\"><button class=\"ds-group-expand\" aria-label=\"Expand population Synthetic_A\" aria-expanded=\"false\">›</button><button class=\"ds-group-select\" aria-pressed=\"true\"><span>Synthetic_A</span><span class=\"ds-group-sample-count\">3/3 samples</span></button></div><button class=\"ds-database-sample\" aria-pressed=\"true\"><span class=\"ds-choice-check\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m20 6-11 11-5-5\"/></svg></span><span class=\"ds-sample-copy\">Synthetic_B_01<small>Synthetic_B</small></span></button></div><section class=\"ds-manual-source\"><details open><summary>Paste coordinates</summary><div class=\"ds-manual-entry\"><textarea class=\"ds-form-control\" rows=\"3\" aria-label=\"Global25 coordinates\" placeholder=\"Group:sample,PC1,PC2,…,PC25\"></textarea><div class=\"ds-manual-actions\"><select class=\"ds-custom-select\" aria-label=\"Manual coordinate scaling\"><option>Scaled</option><option>Raw</option></select><button class=\"ds-btn\" type=\"button\" disabled>Add coordinates</button></div><p class=\"ds-picker-hint\">One named G25 row per line. Ctrl/⌘ + Enter to add.</p></div></details></section><div class=\"ds-selection-status\" role=\"status\">4 samples in the current PCA.</div></aside>",
+      "css": ".ds-database-panel{font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,\"Noto Sans\",\"Liberation Sans\",sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\",\"Noto Color Emoji\";height:620px;max-width:100%;}.ds-database-panel button,.ds-database-panel input,.ds-database-panel textarea,.ds-database-panel select{font-family:inherit;line-height:1.5;}.ds-database-panel button{cursor:pointer;}.ds-database-panel button:focus-visible,.ds-database-panel input:focus-visible,.ds-database-panel summary:focus-visible,.ds-database-panel textarea:focus-visible,.ds-database-panel select:focus-visible{outline:2px solid #007bff;outline-offset:1px;}.ds-form-control,.ds-custom-select{display:block;width:100%;padding:.25rem .5rem;font-size:.875rem;font-weight:400;line-height:1.5;color:#495057;background-color:#fff;border:1px solid #ced4da;border-radius:.2rem}.ds-custom-select{height:31px}.ds-form-control:focus,.ds-custom-select:focus{outline:0;border-color:#80bdff;box-shadow:0 0 0 .2rem rgba(0,123,255,.25)}.ds-btn{display:inline-block;padding:.25rem .5rem;font-size:.875rem;color:#007bff;background:transparent;border:1px solid #007bff;border-radius:.2rem}.ds-btn:hover,.ds-btn:active{color:#fff;background:#007bff}.ds-btn:focus-visible{box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}.ds-btn:disabled{opacity:.65;cursor:default}.ds-database-panel {\n  width: 380px;\n  flex: 0 0 380px;\n  min-height: 0;\n  display: flex;\n  flex-direction: column;\n  border-left: 1px solid #ced4da;\n  background: #fff;\n  font-size: 14px;\n  line-height: 1.5;\n  overflow: auto;\n}\n.ds-data-heading {\n  height: 47px;\n  flex-shrink: 0;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 0 14px;\n  border-bottom: 1px solid #e9ecef;\n  font-weight: 600;\n}\n.ds-data-count {\n  color: #6c757d;\n  font-size: 12px;\n  font-weight: 400;\n  font-variant-numeric: tabular-nums;\n}\n.ds-database-source {\n  padding: 14px 14px 0;\n  flex-shrink: 0;\n}\n.ds-database-load-row {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.ds-database-load-row button {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  white-space: nowrap;\n}\n.ds-database-load-row select {\n  width: 82px;\n  margin-left: auto;\n}\n.ds-database-file-status {\n  margin-top: 8px;\n  color: #6c757d;\n  font-size: 12px;\n}\n.ds-database-file-status span {\n  display: block;\n}\n.ds-database-filename {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: #495057;\n}\n.ds-population-picker {\n  padding: 18px 14px 0;\n  flex-shrink: 0;\n}\n.ds-picker-heading {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  gap: 8px;\n  margin-bottom: 6px;\n}\n.ds-picker-heading label {\n  font-weight: 600;\n  margin: 0;\n}\n.ds-data-text-action {\n  border: 0;\n  padding: 0;\n  background: transparent;\n  color: #007bff;\n  font-size: 12px;\n  white-space: nowrap;\n}\n.ds-data-text-action:hover {\n  text-decoration: underline;\n}\n.ds-population-token-box {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  align-content: flex-start;\n  gap: 4px;\n  padding: 7px;\n  min-height: 86px;\n  max-height: 210px;\n  overflow: auto;\n  border: 1px solid #ced4da;\n  border-radius: 3px;\n  cursor: text;\n}\n.ds-population-token-box:focus-within {\n  border-color: #80bdff;\n  box-shadow: 0 0 0 2px #cce5ff;\n}\n.ds-population-token-box input {\n  border: 0;\n  background: transparent;\n  padding: 3px 2px;\n  flex: 1 1 180px;\n  width: 100%;\n  min-width: 0;\n  font-size: 13px;\n  outline: none;\n}\n.ds-population-token-box input:focus-visible {\n  outline: none;\n}\n.ds-population-token-box input::placeholder {\n  color: #6c757d;\n  opacity: 1;\n}\n.ds-population-chip {\n  display: inline-flex;\n  align-items: center;\n  max-width: 100%;\n  gap: 5px;\n  padding: 2px 4px 2px 6px;\n  border: 1px solid #a9caff;\n  background: #e4efff;\n  color: #0056b3;\n  border-radius: 3px;\n  font-size: 12px;\n}\n.ds-population-chip.ds-individual {\n  background: #f2eafa;\n  color: #653b83;\n  border-color: #d0b5e4;\n}\n.ds-population-chip-text {\n  overflow-wrap: anywhere;\n  min-width: 0;\n}\n.ds-chip-count {\n  font-size: 10px;\n  font-variant-numeric: tabular-nums;\n  opacity: 0.85;\n}\n.ds-population-chip button {\n  display: inline-flex;\n  align-items: center;\n  border: 0;\n  padding: 1px;\n  background: transparent;\n  color: inherit;\n  flex-shrink: 0;\n}\n.ds-population-chip button:hover {\n  background: #cce5ff;\n}\n.ds-picker-hint {\n  margin: 6px 0 0;\n  font-size: 12px;\n  color: #6c757d;\n}\n.ds-database-results {\n  margin: 10px 14px 0;\n  min-height: 60px;\n  flex: 1 1 180px;\n  overflow: auto;\n  border-top: 1px solid #e9ecef;\n}\n.ds-database-results:empty {\n  border-top-color: transparent;\n}\n.ds-result-heading {\n  display: flex;\n  justify-content: space-between;\n  padding: 7px 4px;\n  font-size: 12px;\n  font-weight: 600;\n  color: #495057;\n  background: #f8f9fa;\n}\n.ds-result-heading span {\n  color: #6c757d;\n  font-weight: 400;\n}\n.ds-database-group-row {\n  display: flex;\n  align-items: stretch;\n  border-bottom: 1px solid #e9ecef;\n}\n.ds-group-expand {\n  width: 25px;\n  flex: 0 0 25px;\n  border: 0;\n  background: transparent;\n  padding: 6px 0;\n  color: #6c757d;\n}\n.ds-group-select {\n  display: flex;\n  align-items: center;\n  gap: 7px;\n  justify-content: space-between;\n  width: 100%;\n  min-width: 0;\n  border: 0;\n  padding: 8px 4px;\n  text-align: left;\n  background: transparent;\n  color: #212529;\n  font-size: 13px;\n}\n.ds-group-select > span:first-child {\n  overflow-wrap: anywhere;\n  min-width: 0;\n}\n.ds-group-select small {\n  display: block;\n  color: #6c757d;\n  font-size: 11px;\n}\n.ds-group-sample-count {\n  color: #6c757d;\n  font-size: 11px;\n  white-space: nowrap;\n  flex-shrink: 0;\n  font-variant-numeric: tabular-nums;\n}\n.ds-group-select[aria-pressed=\"true\"] {\n  color: #0056b3;\n  background: #e4efff;\n}\n.ds-group-select:hover,\n.ds-group-expand:hover,\n.ds-database-sample:hover {\n  background: #f1f6fd;\n}\n.ds-database-sample {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 7px;\n  border: 0;\n  border-bottom: 1px solid #e9ecef;\n  background: transparent;\n  text-align: left;\n  padding: 7px 5px;\n  color: #212529;\n  font-size: 13px;\n}\n.ds-database-sample.ds-nested {\n  padding-left: 26px;\n  font-size: 12px;\n}\n.ds-database-sample[aria-pressed=\"true\"] {\n  background: #f2eafa;\n  color: #653b83;\n}\n.ds-choice-check {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 16px;\n  height: 16px;\n  flex-shrink: 0;\n  border: 1px solid #adb5bd;\n  border-radius: 2px;\n}\n.ds-sample-copy {\n  min-width: 0;\n  overflow-wrap: anywhere;\n}\n.ds-sample-copy small {\n  display: block;\n  font-size: 11px;\n  color: #6c757d;\n}\n.ds-result-empty,\n.ds-result-limit {\n  padding: 10px 4px;\n  font-size: 12px;\n  color: #6c757d;\n  overflow-wrap: anywhere;\n}\n.ds-more-samples {\n  margin: 7px 0 7px 26px;\n}\n.ds-manual-source {\n  flex-shrink: 0;\n  padding: 10px 14px 12px;\n  border-top: 1px solid #e9ecef;\n}\n.ds-manual-source summary {\n  font-weight: 600;\n  font-size: 13px;\n  cursor: pointer;\n}\n.ds-manual-entry {\n  padding-top: 8px;\n}\n.ds-manual-entry textarea {\n  resize: vertical;\n  min-height: 76px;\n  max-height: 180px;\n  font-size: 12px;\n}\n.ds-manual-entry textarea:focus-visible {\n  outline-offset: 0;\n}\n.ds-manual-actions {\n  display: flex;\n  gap: 8px;\n  justify-content: space-between;\n  margin-top: 8px;\n}\n.ds-manual-actions select {\n  width: 86px;\n}\n.ds-data-error {\n  padding: 7px 8px;\n  margin: 8px 0 0;\n  color: #842029;\n  background: #fff5f5;\n  border: 1px solid #f1c2c7;\n  font-size: 12px;\n  overflow-wrap: anywhere;\n}\n.ds-selection-status {\n  padding: 8px 14px;\n  flex-shrink: 0;\n  border-top: 1px solid #e9ecef;\n  color: #495057;\n  font-size: 12px;\n}\n"
     },
     {
       "name": "Grouping dropdown",
@@ -572,9 +633,9 @@
   ],
   "narrative": {
     "northStar": "G25 Views' Custom PCA workspace",
-    "overview": "G25 tools follows the user-pinned G25 Views Custom PCA interface: source-sized Bootstrap controls above one white, viewport-filling Plotly chart. This approved replacement preserves the reference's density, SVG hover tools and native chart behavior.\n\nThe only visual additions are the thin charcoal icon rail, compact component selectors and PCA_views' outlined marks, with the original marker appearance retained. Data supplies the color; interface structure stays restrained.",
+    "overview": "G25 tools follows the user-pinned G25 Views Custom PCA interface: source-sized Bootstrap controls above one white, viewport-filling Plotly chart. This approved replacement preserves the reference's density, SVG hover tools and native chart behavior.\n\nThe visual additions are the thin charcoal icon rail, compact component selectors, PCA_views' outlined marks and the authorized right Data panel. The panel adapts Admix_IRE's population/sample chip search within Bootstrap's existing form language; the original marker appearance remains available. Data supplies plot color; interface structure stays restrained.",
     "keyCharacteristics": [
-      "32 px icon-only rail; 47 px input strip; 31 px controls.",
+      "32 px icon-only rail; 47 px plot-control strip; 31 px controls; 380 px right Data panel.",
       "Native hover modebar with original G25 Custom SVG icons.",
       "White chart, faint ticks, light grid and source margins.",
       "Bootstrap system typography for controls; native Plotly typography for the graph."
@@ -587,18 +648,18 @@
       },
       {
         "name": "Data Color",
-        "body": "Use marker palettes for group identity; keep interface chrome in Bootstrap blue and neutral gray.",
+        "body": "Use marker palettes for plot group identity; keep interface chrome in Bootstrap blue and neutral gray, with purple reserved for individual selection in the Data panel.",
         "section": "colors"
       }
     ],
     "dos": [
-      "Do retain the 32 px rail, 47 px strip and viewport-filling chart at supported desktop widths.",
+      "Do retain the 32 px rail, 47 px plot-control strip, 380 px Data panel and remaining-space chart at supported desktop widths.",
       "Do preserve the original SVG tools, compact dropdowns and native chart interactions.",
       "Do keep individual points, outlined group marks and the selectable original G25 appearance.",
       "Do keep the last valid plot visible when coordinate validation fails."
     ],
     "donts": [
-      "Don't reintroduce the rejected dashboard shell, separate coordinate panel, permanent plot toolbar or footer.",
+      "Don't reintroduce the rejected dashboard shell, permanent plot toolbar or global chart-status footer; data entry and selection status belong in the authorized Data panel.",
       "Don't add settings dialogs, regional PCA features or mobile layouts to this approved surface.",
       "Don't replace Bootstrap system typography or source-pinned faint ticks with the previous design tokens."
     ]

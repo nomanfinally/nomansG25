@@ -29,3 +29,18 @@ export function syntheticG25() {
     )
     .join("\n");
 }
+
+export function syntheticDatabase() {
+  const rows = syntheticG25()
+    .split("\n")
+    .map((line) => {
+      const [name] = line.split(",");
+      const [group, id] = name.split(":");
+      return [group, `${group}_${id}`, line].join("\t");
+    });
+  return [
+    "Group ID\tGenetic ID\tG25_coords",
+    ...rows,
+    "Synthetic_without_coords\tmissing\t",
+  ].join("\n");
+}

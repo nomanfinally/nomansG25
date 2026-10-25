@@ -28,19 +28,7 @@ async function hover(page: Page) {
     .toBe("1");
 }
 async function paste(page: Page, text = syntheticG25()) {
-  await page
-    .getByLabel("Global25 coordinates", { exact: true })
-    .evaluate((element, text) => {
-      const clipboardData = new DataTransfer();
-      clipboardData.setData("text/plain", text);
-      element.dispatchEvent(
-        new ClipboardEvent("paste", {
-          bubbles: true,
-          cancelable: true,
-          clipboardData,
-        }),
-      );
-    }, text);
+  await page.getByLabel("Global25 coordinates", { exact: true }).fill(text);
 }
 async function run(page: Page) {
   await page.getByRole("button", { name: "Run PCA", exact: true }).click();
@@ -109,7 +97,7 @@ test("the reference-height input strip, icon-only rail and genuinely hover-only 
   expect(await page.evaluate(() => location.hash)).toBe("#Custom");
 });
 
-test("multiline clipboard paste, strict input errors and preservation of the last valid PCA", async ({
+test("multiline manual entry, strict input errors and preservation of the last valid PCA", async ({
   page,
 }) => {
   const errors: string[] = [];
@@ -288,9 +276,7 @@ test("wheel/buttons, pan/box zoom, legend toggle and reset axes retain the singl
   await expect
     .poll(() => chart(page).evaluate((el: any) => el.data.length))
     .toBe(0);
-  await expect(
-    page.getByLabel("Global25 coordinates", { exact: true }),
-  ).not.toHaveValue("");
+  await expect(page.locator(".population-chip")).toHaveCount(0);
 });
 
 test("grouping modes, custom names, subgroup overlays and creation settings", async ({
@@ -315,7 +301,9 @@ test("grouping modes, custom names, subgroup overlays and creation settings", as
   await page.getByLabel("Custom group name").fill("Combined");
   await menu(page, "Addition options");
   await page.locator('label[for="subgroups"]').click();
-  await expect(page.getByLabel("Aggregated subgroups", { exact: true })).toBeChecked();
+  await expect(
+    page.getByLabel("Aggregated subgroups", { exact: true }),
+  ).toBeChecked();
   await page.locator('label[for="add-regression"]').click();
   await page.getByRole("button", { name: "Run PCA", exact: true }).click();
   await expect
@@ -349,7 +337,9 @@ test("source marker option, raw/scaled selector, component selectors and subtitl
 }) => {
   await load(page);
   await menu(page, "Addition options");
-  await page.getByLabel("Marker appearance", { exact: true }).selectOption("g25");
+  await page
+    .getByLabel("Marker appearance", { exact: true })
+    .selectOption("g25");
   await run(page);
   await expect
     .poll(() => chart(page).evaluate((el: any) => el.data[0].marker.color))
@@ -372,12 +362,8 @@ test("source marker option, raw/scaled selector, component selectors and subtitl
   await expect
     .poll(() => chart(page).evaluate((el: any) => el.layout.title.text))
     .toBe("Global 25 Custom PCA");
-  await menu(page, "Coordinate scaling");
-  await page.getByRole("button", { name: "Raw", exact: true }).click();
-  await run(page);
-  await expect(page.locator('summary[title="Coordinate scaling"]')).toHaveText(
-    "Raw",
-  );
+  await page.getByLabel("Manual coordinate scaling").selectOption("raw");
+  await expect(page.getByLabel("Manual coordinate scaling")).toHaveValue("raw");
 });
 
 test("all 18 original image dimensions and a real 800 by 400 PNG download", async ({
@@ -447,7 +433,10 @@ test("annotation dragging survives toolbar changes and desktop layouts keep the 
       .poll(() => page.evaluate(() => document.body.scrollWidth))
       .toBe(width);
     const bounds = await chart(page).boundingBox();
-    expect(bounds!.width).toBe(width - 32);
+    expect(bounds!.width).toBe(width - 32 - 380);
+    await expect
+      .poll(() => chart(page).evaluate((el: any) => el._fullLayout.width))
+      .toBe(width - 32 - 380);
     expect(bounds!.height).toBe(853);
   }
   await expect(

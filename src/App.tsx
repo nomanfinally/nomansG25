@@ -6,7 +6,9 @@ import {
   type ReactNode,
 } from "react";
 import { ChartScatter, Ruler, Layers3 } from "lucide-react";
-import type { Scaling } from "./domain/g25";
+import { useCatalogue } from "./hooks/useCatalogue";
+import { DatabasePanel } from "./components/DatabasePanel";
+import { datasetFromRows, type CatalogueRow } from "./domain/database";
 import type { PcaResult } from "./domain/pca";
 import {
   imageSizes,
@@ -55,8 +57,8 @@ const addModeNames = {
 };
 
 export default function App() {
-  const [text, setText] = useState(""),
-    [scaling, setScaling] = useState<Scaling>("scaled");
+  const catalogue = useCatalogue();
+  const selected = catalogue.selected;
   const [options, setOptions] = useState<AddOptions>(initialAddOptions),
     [applied, setApplied] = useState<AddOptions>(initialAddOptions);
   const [result, setResult] = useState<PcaResult | null>(null),
@@ -67,8 +69,7 @@ export default function App() {
     [saveError, setSaveError] = useState("");
   const plot = useRef<ChartHandle>(null),
     worker = useRef<Worker | null>(null),
-    requestId = useRef(0),
-    input = useRef<HTMLInputElement>(null);
+    requestId = useRef(0);
   useEffect(() => () => worker.current?.terminate(), []);
   useEffect(() => {
     document.title = "G25 tools — Custom PCA";
@@ -115,24 +116,25 @@ export default function App() {
     setError("");
     setSaveError("");
     setResult(null);
+    catalogue.clearSelection();
     setView({ ...initialPlotView, hiddenTraces: [] });
     setRevision((value) => value + 1);
   };
-  const run = () => {
-    if (busy) return;
+  const fitSelection = (rows: CatalogueRow[]) => {
+    worker.current?.terminate();
+    worker.current = null;
+    const id = ++requestId.current;
     setError("");
     setSaveError("");
-    if (!text.trim()) {
-      setError(
-        "Paste a sample name and 25 comma-separated G25 coordinates per row.",
-      );
-      input.current?.focus();
+    if (rows.length < 3) {
+      setBusy(false);
+      setResult(null);
+      setView({ ...initialPlotView, hiddenTraces: [] });
+      setRevision((value) => value + 1);
       return;
     }
-    worker.current?.terminate();
     setBusy(true);
-    const id = ++requestId.current,
-      runOptions = { ...options };
+    const runOptions = { ...options };
     try {
       const next = new Worker(
         new URL("./workers/pca.worker.ts", import.meta.url),
@@ -149,11 +151,11 @@ export default function App() {
           setView({ ...initialPlotView, hiddenTraces: [] });
           setRevision((value) => value + 1);
         } else {
+          setResult(null);
           setError(
             event.data.error ??
-              "The PCA could not be calculated. Check the coordinate rows.",
+              "The selected samples could not form a two-dimensional PCA.",
           );
-          input.current?.focus();
         }
         setBusy(false);
         next.terminate();
@@ -161,16 +163,32 @@ export default function App() {
       };
       next.onerror = () => {
         if (id !== requestId.current) return;
+        setResult(null);
         setError("The PCA could not start. Reload the page and try again.");
         setBusy(false);
         next.terminate();
         worker.current = null;
       };
-      next.postMessage({ text: text.trim(), scaling });
+      next.postMessage({ dataset: datasetFromRows(rows) });
     } catch {
       setBusy(false);
+      setResult(null);
       setError("The PCA could not start. Reload the page and try again.");
     }
+  };
+  useEffect(() => {
+    // Cancel stale fits immediately; debounce rapid chip/sample changes.
+    requestId.current++;
+    worker.current?.terminate();
+    worker.current = null;
+    setBusy(selected.length >= 3);
+    const timer = window.setTimeout(() => fitSelection(selected), 100);
+    return () => window.clearTimeout(timer);
+    // Creation options apply on the next selection change or explicit Run.
+  }, [selected]);
+  const run = () => {
+    if (catalogue.text.trim()) catalogue.addManual();
+    else fitSelection(selected);
   };
   const action = useCallback(
     (action: ChartAction) => {
@@ -275,7 +293,7 @@ export default function App() {
       <main className="workspace">
         <form
           className="input-group input-group-sm p-2 source-controls"
-          aria-label="G25 coordinate controls"
+          aria-label="G25 plot controls"
           onSubmit={(event) => {
             event.preventDefault();
             run();
@@ -305,70 +323,8 @@ export default function App() {
               ))}
             </Menu>
           </div>
-          <input
-            ref={input}
-            id="coordsInput"
-            aria-label="Global25 coordinates"
-            aria-invalid={!!error}
-            aria-describedby={error ? "coordinate-error" : undefined}
-            className={`form-control${error ? " is-invalid" : ""}`}
-            type="text"
-            placeholder="Paste single or multiple Global 25 coordinates here."
-            spellCheck={false}
-            value={text.replace(/\r?\n/g, " ")}
-            title={error || "Paste G25 rows; press Enter to run Custom PCA"}
-            onChange={(event) => {
-              setText(event.target.value);
-              setError("");
-            }}
-            onPaste={(event) => {
-              const pasted = event.clipboardData.getData("text");
-              if (!pasted) return;
-              event.preventDefault();
-              const target = event.currentTarget,
-                start = target.selectionStart ?? 0,
-                end = target.selectionEnd ?? start,
-                display = text.replace(/\r?\n/g, " ");
-              setText(
-                display.slice(0, start) +
-                  pasted.replace(/\r?\n/g, " ") +
-                  display.slice(end),
-              );
-              setError("");
-            }}
-          />
+          <div className="source-controls-spacer" />
           <div className="input-group-append">
-            <button
-              className="close clear-coordinates"
-              aria-label="Clear coordinates"
-              type="button"
-              onClick={() => {
-                setText("");
-                setError("");
-                input.current?.focus();
-              }}
-            >
-              <span aria-hidden="true">×</span>
-            </button>
-            <Menu
-              label={scaling === "scaled" ? "Scaled" : "Raw"}
-              title="Coordinate scaling"
-            >
-              {(["scaled", "raw"] as const).map((value) => (
-                <button
-                  className="dropdown-item btn-sm"
-                  type="button"
-                  key={value}
-                  onClick={(event) => {
-                    setScaling(value);
-                    setError("");
-                    closeMenu(event);
-                  }}
-                >
-                  {value === "scaled" ? "Scaled" : "Raw"}
-                </button>
-              ))}
-            </Menu>
             <Menu label={addModeNames[options.mode]} title="Grouping mode">
               {(["aggregated", "individual", "single"] as const).map(
                 (value) => (
@@ -553,12 +509,13 @@ export default function App() {
             onHidden={hidden}
           />
         </div>
-        {(error || saveError) && (
+        {saveError && (
           <p className="input-feedback" id="coordinate-error" role="alert">
-            {error || saveError}
+            {saveError}
           </p>
         )}
       </main>
+      <DatabasePanel catalogue={catalogue} busy={busy} error={error} />
     </div>
   );
 }
